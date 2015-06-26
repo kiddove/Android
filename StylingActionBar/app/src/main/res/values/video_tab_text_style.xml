@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="video_tab_text">
+        <item name="android:textColor">@color/ColorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+</resources>

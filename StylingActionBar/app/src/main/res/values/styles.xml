@@ -1,0 +1,61 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionBarWidgetTheme">@style/PopopMenuTextView</item>
+        <!--&lt;!&ndash;text color in the pop up list&ndash;&gt;-->
+        <!--<item name="android:itemTextAppearance">@style/MenuTextApearance</item>-->
+        <!--// menu item text color(in action bar)-->
+        <item name="android:actionMenuTextColor">@color/bar_menu_text</item>
+        <!--&lt;!&ndash; Change Overflow Menu ListView Item Height & Property &ndash;&gt;-->
+        <!--<item name="android:listPreferredItemHeightSmall">45dp</item>-->
+        <!--<item name="android:listPreferredItemPaddingLeft">5dp</item>-->
+        <!--<item name="android:listPreferredItemPaddingRight">5dp</item>-->
+
+        <!--try to change background of menuitem on bar-->
+        <!--<item name="android:actionBarItemBackground">@drawable/menu_item_background</item>-->
+    </style>
+
+    <!--overflow menu drop down-->
+    <style name="PopopMenuTextView" parent="@android:style/Theme.Holo.Light">
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
+        <item name="android:textColor">@color/bar_menu_text</item>
+        <!--<item name="android:textSize">28dp</item>-->
+    </style>
+    <!-- Change Overflow Menu Background -->
+    <style name="PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/bar_background</item>
+    </style>
+    <!-- Change Overflow Menu ListView Divider Property or selector-->
+    <style name="DropDownListView" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <!--<item name="android:listSelector">@drawable/selectable_background_stylingactionbar</item>-->
+        <item name="android:divider">@color/bar_devider</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+    <!--actionbar-->
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/bar_background</item>
+        <!--<item name="android:backgroundStacked">@color/simple_yellow</item>-->
+        <!--<item name="android:backgroundSplit">@color/ColorPrimary</item>-->
+        <item name="android:titleTextStyle">@style/AppTheme.Bar.TitleText</item>
+    </style>
+    <!--actionbar title text-->
+    <style name="AppTheme.Bar.TitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/bar_menu_text</item>
+        <!-- The textColor property is backward compatible with the Support Library -->
+    </style>
+
+    <!--actionbar tabs text-->
+    <style name="AppTheme.Bar.TabText" parent="@android:style/Widget.ActionBar.TabText">
+        <item name="android:textColor">@color/simple_yellow</item>
+        <!-- The textColor property is backward compatible with the Support Library -->
+    </style>
+    <!--menu item text color (in popup menu)-->
+    <style name="MenuTextApearance" parent="@android:style/TextAppearance.Holo.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/bar_menu_text</item>
+    </style>
+
+</resources>

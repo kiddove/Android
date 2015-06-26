@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">StylingActionBar</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Menu Strings -->
+    <string name="ui_menu_search">search</string>
+    <string name="ui_menu_send">send</string>
+    <string name="ui_menu_add">add</string>
+    <string name="ui_menu_quit">quit</string>
+    <string name="ui_menu_feedback">feedback</string>
+    <string name="ui_menu_about">about</string>
+    <string name="ui_menu_share">share</string>
+    <string name="video_list_item_img_description">description for video tab item img</string>
+    <string name="photo_list_item_img_description">description for photo tab item img</string>
+    <string name="title_activity_video">Video</string>
+    <string name="title_activity_photo">Photo</string>
+    <string name="loading_video">Loading video</string>
+</resources>

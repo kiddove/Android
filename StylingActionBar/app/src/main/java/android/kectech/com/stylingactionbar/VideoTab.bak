@@ -1,0 +1,195 @@
+package android.kectech.com.stylingactionbar;
+
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.kectech.com.stylingactionbar.lib.SwipyRefreshLayout;
+import android.kectech.com.stylingactionbar.lib.SwipyRefreshLayoutDirection;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Paul on 16/06/2015.
+ * video tab implements by a scrollview
+ */
+public class VideoTab extends Fragment {
+    //private ArrayAdapter<String> mListAdapter;
+    private static final int LIST_ITEM_COUNT = 20;
+
+    private ListView mListView;
+
+    private  VideoListViewAdapter mVideoAdapter;
+
+    private SwipyRefreshLayout mSwipyRefreshLayout;
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.video, container, false);
+
+        mListView = (ListView) v.findViewById(R.id.video_tab_list);
+        mSwipyRefreshLayout = (SwipyRefreshLayout)v.findViewById(R.id.video_tab_swipy_refresh_layout);
+
+        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                Log.i("refresh", "onRefresh called");
+                DummyRefresh(direction);
+            }
+        });
+
+//        // click listener
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast t = Toast.makeText(getActivity(), "select " + position,
+                        Toast.LENGTH_SHORT);
+                t.show();
+
+                // todo
+                // get another activity to run
+                Intent intent = new Intent(getActivity(), VideoActivity.class);
+                if (intent != null) {
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    //String url = "https://www.youtube.com/embed/quNeZeiO5pc";
+                    String url = "http://192.168.9.40/demo/test.html";
+                    intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        mSwipyRefreshLayout.setColorScheme(
+                R.color.swipe_color_1, R.color.swipe_color_3,
+                R.color.swipe_color_5);
+
+        try {
+            ArrayList<VideoListItem> listItems = new ArrayList<VideoListItem>(LIST_ITEM_COUNT);
+            for (int i = 0; i < LIST_ITEM_COUNT; i++) {
+                VideoListItem item = new VideoListItem(R.drawable.ic_launcher, "title", "desc");
+                listItems.add(item);
+            }
+            mVideoAdapter = new VideoListViewAdapter(getActivity(), R.layout.video_list_item, listItems);
+            mListView.setAdapter(mVideoAdapter);
+        }
+        catch (Exception e) {
+            String ss = e.getMessage();
+            Log.d("111", ss);
+        }
+        return v;
+    }
+
+    public ArrayList<VideoListItem> AddContent(@Nullable SwipyRefreshLayoutDirection direction) {
+        try {
+            ArrayList<VideoListItem> listItems = new ArrayList<VideoListItem>(LIST_ITEM_COUNT);
+            for (int i = 0; i < LIST_ITEM_COUNT; i++) {
+                if (direction == null) {
+                    VideoListItem item = new VideoListItem(R.drawable.ic_launcher, "title", "desc");
+                    listItems.add(item);
+                } else if (direction == SwipyRefreshLayoutDirection.TOP) {
+                    VideoListItem item = new VideoListItem(R.drawable.ic_launcher, "refresh", "top" + i);
+                    listItems.add(item);
+                } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+                    VideoListItem item = new VideoListItem(R.drawable.ic_launcher, "refresh", "bottom" + i);
+                    listItems.add(item);
+                }
+            }
+            return listItems;
+        }
+        catch (Exception e) {
+            String ss = e.getMessage();
+            Log.d("111", ss);
+            return null;
+        }
+    }
+
+    public void DummyRefresh(SwipyRefreshLayoutDirection direction) {
+        new DummyBackgroundTask(direction).execute();
+    }
+    /**
+     * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
+     */
+    private class DummyBackgroundTask extends AsyncTask<Void, Void, List<VideoListItem>> {
+
+        static final int TASK_DURATION = 3 * 1000; // 3 seconds
+
+        private SwipyRefreshLayoutDirection direction;
+        public DummyBackgroundTask(SwipyRefreshLayoutDirection direction) {
+            this.direction = direction;
+        }
+        @Override
+        protected List<VideoListItem> doInBackground(Void... params) {
+            // Sleep for a small amount of time to simulate a background-task
+            try {
+                Thread.sleep(TASK_DURATION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Return a new random list of cheeses
+            //return Cheeses.randomList(LIST_ITEM_COUNT);
+            return AddContent(this.direction);
+        }
+
+        @Override
+        protected void onPostExecute(List<VideoListItem> result) {
+            super.onPostExecute(result);
+
+            // Tell the Fragment that the refresh has completed
+            if (direction == SwipyRefreshLayoutDirection.TOP)
+                onRefreshCompleteTop(result);
+            else if (direction == SwipyRefreshLayoutDirection.BOTTOM)
+                onRefreshCompleteBottom(result);
+        }
+
+    }
+    private void onRefreshCompleteTop(List<VideoListItem> result) {
+        //Log.i(LOG_TAG, "onRefreshComplete");
+
+        // Remove all items from the ListAdapter, and then replace them with the new items
+        //mVideoAdapter.clear();
+        for (VideoListItem item : result) {
+            //mVideoAdapter.add(item);
+            mVideoAdapter.insert(item, 0);
+        }
+
+        // Stop the refreshing indicator
+        mSwipyRefreshLayout.setRefreshing(false);
+    }
+
+    private void onRefreshCompleteBottom(List<VideoListItem> result) {
+        //Log.i(LOG_TAG, "onRefreshComplete");
+
+        // Remove all items from the ListAdapter, and then replace them with the new items
+        //mVideoAdapter.clear();
+        for (VideoListItem item : result) {
+            mVideoAdapter.add(item);
+            //mVideoAdapter.insert(item, 0);
+        }
+
+        // Stop the refreshing indicator
+        mSwipyRefreshLayout.setRefreshing(false);
+    }
+
+    // detect when this fragment is visible
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            Log.i("Video", "Video Tab visible need refresh data..");
+            // todo
+            // get data...
+        }
+    }
+}
