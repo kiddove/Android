@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Paul on 16/06/2015.
@@ -53,7 +52,6 @@ public class VideoTab extends Fragment {
         mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                Log.i("refresh", "onRefresh called");
                 DummyRefresh(direction);
             }
         });
@@ -67,19 +65,18 @@ public class VideoTab extends Fragment {
                 t.show();
 
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
-                // todo
                 // get another activity to run
                 Intent intent = new Intent(getActivity(), VideoActivity.class);
-                if (intent != null) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    //String url = "https://www.youtube.com/embed/quNeZeiO5pc";
-                    String url = "http://192.168.9.40/demo/test.html";
 
-                    if (videoListItem.getTitle() == SCAN_TAG)
-                        url = videoListItem.getDesc();
-                    intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
-                    startActivity(intent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                //String url = "https://www.youtube.com/embed/quNeZeiO5pc";
+                String url = "http://192.168.9.40/demo/test.html";
+
+                if (videoListItem.getTitle().equals(SCAN_TAG)) {
+                    url = videoListItem.getDesc();
                 }
+                intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
+                startActivity(intent);
             }
         });
 
@@ -88,7 +85,7 @@ public class VideoTab extends Fragment {
                 R.color.swipe_color_5);
 
         try {
-            ArrayList<VideoListItem> listItems = new ArrayList<VideoListItem>(LIST_ITEM_COUNT);
+            ArrayList<VideoListItem> listItems = new ArrayList<>(LIST_ITEM_COUNT);
             for (int i = 0; i < LIST_ITEM_COUNT; i++) {
                 VideoListItem item = new VideoListItem(R.drawable.ic_launcher, "title", "desc");
                 listItems.add(item);
@@ -97,15 +94,14 @@ public class VideoTab extends Fragment {
             mListView.setAdapter(mVideoAdapter);
         }
         catch (Exception e) {
-            String ss = e.getMessage();
-            Log.d("111", ss);
+            Log.d(MainActivity.LOGTAG, e.getMessage());
         }
         return v;
     }
 
     public ArrayList<VideoListItem> AddContent(@Nullable SwipyRefreshLayoutDirection direction) {
         try {
-            ArrayList<VideoListItem> listItems = new ArrayList<VideoListItem>(LIST_ITEM_COUNT);
+            ArrayList<VideoListItem> listItems = new ArrayList<>(LIST_ITEM_COUNT);
             for (int i = 0; i < LIST_ITEM_COUNT; i++) {
                 if (direction == null) {
                     VideoListItem item = new VideoListItem(R.drawable.ic_launcher, "title", "desc");
@@ -121,8 +117,7 @@ public class VideoTab extends Fragment {
             return listItems;
         }
         catch (Exception e) {
-            String ss = e.getMessage();
-            Log.d("111", ss);
+            Log.d(MainActivity.LOGTAG, e.getMessage());
             return null;
         }
     }
@@ -134,7 +129,7 @@ public class VideoTab extends Fragment {
      * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
      * the first parameter is in execute(param); can be a view holder... for async use to load the image in list view
      */
-    private class DummyBackgroundTask extends AsyncTask<String, Void, List<VideoListItem>> {
+    private class DummyBackgroundTask extends AsyncTask<String, Void, ArrayList<VideoListItem>> {
 
         static final int TASK_DURATION = 3 * 1000; // 3 seconds
 
@@ -143,7 +138,7 @@ public class VideoTab extends Fragment {
             this.direction = direction;
         }
         @Override
-        protected List<VideoListItem> doInBackground(String... params) {
+        protected ArrayList<VideoListItem> doInBackground(String... params) {
             // Sleep for a small amount of time to simulate a background-task
             try {
                 Thread.sleep(TASK_DURATION);
@@ -157,7 +152,7 @@ public class VideoTab extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<VideoListItem> result) {
+        protected void onPostExecute(ArrayList<VideoListItem> result) {
             super.onPostExecute(result);
 
             // Tell the Fragment that the refresh has completed
@@ -168,8 +163,7 @@ public class VideoTab extends Fragment {
         }
 
     }
-    private void onRefreshCompleteTop(List<VideoListItem> result) {
-        //Log.i(LOG_TAG, "onRefreshComplete");
+    private void onRefreshCompleteTop(ArrayList<VideoListItem> result) {
 
         // Remove all items from the ListAdapter, and then replace them with the new items
         //mVideoAdapter.clear();
@@ -182,31 +176,17 @@ public class VideoTab extends Fragment {
         mSwipyRefreshLayout.setRefreshing(false);
     }
 
-    private void onRefreshCompleteBottom(List<VideoListItem> result) {
-        //Log.i(LOG_TAG, "onRefreshComplete");
+    private void onRefreshCompleteBottom(ArrayList<VideoListItem> result) {
 
-        int iCount = mVideoAdapter.getCount();
-        // Remove all items from the ListAdapter, and then replace them with the new items
-        //mVideoAdapter.clear();
         for (VideoListItem item : result) {
             mVideoAdapter.add(item);
-            //mVideoAdapter.insert(item, 0);
         }
 
         // Stop the refreshing indicator
         mSwipyRefreshLayout.setRefreshing(false);
 
-//        if (result.size() > 0 && mListView.getCount() > 0) {
-//            int position = mListView.getFirstVisiblePosition();
-//            View child = mListView.getChildAt(0);
-//            if (child != null) {
-//                int top = child.getBottom();
-//                mListView.setSelectionFromTop(position, top);
-//            }
-//        }
+        // scroll to proper position
         if (result.size() > 0) {
-//            int position = mListView.getFirstVisiblePosition();
-//            mListView.setSelection(position + 1);
 
             final int position = mListView.getFirstVisiblePosition();
             mListView.setSelection(position + 1);
@@ -225,11 +205,11 @@ public class VideoTab extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser) {
-            Log.i("Video", "Video Tab visible need refresh data..");
-            // todo
-            // get data...
-        }
+//        if (isVisibleToUser) {
+//            Log.i(MainActivity.LOGTAG, "Video Tab visible need refresh data..");
+//            // todo
+//            // get data...
+//        }
     }
 
     @Override

@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:contentDescription="Specs"
+            android:contentDescription="@string/hello_world"
             android:scaleType="fitCenter" />
     </ScrollView>
 

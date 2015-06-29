@@ -1,7 +1,6 @@
 package android.kectech.com.stylingactionbar.data;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.kectech.com.stylingactionbar.MainActivity;
@@ -13,8 +12,6 @@ import android.kectech.com.stylingactionbar.view.ScaleImageView;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.io.BufferedInputStream;
@@ -24,7 +21,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
+
 
 /**
  * Created by Paul on 25/06/2015.
@@ -34,7 +31,6 @@ import java.util.List;
  * result -- bitmap
  */
 public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListItem, Bitmap> {
-    private static final String LOGTAG = "LoadPhotoListThumbsTask";
     // Reference to the view which should receive the image
     private final WeakReference adapterRef;
     private final WeakReference listRef;
@@ -86,23 +82,21 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
                     outstream.write(buffer, 0, dataSize);
                 }
 
+                outstream.flush();
                 outstream.close();
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                File fileImage = new File(localPath);
 
-                if (fileImage.exists()) {
-                    bitmap = BitmapFactory.decodeFile(fileImage.getAbsolutePath());
-                    params[i].setThumbNail(bitmap);
-                }
+                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                params[i].setThumbNail(bitmap);
 
                 // update UI to show thumbnail
                 publishProgress(params[i]);
             }
 
         } catch (Exception e) {
-            Log.e(LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, e.getMessage());
         }
 
         return bitmap;
@@ -115,26 +109,6 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
         if (isCancelled()) {
             result = null;
         }
-//         // for single
-//        if (adapterRef != null && listRef != null) {
-//
-//            PhotoListViewAdapter adapter = (PhotoListViewAdapter)adapterRef.get();
-//            ListView listView = (ListView)listRef.get();
-//            adapter.getItem(position).setThumbNail(result);
-//            if (result != null) {
-//
-//                int i1 = listView.getFirstVisiblePosition();
-//                int i2 = listView.getLastVisiblePosition();
-//                View v = listView.getChildAt(position - listView.getFirstVisiblePosition());
-//                if (v != null) {
-//                    ImageView imgView = (ImageView) v.findViewById(R.id.photo_list_item_img);
-//                    if (imgView != null)
-//                        imgView.setImageBitmap(result);
-//                }
-//
-//            } else
-//                Log.e(LOGTAG, "result is nulls, download failed.");
-//        }
     }
 
     @Override
@@ -163,7 +137,7 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
                         imgView.setImageBitmap(bitmap);
                 }
             } else
-                Log.e(LOGTAG, "result is nulls, download failed.");
+                Log.e(MainActivity.LOGTAG, "result is nulls, download failed.");
         }
     }
 }

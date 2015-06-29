@@ -12,27 +12,27 @@ public class PhotoListItem {
 
     private Bitmap thumbNail = null;
     private String title = null;
-    private String description = null;
-    private String imageURL = null;
-    private String thumbURL = null;
+    private String desc = null;
+    private String image = null;
+    private String thumb = null;
     private int position = 0;
 
     public PhotoListItem(@Nullable String imageURL, @Nullable String thumbURL, @Nullable String title, @Nullable String description, @Nullable Bitmap thumbNail, @Nullable int position) {
         this.thumbNail = thumbNail;
         this.title = title;
-        this.description = description;
-        this.imageURL = imageURL;
-        this.thumbURL = thumbURL;
+        this.desc = description;
+        this.image = imageURL;
+        this.thumb = thumbURL;
         this.position = position;
     }
-    public PhotoListItem(PhotoListItem item) {
-        this.thumbNail = item.thumbNail;
-        this.title = item.title;
-        this.description = item.description;
-        this.imageURL = item.imageURL;
-        this.thumbURL = item.thumbURL;
-        this.position = item.position;
-    }
+//    public PhotoListItem(PhotoListItem item) {
+//        this.thumbNail = item.thumbNail;
+//        this.title = item.title;
+//        this.description = item.description;
+//        this.imageURL = item.imageURL;
+//        this.thumbURL = item.thumbURL;
+//        this.position = item.position;
+//    }
 
     public Bitmap getThumbNail() {
         return thumbNail;
@@ -43,11 +43,11 @@ public class PhotoListItem {
     }
 
     public String getDescription() {
-        return description;
+        return desc;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.desc = description;
     }
 
     public String getTitle() {
@@ -59,19 +59,19 @@ public class PhotoListItem {
     }
 
     public String getImageURL() {
-        return imageURL;
+        return image;
     }
 
     public void setImageURL(String imageUrl) {
-        this.imageURL = imageUrl;
+        this.image = imageUrl;
     }
 
     public String getThumbURL() {
-        return thumbURL;
+        return thumb;
     }
 
     public void setThumbURL(String thumbURL) {
-        this.thumbURL = thumbURL;
+        this.thumb = thumbURL;
     }
 
     public int getPosition() {

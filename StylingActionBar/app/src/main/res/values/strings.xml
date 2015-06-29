@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StylingActionBar</string>
+    <string name="app_name">DemoApp</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

@@ -3,16 +3,13 @@ package android.kectech.com.stylingactionbar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.kectech.com.stylingactionbar.util.KecUtilities;
 import android.kectech.com.stylingactionbar.view.ScaleImageView;
 import android.kectech.com.stylingactionbar.data.DownLoadImageTask;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,15 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.io.File;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Paul on 25/06/2015.
@@ -40,9 +31,7 @@ import java.util.List;
 public class PhotoActivity extends Activity {
 
     private static final int imageCount = 1;
-    private ViewPager viewPager;
-    private List<View> viewList;
-    private MyPagerAdapter adapter;
+    private ArrayList<View> viewList;
     private Activity context = null;
     //private String[] URLs = null;
     Bundle URLs = null;
@@ -57,6 +46,7 @@ public class PhotoActivity extends Activity {
 
         context = this;
 
+        try {
         // for using action bar back button
         getActionBar().setDisplayHomeAsUpEnabled(true);
         // hide the icon on the left side on action bar
@@ -82,7 +72,7 @@ public class PhotoActivity extends Activity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(32, 32);
         params.setMargins(6, 0, 6, 0);
 
-        try {
+
             for (int i = 0; i < imageCount; i++) {
                 View v = layoutInflater.inflate(R.layout.photo_activity_image_fragment, null);
                 // here load thumb first if has..
@@ -108,7 +98,7 @@ public class PhotoActivity extends Activity {
             }
         }
         catch (Exception e) {
-            Log.e("yougemaoyong", e.getMessage());
+            Log.e(MainActivity.LOGTAG, e.getMessage());
             return;
         }
 
@@ -118,7 +108,7 @@ public class PhotoActivity extends Activity {
         context = this;
 
         // pager
-        viewPager = (ViewPager)findViewById(R.id.photo_activity_viewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.photo_activity_viewpager);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -136,9 +126,8 @@ public class PhotoActivity extends Activity {
             }
         });
 
-        adapter = new MyPagerAdapter(viewList);
-        viewPager.setAdapter(adapter);
-        //viewPager.setCurrentItem(0);
+        viewPager.setAdapter(new MyPagerAdapter(viewList));
+
         setCurrentPage(0);
     }
 
@@ -195,9 +184,9 @@ public class PhotoActivity extends Activity {
     // page adapter
     private class MyPagerAdapter extends PagerAdapter {
 
-        private List<View> mListView;
+        private ArrayList<View> mListView;
 
-        public MyPagerAdapter(List<View> mListView) {
+        public MyPagerAdapter(ArrayList<View> mListView) {
             super();
             this.mListView = mListView;
         }
@@ -251,36 +240,6 @@ public class PhotoActivity extends Activity {
 
         }
     }
-//    private Bitmap ReadFileFromLocal(String fileurl) {
-//        Bitmap bitmap = null;
-//        InputStream inputSteam = null;
-//        String subfolder = "photo";
-//
-//        // use base64 to encode the url then use as filename store on local dir
-//        byte[] data = null;
-//        try {
-//            data = fileurl.getBytes("UTF-8");
-//        } catch (UnsupportedEncodingException usee) {
-//            usee.printStackTrace();
-//            return null;
-//        }
-//        String fileName = Base64.encodeToString(data, Base64.DEFAULT);
-//        if (fileName != null) {
-//            //FileOutputStream outputStream = context.openFileOutput(filePath, context.MODE_PRIVATE);
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-////            File file = new File(context.getFilesDir() + File.separator
-////                    + fileName);
-//            File file = new File(context.getFilesDir() + File.separator
-//                    + subfolder + File.separator + fileName);
-//
-//            if (file.exists()) {
-//                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//            }
-//        }
-//
-//        return bitmap;
-//    }
 
     // set current
     public void setCurrentPage(int position) {

@@ -16,6 +16,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 
+
 public class MainActivity extends Activity {
 
     // declareing view and variables
@@ -35,15 +36,23 @@ public class MainActivity extends Activity {
 
     public final static String PHOTO_SUB_FOLDER = "Photo";
 
+    // use for log tag
+    public final static String LOGTAG = "kectech_log";
+
+    // default encoding for files
+    public final static String ENCODING = "UTF-8";
+
+    // default user
+    public final static String USER = "default";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        Log.d("TAG", "Max memory is " + maxMemory + "KB");
+        Log.d(MainActivity.LOGTAG, "Max memory is " + maxMemory + "KB");
 
-        // todo...
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
         //// need style.xml parent = Theme.AppCompat.Light.NoActionBar
@@ -51,41 +60,45 @@ public class MainActivity extends Activity {
 
         //setSupportActionBar(toolbar);
         // hide the icon on the left side on action bar
-        getActionBar().setDisplayShowHomeEnabled(false);
-        // hide the tile text
-        getActionBar().setDisplayShowTitleEnabled(false);
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getFragmentManager(), Titles, NumOfTabs);
+        try {
+            getActionBar().setDisplayShowHomeEnabled(false);
+            // hide the tile text
+            getActionBar().setDisplayShowTitleEnabled(false);
+            // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+            adapter = new ViewPagerAdapter(getFragmentManager(), Titles, NumOfTabs);
 
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(adapter);
+            // Assigning ViewPager View and setting the adapter
+            pager = (ViewPager) findViewById(R.id.pager);
+            pager.setAdapter(adapter);
 
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+            // Assiging the Sliding Tab Layout View
+            tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+            tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
-        // use this interface to use you own view, e.g. can add icon instead of text
-        // for pageview or titleview? we will see
-        //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
-        // do NOT use 0 for 2nd param, will cause exception
-        //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
-        //tabs.setCustomTabView(R.layout.tab_title, 0);
+            // use this interface to use you own view, e.g. can add icon instead of text
+            // for pageview or titleview? we will see
+            //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
+            // do NOT use 0 for 2nd param, will cause exception
+            //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
+            //tabs.setCustomTabView(R.layout.tab_title, 0);
 
-        // change background color...
-        //tabs.setBackgroundColor();
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tab_selected);
-            }
-        });
+            // change background color...
+            //tabs.setBackgroundColor();
+            // Setting Custom Color for the Scroll bar indicator of the Tab View
+            tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                @Override
+                public int getIndicatorColor(int position) {
+                    return getResources().getColor(R.color.tab_selected);
+                }
+            });
 
-        // Easy and effective solution for non dynamic view pagers
-        pager.setOffscreenPageLimit(NumOfTabs);
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
+            // Easy and effective solution for non dynamic view pagers
+            pager.setOffscreenPageLimit(NumOfTabs);
+            // Setting the ViewPager For the SlidingTabsLayout
+            tabs.setViewPager(pager);
+        } catch (NullPointerException npe) {
+            Log.e(MainActivity.LOGTAG, npe.getMessage());
+        }
     }
 
     @Override
@@ -108,7 +121,7 @@ public class MainActivity extends Activity {
         }
 
         if (id == R.id.menu_video_tab_item_add) {
-            Log.d("Menu", "can scan QR code now..");
+            Log.d(MainActivity.LOGTAG, "can scan QR code now..");
             IntentIntegrator integrator = new IntentIntegrator(this);
             integrator.initiateScan();
             return true;
@@ -123,7 +136,7 @@ public class MainActivity extends Activity {
         if (scanResult != null) {
             String scanContent = scanResult.getContents();
 
-            Log.d("Scan", "QR Scan Content: " + scanContent);
+            Log.d(MainActivity.LOGTAG, "QR Scan Content: " + scanContent);
 
 //            // insert into ....
             VideoTab fragment = (VideoTab) findFragmentByPosition(1);

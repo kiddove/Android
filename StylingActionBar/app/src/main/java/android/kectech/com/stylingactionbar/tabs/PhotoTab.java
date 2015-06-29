@@ -9,10 +9,10 @@ import android.kectech.com.stylingactionbar.adapter.PhotoListViewAdapter;
 import android.kectech.com.stylingactionbar.data.LoadPhotoListThumbsTask;
 import android.kectech.com.stylingactionbar.lib.SwipyRefreshLayoutDirection;
 import android.kectech.com.stylingactionbar.listitem.PhotoListItem;
+import android.kectech.com.stylingactionbar.util.KecUtilities;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +20,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.kectech.com.stylingactionbar.lib.SwipyRefreshLayout;
-
 import java.io.BufferedInputStream;
-import java.io.IOException;
+import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
+
 
 /**
  * Created by Paul on 16/06/2015.
@@ -41,7 +45,6 @@ import java.util.List;
 public class PhotoTab extends Fragment {
 
     private static final int LIST_ITEM_COUNT = 10;
-    private static final String LOGTAG = "PhotoTabLog";
 
     // list
     private ListView mListView;
@@ -52,10 +55,10 @@ public class PhotoTab extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.photo,container,false);
+        View v = inflater.inflate(R.layout.photo, container, false);
 
-        mListView = (ListView)v.findViewById(R.id.photo_tab_list);
-        mSwipyRefreshLayout = (SwipyRefreshLayout)v.findViewById(R.id.photo_tab_swipy_refresh_layout);
+        mListView = (ListView) v.findViewById(R.id.photo_tab_list);
+        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.photo_tab_swipy_refresh_layout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
 
         // color of refresh spinner
@@ -85,20 +88,20 @@ public class PhotoTab extends Fragment {
                 Bundle params = new Bundle();
                 params.putString(MainActivity.PHOTO_TAB_THUMB_URL_KEY, photoListItem.getThumbURL());
                 params.putString(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, photoListItem.getImageURL());
-                if (intent != null) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                    intent.putExtras(params);
-                    try {
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        Log.e(LOGTAG, e.getMessage());
-                    }
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                intent.putExtras(params);
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(MainActivity.LOGTAG, e.getMessage());
                 }
+
             }
         });
 
-        Refresh(SwipyRefreshLayoutDirection.BOTH);
+        initList();
 
         return v;
     }
@@ -106,30 +109,27 @@ public class PhotoTab extends Fragment {
 
     // refresh list
     public void Refresh(SwipyRefreshLayoutDirection direction) {
-        // todo
-        // to be continued...
+
+        // actually bottom and init can use same interface??
         if (direction == SwipyRefreshLayoutDirection.TOP) {
             new UpdatePhotoListTaskTop().execute("todo");
         } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
             new UpdatePhotoListTaskBottom().execute("todo");
         } else
-        // use as init
+            // use as init
             new UpdatePhotoListTask().execute("todo");
     }
 
     // used to get the list item json file init, top_refresh, bottom_refresh, maybe need param when sending http request
     // to be continued...
     // may need to write 3 task
-    private class UpdatePhotoListTask extends AsyncTask<String, Void, List<PhotoListItem>> {
+    private class UpdatePhotoListTask extends AsyncTask<String, Void, String> {
 
         public UpdatePhotoListTask() {
         }
 
         @Override
-        protected List<PhotoListItem> doInBackground(String... params) {
-
-
-            // todo
+        protected String doInBackground(String... params) {
             // step1 Read from loacl if has data
             // step2 if not send http request
             // if updated write to local... after refresh... a lot of work to do
@@ -147,31 +147,29 @@ public class PhotoTab extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
                 //int length = connection.getContentLength();
-
-                return readJsonFromStream(inputStream);
-
-            } catch (MalformedURLException mue) {
-                Log.e(LOGTAG, mue.getMessage());
+                return readStringFromStream(inputStream);
             } catch (Exception e) {
-                Log.e(LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOGTAG, e.getMessage());
             }
-
             return null;
         }
 
         @Override
-        protected void onPostExecute(List<PhotoListItem> result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            ArrayList<PhotoListItem> items = getListFromJson(result);
 
-            // todo
-            onRefreshComplete(result);
+            if (result != null) {
+                KecUtilities.writeTabLocalData(result, MainActivity.PHOTO_SUB_FOLDER, getActivity());
+                onRefreshComplete(items);
+            }
+            mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdatePhotoListTaskTop extends AsyncTask<String, Void, List<PhotoListItem>> {
+    private class UpdatePhotoListTaskTop extends AsyncTask<String, Void, String> {
         @Override
-        protected List<PhotoListItem> doInBackground(String... params) {
-            // todo
+        protected String doInBackground(String... params) {
             // for test
             String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=top&count=5";
 
@@ -184,32 +182,30 @@ public class PhotoTab extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
 
-                return readJsonFromStream(inputStream);
+                return readStringFromStream(inputStream);
 
-            } catch (MalformedURLException mue) {
-                Log.e(LOGTAG, mue.getMessage());
             } catch (Exception e) {
-                Log.e(LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(List<PhotoListItem> result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            // todo
-            onRefreshCompleteTop(result);
+            //Log.d(MainActivity.LOGTAG, "***   onPostExecute: " + result + "   ***");
+            ArrayList<PhotoListItem> items = getListFromJson(result);
+
+            onRefreshCompleteTop(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdatePhotoListTaskBottom extends AsyncTask<String, Void, List<PhotoListItem>> {
+    private class UpdatePhotoListTaskBottom extends AsyncTask<String, Void, String> {
         @Override
-        protected List<PhotoListItem> doInBackground(String... params) {
+        protected String doInBackground(String... params) {
 
-
-            // todo
             // for test
             String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=bottom&count=5";
 
@@ -223,81 +219,32 @@ public class PhotoTab extends Fragment {
                 InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
                 //int length = connection.getContentLength();
 
-                return readJsonFromStream(inputStream);
+                return readStringFromStream(inputStream);
 
-            } catch (MalformedURLException mue) {
-                Log.e(LOGTAG, mue.getMessage());
             } catch (Exception e) {
-                Log.e(LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(List<PhotoListItem> result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            ArrayList<PhotoListItem> items = getListFromJson(result);
 
             // todo
-            onRefreshCompleteBottom(result);
+            // write to local file
+            onRefreshCompleteBottom(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    // parse json string(inputstream)
-    private List<PhotoListItem> readJsonFromStream(InputStream in) throws IOException {
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        try {
-            return readPhotoItemArray(reader);
-        } finally {
-            reader.close();
-        }
-    }
-
-    private List<PhotoListItem> readPhotoItemArray(JsonReader reader) throws IOException {
-        List<PhotoListItem> listItems = new ArrayList();
-        int i = 0;
-        reader.beginArray();
-        while (reader.hasNext()) {
-//            PhotoListItem item = readPhotoItem(reader);
-//            // position should be determined when insert/add to adapter/list
-//            item.setPosition(i);
-//            listItems.add(item);
-//            i++;
-
-            listItems.add(readPhotoItem(reader));
-        }
-        reader.endArray();
-        return listItems;
-    }
-
-    public PhotoListItem readPhotoItem(JsonReader reader) throws IOException {
-        String title = null;
-        String desc = null;
-        String thumbURL = null;
-        String imageURL = null;
-        reader.beginObject();
-        while (reader.hasNext()) {
-            String key = reader.nextName();
-            if (key.equals("image")) {
-                imageURL = reader.nextString();
-            } else if (key.equals("thumb")) {
-                thumbURL = reader.nextString();
-            } else if (key.equals("title")) {
-                title = reader.nextString();
-            } else if (key.equals("desc")) {
-                desc = reader.nextString();
-            } else
-                reader.skipValue();
-        }
-        reader.endObject();
-        Log.i(LOGTAG, thumbURL);
-        return new PhotoListItem(imageURL, thumbURL, title, desc, null, 0);
-    }
-
     // for the first time when init using this
-    private void onRefreshComplete(List<PhotoListItem> result) {
+    private void onRefreshComplete(ArrayList<PhotoListItem> result) {
+        if (result == null)
+            return;
         if (mPhotoAdapter != null) {
-            Log.d(LOGTAG, "ListView(mPhotoAdapter) already had data, will be cleared...");
+            Log.d(MainActivity.LOGTAG, "ListView(mPhotoAdapter) already had data, will be cleared...");
         }
         try {
             // first add to adapter and listview
@@ -321,14 +268,23 @@ public class PhotoTab extends Fragment {
             new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
 
         } catch (Exception e) {
-            Log.e(LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
     }
 
-    private void onRefreshCompleteTop(List<PhotoListItem> result) {
+    private void onRefreshCompleteTop(ArrayList<PhotoListItem> result) {
+        if (result == null)
+            return;
+        ArrayList<PhotoListItem> localData = null;
         try {
+            // read local data, must have some, because of init
+            String strJson = KecUtilities.getTabLocalData(MainActivity.PHOTO_SUB_FOLDER, getActivity());
+
+            if (strJson != null && !strJson.isEmpty()) {
+                localData = getListFromJson(strJson);
+            }
             // first add/insert into adapter/list
             // suppose result is ordered.
             // should insert into list from the last item...
@@ -338,27 +294,42 @@ public class PhotoTab extends Fragment {
 
                 PhotoListItem item = result.get(position);
                 mPhotoAdapter.insert(item, 0);
+                if (localData != null)
+                    localData.add(0, item);
                 item.setPosition(position);
                 items[position] = item;
             }
 
 
+            // write to local not append, write
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), MainActivity.PHOTO_SUB_FOLDER, getActivity());
+
             new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
 
         } catch (Exception e) {
-            Log.e(LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
     }
 
-    private void onRefreshCompleteBottom(List<PhotoListItem> result) {
+    private void onRefreshCompleteBottom(ArrayList<PhotoListItem> result) {
+        if (result == null)
+            return;
+        ArrayList<PhotoListItem> localData = null;
         try {
+            // read local data, must have some, because of init
+            String strJson = KecUtilities.getTabLocalData(MainActivity.PHOTO_SUB_FOLDER, getActivity());
+            if (strJson != null && !strJson.isEmpty()) {
+                localData = getListFromJson(strJson);
+            }
             // 1. add/insert into adapter/list and set the correct position
             int position = mPhotoAdapter.getCount();
             for (PhotoListItem item : result) {
                 item.setPosition(position);
                 mPhotoAdapter.add(item);
+                if (localData != null)
+                    localData.add(item);
                 position++;
             }
 
@@ -375,12 +346,72 @@ public class PhotoTab extends Fragment {
 
             PhotoListItem[] items = new PhotoListItem[result.size()];
             result.toArray(items);
-
+            // write to local not append, write
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), MainActivity.PHOTO_SUB_FOLDER, getActivity());
             new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
         } catch (Exception e) {
-            Log.e(LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
+    }
+
+    public String readStringFromStream(InputStream inputStream) {
+        String strJson = null;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                total.append(line);
+            }
+            strJson = total.toString();
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, "readStringFromStream occurs exception: " + e.getMessage());
+        }
+        return strJson;
+    }
+
+    public ArrayList<PhotoListItem> getListFromJson(String strJson) {
+        try {
+            Gson gson = new Gson();
+
+            Type typeOfObjects = new TypeToken<ArrayList<PhotoListItem>>() {
+            }.getType();
+
+            return gson.fromJson(strJson, typeOfObjects);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+        }
+        return null;
+    }
+
+    public String getJsonFromObject(ArrayList<PhotoListItem> items) {
+        try {
+            Gson gson = new Gson();
+
+            Type typeOfObjects = new TypeToken<ArrayList<PhotoListItem>>() {
+            }.getType();
+
+            return gson.toJson(items, typeOfObjects);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void initList() {
+        // read local file
+        String strJson = KecUtilities.getTabLocalData(MainActivity.PHOTO_SUB_FOLDER, getActivity());
+
+        if (strJson != null && !strJson.isEmpty()) {
+            ArrayList<PhotoListItem> items = getListFromJson(strJson);
+            if (items != null) {
+                onRefreshComplete(items);
+            }
+        } else {
+            Refresh(SwipyRefreshLayoutDirection.BOTH);
+        }
     }
 }

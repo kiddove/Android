@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Paul on 16/06/2015.
@@ -20,7 +20,7 @@ import java.util.List;
 public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
     private  Context context;
 
-    public VideoListViewAdapter(Context context, int resourceId, List<VideoListItem> items) {
+    public VideoListViewAdapter(Context context, int resourceId, ArrayList<VideoListItem> items) {
         super(context, resourceId, items);
         this.context = context;
     }
