@@ -25,10 +25,10 @@ import java.net.URLConnection;
  * use to download the full image when user tapped an item in the list,
  * will be displayed in an activity
  * AsyncTask<params, progress, result>
- *     onPreExecute()
- *     doInBackground(Params)
- *     onProgressUpdate()
- *     onPostExecute(Result)
+ * onPreExecute()
+ * doInBackground(Params)
+ * onProgressUpdate()
+ * onPostExecute(Result)
  */
 public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
     // Reference to the view which should receive the image
