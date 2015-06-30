@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     android:exitFadeDuration="@android:integer/config_mediumAnimTime">
-    <!-- Pressed -->
     <item
-        android:state_pressed="true">
-        <shape>
-            <solid android:color="@color/item_pressed" />
-        </shape>
+        android:state_pressed="true"
+        android:drawable="@color/item_pressed">
     </item>
+
+    <!--background is not setting here, default has no use-->
+    <!--<item android:drawable="@color/bar_background" />-->
 </selector>

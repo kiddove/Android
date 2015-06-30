@@ -48,10 +48,11 @@ public class MainActivity extends Activity {
 
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
-        //// need style.xml parent = Theme.AppCompat.Light.NoActionBar
-        //toolbar = (Toolbar) findViewById(R.id.tool_bar);
-
-        //setSupportActionBar(toolbar);
+//        //// need style.xml parent = Theme.AppCompat.Light.NoActionBar
+//        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+//
+//        //setSupportActionBar(toolbar);
+//        setActionBar(toolBar);
         // hide the icon on the left side on action bar
         try {
             getActionBar().setDisplayShowHomeEnabled(false);

@@ -36,4 +36,8 @@
 
     <color name="tab_layout_background">#FFE6E7E8</color>
     <color name="black">#FF000000</color>
+
+    <!--<color name="item_pressed">#84D3EF</color>-->
+    <!--do not set transparent otherwise when in dark background... it's awful -->
+    <color name="item_pressed">#A5D3F5</color>
 </resources>

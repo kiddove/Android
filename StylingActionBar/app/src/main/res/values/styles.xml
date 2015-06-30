@@ -1,12 +1,10 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="android:actionBarWidgetTheme">@style/PopopMenuTextView</item>
-        <!--&lt;!&ndash;text color in the pop up list&ndash;&gt;-->
-        <!--<item name="android:itemTextAppearance">@style/MenuTextApearance</item>-->
+        <item name="android:actionBarWidgetTheme">@style/PopupMenuTheme</item>
         <!--// menu item text color(in action bar)-->
         <item name="android:actionMenuTextColor">@color/bar_menu_text</item>
         <!--&lt;!&ndash; Change Overflow Menu ListView Item Height & Property &ndash;&gt;-->
@@ -14,29 +12,45 @@
         <!--<item name="android:listPreferredItemPaddingLeft">5dp</item>-->
         <!--<item name="android:listPreferredItemPaddingRight">5dp</item>-->
 
-        <!--try to change background of menuitem on bar-->
-        <!--<item name="android:actionBarItemBackground">@drawable/menu_item_background</item>-->
+        <!--try to change background when pressed of menu item on bar, or tab when pressed-->
+         <!--tab, slidingtablayout, but indicator disappeared...-->
+        <!--so only set pressed state here and make background transparent-->
+        <!--set strip background to what you want-->
+        <item name="android:selectableItemBackground">@drawable/sliding_tab_item_selector</item>
+
+        <!--action bar icon and overflow part-->
+        <item name="android:actionBarItemBackground">@drawable/actionbar_and_overflow_selector</item>
+        <!--droplist will be in DropDownListView listSelector-->
+
+        <!--api 21 or above need to put here... for dropdown list, api 19 or below not working here-->
+        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
+        <item name="android:itemTextAppearance">@style/MenuTextApearance</item>
     </style>
 
     <!--overflow menu drop down-->
-    <style name="PopopMenuTextView" parent="@android:style/Theme.Holo.Light">
+    <style name="PopupMenuTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <!--api 19 or below need to put here, but api 21 or above not working-->
         <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
-        <item name="android:textColor">@color/bar_menu_text</item>
         <!--<item name="android:textSize">28dp</item>-->
     </style>
     <!-- Change Overflow Menu Background -->
     <style name="PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
-        <item name="android:popupBackground">@color/bar_background</item>
+        <!--<item name="android:popupBackground">@color/bar_background</item>-->
+        <item name="android:popupBackground">@drawable/tab_list_selector</item>
     </style>
     <!-- Change Overflow Menu ListView Divider Property or selector-->
     <style name="DropDownListView" parent="@android:style/Widget.Holo.ListView.DropDown">
-        <!--<item name="android:listSelector">@drawable/selectable_background_stylingactionbar</item>-->
+        <!--drip list item selector-->
+        <item name="android:listSelector">@drawable/droplist_item_selector</item>
+        <item name="android:background">@color/bar_background</item>
         <item name="android:divider">@color/bar_devider</item>
-        <item name="android:dividerHeight">1dp</item>
+        <item name="android:dividerHeight">2dp</item>
+        <!--<item name="android:itemTextAppearance">@style/MenuTextApearance</item>-->
+        <!--<item name="android:textColor">@style/MenuTextApearance</item>-->
     </style>
     <!--actionbar-->
-    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/bar_background</item>
         <!--<item name="android:backgroundStacked">@color/simple_yellow</item>-->
         <!--<item name="android:backgroundSplit">@color/ColorPrimary</item>-->

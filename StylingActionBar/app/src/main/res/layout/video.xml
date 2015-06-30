@@ -21,7 +21,8 @@
         <ListView
             android:id="@+id/video_tab_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:listSelector="@drawable/tab_list_selector"/>
 
     </android.kectech.com.stylingactionbar.lib.SwipyRefreshLayout>
 </FrameLayout>

@@ -27,6 +27,6 @@
         android:drawableTop="@drawable/ic_launcher"
         android:drawablePadding="5dp"
         android:gravity="center"
-        android:background="@drawable/tablayout_background"
+        android:background="@drawable/sliding_tab_item_selector"
         android:clickable="false" />
 </LinearLayout>
