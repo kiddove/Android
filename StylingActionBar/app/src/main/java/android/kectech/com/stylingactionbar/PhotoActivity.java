@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 /**
@@ -47,36 +48,36 @@ public class PhotoActivity extends Activity {
         context = this;
 
         try {
-        // for using action bar back button
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        // hide the icon on the left side on action bar
-        getActionBar().setDisplayShowHomeEnabled(false);
+            // for using action bar back button
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            // hide the icon on the left side on action bar
+            getActionBar().setDisplayShowHomeEnabled(false);
 
-        // get url from where activate this activity (like in video tab click
-        // receive the intent
-        //String url = "http://192.168.9.40/demo/test.html";
-        Intent intent = getIntent();
-        if (intent != null) {
-            URLs = intent.getExtras();
-        }
+            // get url from where activate this activity (like in video tab click
+            // receive the intent
+            //String url = "http://192.168.9.40/demo/test.html";
+            Intent intent = getIntent();
+            if (intent != null) {
+                URLs = intent.getExtras();
+            }
 
-        // for now only one image
+            // for now only one image
 
-        // init
-        LayoutInflater layoutInflater = getLayoutInflater().from(this);
-        viewList = new ArrayList<View>();
-        dots = new ArrayList<View>();
+            // init
+            LayoutInflater layoutInflater = getLayoutInflater().from(this);
+            viewList = new ArrayList<View>();
+            dots = new ArrayList<View>();
 
-        // dots
-        LinearLayout dotsLayout = (LinearLayout)findViewById(R.id.photo_activity_dots_group);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(32, 32);
-        params.setMargins(6, 0, 6, 0);
+            // dots
+            LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.photo_activity_dots_group);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(32, 32);
+            params.setMargins(6, 0, 6, 0);
 
 
             for (int i = 0; i < imageCount; i++) {
                 View v = layoutInflater.inflate(R.layout.photo_activity_image_fragment, null);
                 // here load thumb first if has..
-                ScaleImageView imageView = (ScaleImageView)v.findViewById(R.id.photo_activity_image_fragment_imageview);
+                ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageview);
                 if (imageView != null) {
                     if (URLs != null) {
                         String strThumbURL = URLs.getString(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
@@ -96,8 +97,7 @@ public class PhotoActivity extends Activity {
                 dotsLayout.addView(dot);
                 dots.add(dot);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
             return;
         }
@@ -194,7 +194,7 @@ public class PhotoActivity extends Activity {
 
         public void destroyItem(View arg0, int arg1, Object arg2) {
             // TODO Auto-generated method stub
-            ((ViewGroup)arg0).removeView(mListView.get(arg1));
+            ((ViewGroup) arg0).removeView(mListView.get(arg1));
         }
 
         @Override
@@ -212,14 +212,14 @@ public class PhotoActivity extends Activity {
         @Override
         public Object instantiateItem(View arg0, int arg1) {
             // TODO Auto-generated method stub
-            ((ViewGroup)arg0).addView(mListView.get(arg1), 0);
+            ((ViewGroup) arg0).addView(mListView.get(arg1), 0);
             return mListView.get(arg1);
         }
 
 
         public boolean isViewFromObject(View arg0, Object arg1) {
             // TODO Auto-generated method stub
-            return arg0==(arg1);
+            return arg0 == (arg1);
         }
 
         @Override
@@ -247,8 +247,8 @@ public class PhotoActivity extends Activity {
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);
         previous = position;
 
-        TextView tv = (TextView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_textview);
-        tv.setText("Image" + position);
+//        TextView tv = (TextView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_textview);
+//        tv.setText("Image" + position);
 
         ScaleImageView imageView = (ScaleImageView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_imageview);
         // download image async
@@ -259,7 +259,7 @@ public class PhotoActivity extends Activity {
         //Bitmap bitmap = null;
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
-        }else {
+        } else {
             new DownLoadImageTask(imageView, context).execute(imageURL);
         }
     }

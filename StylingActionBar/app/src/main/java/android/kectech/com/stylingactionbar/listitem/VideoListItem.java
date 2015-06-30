@@ -9,7 +9,7 @@ public class VideoListItem {
     private String strTitle;
     private String strDesc;
 
-    public  VideoListItem(int imgid, String title, String desc) {
+    public VideoListItem(int imgid, String title, String desc) {
         this.imgId = imgid;
         this.strTitle = title;
         this.strDesc = desc;
@@ -18,24 +18,29 @@ public class VideoListItem {
     public int getImageId() {
         return imgId;
     }
+
     public void setImageId(int imageId) {
         this.imgId = imageId;
     }
+
     public String getDesc() {
         return strDesc;
     }
+
     public void setDesc(String desc) {
         this.strDesc = desc;
     }
+
     public String getTitle() {
         return strTitle;
     }
+
     public void setTitle(String title) {
         this.strTitle = title;
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return strTitle + "\n" + strDesc;
     }
 }

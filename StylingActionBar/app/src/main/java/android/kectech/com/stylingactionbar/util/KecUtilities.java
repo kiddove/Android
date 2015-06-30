@@ -26,11 +26,11 @@ public class KecUtilities {
     public static String getLoaclFilePathFromURL(String url, String subFolder, Context context) {
         //Test if subfolder exists and if not create
         File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdir();
         }
         folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + subFolder);
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdir();
         }
         // use base64 to encode the url then use as filename store on local dir
@@ -91,11 +91,11 @@ public class KecUtilities {
         //Log.d(MainActivity.LOGTAG, "***   write: " + strJson + "   ***");
         try {
             File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
-            if(!folder.exists()){
+            if (!folder.exists()) {
                 folder.mkdir();
             }
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + subFolder);
-            if(!folder.exists()){
+            if (!folder.exists()) {
                 folder.mkdir();
             }
 

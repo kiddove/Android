@@ -26,8 +26,8 @@ import java.net.URLConnection;
 /**
  * Created by Paul on 25/06/2015.
  * used for loading thumbs for the photo tab ListView's item
- * params (for the task not the constructor)-- object, tunmbs url? listitem? postion? String?
- * progress -- Void
+ * params (for the task not the constructor)-- object, tunmbs url? listitem postion? String?
+ * progress -- to notify which item need to refresh, still use listitem
  * result -- bitmap
  */
 public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListItem, Bitmap> {
@@ -55,40 +55,44 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
 
                 String localPath = KecUtilities.getLoaclFilePathFromURL(item.getThumbURL(), MainActivity.PHOTO_SUB_FOLDER, activity);
 
-                // read from locl first?
                 if (localPath == null)
                     return bitmap;
+                // read from local first
+                bitmap = KecUtilities.ReadFileFromLocal(localPath);
+                if (bitmap == null) {
 
-                URL url = new URL(item.getThumbURL());
+                    URL url = new URL(item.getThumbURL());
 
-                URLConnection connection = url.openConnection();
+                    //Log.d(MainActivity.LOGTAG, item.getThumbURL());
+                    URLConnection connection = url.openConnection();
 
-                connection.connect();
-                InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
-                int length = connection.getContentLength();
+                    connection.connect();
+                    InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
+                    int length = connection.getContentLength();
 
-                if (length <= 0)
-                    return bitmap;
+                    if (length <= 0)
+                        return bitmap;
 
-                File file = new File(localPath);
-                if (!file.exists()) {
-                    file.createNewFile();
+                    File file = new File(localPath);
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    //OutputStream outputStream = context.openFileOutput(localPath, Context.MODE_PRIVATE);
+                    FileOutputStream outstream = new FileOutputStream(file);
+                    byte buffer[] = new byte[1024 * 5];
+                    int dataSize;
+                    while ((dataSize = inputSteam.read(buffer)) != -1) {
+                        outstream.write(buffer, 0, dataSize);
+                    }
+
+                    outstream.flush();
+                    outstream.close();
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 }
-                //OutputStream outputStream = context.openFileOutput(localPath, Context.MODE_PRIVATE);
-                FileOutputStream outstream = new FileOutputStream(file);
-                byte buffer[] = new byte[1024 * 5];
-                int dataSize;
-                while ((dataSize = inputSteam.read(buffer)) != -1) {
-                    outstream.write(buffer, 0, dataSize);
-                }
-
-                outstream.flush();
-                outstream.close();
-
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 params[i].setThumbNail(bitmap);
 
                 // update UI to show thumbnail
@@ -121,10 +125,11 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
         // can not update UI in doInBackground...
         // so if use one thread to download multi files
         // update ui here
+        // in this thread, to notify UI show the thumb image
         if (adapterRef != null && listRef != null) {
 
-            PhotoListViewAdapter adapter = (PhotoListViewAdapter)adapterRef.get();
-            ListView listView = (ListView)listRef.get();
+            PhotoListViewAdapter adapter = (PhotoListViewAdapter) adapterRef.get();
+            ListView listView = (ListView) listRef.get();
             Bitmap bitmap = item[0].getThumbNail();
             adapter.getItem(item[0].getPosition()).setThumbNail(bitmap);
             if (bitmap != null) {

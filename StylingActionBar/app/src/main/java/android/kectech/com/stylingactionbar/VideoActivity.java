@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.Toast;
+
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -39,8 +40,9 @@ public class VideoActivity extends Activity {
 
         if (mWebView != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE))
-                { WebView.setWebContentsDebuggingEnabled(true); }
+                if (0 != (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE)) {
+                    WebView.setWebContentsDebuggingEnabled(true);
+                }
             }
             mWebView.loadUrl(url);
         }
@@ -78,13 +80,12 @@ public class VideoActivity extends Activity {
         //return super.onOptionsItemSelected(item);
     }
 
-    // use back button to navigate backword
+    // use back button to navigate backward
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // check if the key event was the Back button and if there's history
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode)
-            {
+            switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     if (mWebView.inCustomView()) {
                         mWebView.hideCustomView();
@@ -92,8 +93,7 @@ public class VideoActivity extends Activity {
                     }
                     if (mWebView.canGoBack()) {
                         mWebView.goBack();
-                    }
-                    else {
+                    } else {
                         getFragmentManager().popBackStackImmediate();
                         finish();
                     }
@@ -113,29 +113,24 @@ public class VideoActivity extends Activity {
         // WebView threads never stopping
         // so we have to...
         try {
-            Class.forName("android.webkit.WebView").getMethod("onPause", (Class[])null).invoke(mWebView, (Object[])null);
-        }
-        catch (ClassNotFoundException cnfe) {
-            Toast t = Toast.makeText(this, "ClassNotFoundException " ,
+            Class.forName("android.webkit.WebView").getMethod("onPause", (Class[]) null).invoke(mWebView, (Object[]) null);
+        } catch (ClassNotFoundException cnfe) {
+            Toast t = Toast.makeText(this, "ClassNotFoundException ",
                     Toast.LENGTH_SHORT);
             t.show();
-        }
-        catch (NoSuchMethodException nsme) {
+        } catch (NoSuchMethodException nsme) {
             Toast t = Toast.makeText(this, "NoSuchMethodException: " + nsme.getMessage(),
                     Toast.LENGTH_SHORT);
             t.show();
-        }
-        catch (InvocationTargetException ite) {
+        } catch (InvocationTargetException ite) {
             Toast t = Toast.makeText(this, "InvocationTargetException: " + ite.getMessage(),
                     Toast.LENGTH_SHORT);
             t.show();
-        }
-        catch (IllegalAccessException iae) {
+        } catch (IllegalAccessException iae) {
             Toast t = Toast.makeText(this, "IllegalAccessException: " + iae.getMessage(),
                     Toast.LENGTH_SHORT);
             t.show();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Toast t = Toast.makeText(this, "Exception: " + e.getMessage(),
                     Toast.LENGTH_SHORT);
             t.show();

@@ -5,8 +5,8 @@
 
     <android.kectech.com.stylingactionbar.view.ScaleImageView
         android:id="@+id/photo_list_item_img"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="@string/photo_list_item_img_description"
         android:paddingLeft="5dp"
         android:paddingRight="2dp"

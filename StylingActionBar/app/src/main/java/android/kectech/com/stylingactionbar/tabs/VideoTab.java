@@ -16,11 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -41,12 +45,13 @@ public class VideoTab extends Fragment {
     private VideoListViewAdapter mVideoAdapter;
 
     private SwipyRefreshLayout mSwipyRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.video, container, false);
 
         mListView = (ListView) v.findViewById(R.id.video_tab_list);
-        mSwipyRefreshLayout = (SwipyRefreshLayout)v.findViewById(R.id.video_tab_swipy_refresh_layout);
+        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.video_tab_swipy_refresh_layout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
 
         mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
@@ -92,8 +97,7 @@ public class VideoTab extends Fragment {
             }
             mVideoAdapter = new VideoListViewAdapter(getActivity(), R.layout.video_list_item, listItems);
             mListView.setAdapter(mVideoAdapter);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(MainActivity.LOGTAG, e.getMessage());
         }
         return v;
@@ -115,8 +119,7 @@ public class VideoTab extends Fragment {
                 }
             }
             return listItems;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(MainActivity.LOGTAG, e.getMessage());
             return null;
         }
@@ -125,6 +128,7 @@ public class VideoTab extends Fragment {
     public void DummyRefresh(SwipyRefreshLayoutDirection direction) {
         new DummyBackgroundTask(direction).execute("whatever");
     }
+
     /**
      * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
      * the first parameter is in execute(param); can be a view holder... for async use to load the image in list view
@@ -134,9 +138,11 @@ public class VideoTab extends Fragment {
         static final int TASK_DURATION = 3 * 1000; // 3 seconds
 
         private SwipyRefreshLayoutDirection direction;
+
         public DummyBackgroundTask(SwipyRefreshLayoutDirection direction) {
             this.direction = direction;
         }
+
         @Override
         protected ArrayList<VideoListItem> doInBackground(String... params) {
             // Sleep for a small amount of time to simulate a background-task
@@ -163,6 +169,7 @@ public class VideoTab extends Fragment {
         }
 
     }
+
     private void onRefreshCompleteTop(ArrayList<VideoListItem> result) {
 
         // Remove all items from the ListAdapter, and then replace them with the new items
@@ -234,5 +241,42 @@ public class VideoTab extends Fragment {
 
         VideoListItem videoListItem = new VideoListItem(R.drawable.ic_launcher, SCAN_TAG, url);
         mVideoAdapter.insert(videoListItem, 0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // if want to handled in fragment
+        // must return false in activity
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_video_tab_item_add:
+                IntentIntegrator integrator = new IntentIntegrator(this);
+                integrator.initiateScan();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // deal with scan result
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null) {
+            String scanContent = scanResult.getContents();
+
+            if (scanContent != null) {
+                Log.d(MainActivity.LOGTAG, "QR Scan Content: " + scanContent);
+
+                if (!scanContent.isEmpty()) {
+//            // insert into ....
+                    try {
+                        AddItemToList(scanContent);
+                    } catch (Exception e) {
+                        Log.e(MainActivity.LOGTAG, e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }

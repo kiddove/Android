@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 public class SwipeTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.swipe,container,false);
+        View v = inflater.inflate(R.layout.swipe, container, false);
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

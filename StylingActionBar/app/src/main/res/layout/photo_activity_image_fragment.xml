@@ -3,20 +3,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/photo_activity_image_fragment_textview"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/hello_world"
-        android:textSize="24sp"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/photo_activity_image_fragment_textview"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:text="@string/hello_world"-->
+        <!--android:textSize="24sp"/>-->
 
-
+    <!--android:layout_below="@+id/photo_activity_image_fragment_textview"-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/photo_activity_image_fragment_textview"
-        android:scrollbarAlwaysDrawVerticalTrack="true">
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:layout_centerInParent="true">
 
         <android.kectech.com.stylingactionbar.view.ScaleImageView
             android:id="@+id/photo_activity_image_fragment_imageview"

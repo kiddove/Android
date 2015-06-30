@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 public class HomeTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.subscriber,container,false);
+        View v = inflater.inflate(R.layout.subscriber, container, false);
         return v;
     }
 }

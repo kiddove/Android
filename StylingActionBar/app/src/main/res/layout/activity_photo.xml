@@ -26,7 +26,7 @@
         android:layout_height="48dp"
         android:id="@+id/photo_activity_progressbar"
         android:progressDrawable="@drawable/photo_activity_progress"
-        android:background="@drawable/photo_activity_background"
+        android:background="@drawable/photo_activity_progress_background"
         android:visibility="gone"
         android:indeterminate="false"
         android:layout_centerInParent="true"

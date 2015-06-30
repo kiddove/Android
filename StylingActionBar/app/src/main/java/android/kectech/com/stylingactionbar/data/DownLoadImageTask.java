@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,10 +35,11 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
     private final WeakReference imageRef;
     private Activity context;
     private ProgressBar progressBar;
+
     public DownLoadImageTask(ImageView imageView, Activity context) {
         imageRef = new WeakReference(imageView);
         this.context = context;
-        progressBar = (ProgressBar)context.findViewById(R.id.photo_activity_progressbar);
+        progressBar = (ProgressBar) context.findViewById(R.id.photo_activity_progressbar);
     }
 
     @Override
@@ -52,12 +54,13 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
         // down load and save to local
+        // before start thread, must determined local data is null
         Bitmap bitmap = null;
 
         try {
-            String fileurl = params[0];
+            String file_url = params[0];
 
-            URL url = new URL(fileurl);
+            URL url = new URL(file_url);
 
             URLConnection connection = url.openConnection();
 
@@ -72,12 +75,12 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             // change the ui of progress bar
             progressBar.setMax(length);
 
-            String localPath = KecUtilities.getLoaclFilePathFromURL(fileurl, MainActivity.PHOTO_SUB_FOLDER, context);
+            String localPath = KecUtilities.getLoaclFilePathFromURL(file_url, MainActivity.PHOTO_SUB_FOLDER, context);
             if (localPath == null)
                 return null;
 
             File file = new File(localPath);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 file.createNewFile();
             }
             //OutputStream outputStream = context.openFileOutput(localPath, Context.MODE_PRIVATE);
@@ -85,7 +88,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             byte buffer[] = new byte[1024 * 5];
             int dataSize;
             int loadedSize = 0;
-            while ((dataSize = inputSteam.read(buffer))!= -1) {
+            while ((dataSize = inputSteam.read(buffer)) != -1) {
                 loadedSize += dataSize;
                 publishProgress(loadedSize);
                 outstream.write(buffer, 0, dataSize);
@@ -110,7 +113,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
     /*
     * After completing background task, dismiss the progress dialog
     * */
-    protected  void onPostExecute(Bitmap bitmap) {
+    protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
         progressBar.setVisibility(View.GONE);
         if (isCancelled()) {

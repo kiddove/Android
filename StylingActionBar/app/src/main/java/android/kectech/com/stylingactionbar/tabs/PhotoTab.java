@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.kectech.com.stylingactionbar.lib.SwipyRefreshLayout;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -31,8 +32,6 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-
 
 
 /**
@@ -414,4 +413,12 @@ public class PhotoTab extends Fragment {
             Refresh(SwipyRefreshLayoutDirection.BOTH);
         }
     }
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        // for using different menu
+//        setHasOptionsMenu(true);
+//    }
 }

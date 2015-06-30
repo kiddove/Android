@@ -3,6 +3,7 @@ package android.kectech.com.stylingactionbar.view;
 /**
  * Created by Paul on 16/06/2015.
  */
+
 import android.kectech.com.stylingactionbar.data.Cheeses;
 import android.kectech.com.stylingactionbar.R;
 import android.os.AsyncTask;
@@ -24,10 +25,10 @@ import java.util.List;
  * A basic sample that shows how to use {@link android.support.v4.widget.SwipeRefreshLayout} to add
  * the 'swipe-to-refresh' gesture to a layout. In this sample, SwipeRefreshLayout contains a
  * scrollable {@link android.widget.ListView} as its only child.
- *
+ * <p/>
  * <p>To provide an accessible way to trigger the refresh, this app also provides a refresh
  * action item.
- *
+ * <p/>
  * <p>In this sample app, the refresh updates the ListView with a random set of new items.
  */
 public class SwipeRefreshLayoutBasicFragment extends Fragment {
@@ -130,6 +131,7 @@ public class SwipeRefreshLayoutBasicFragment extends Fragment {
     }
 
     // BEGIN_INCLUDE (setup_refresh_menu_listener)
+
     /**
      * Respond to the user's selection of the Refresh action item. Start the SwipeRefreshLayout
      * progress bar, then initiate the background task that refreshes the content.
@@ -156,6 +158,7 @@ public class SwipeRefreshLayoutBasicFragment extends Fragment {
     // END_INCLUDE (setup_refresh_menu_listener)
 
     // BEGIN_INCLUDE (initiate_refresh)
+
     /**
      * By abstracting the refresh process to a single method, the app allows both the
      * SwipeGestureLayout onRefresh() method and the Refresh action item to refresh the content.
@@ -171,6 +174,7 @@ public class SwipeRefreshLayoutBasicFragment extends Fragment {
     // END_INCLUDE (initiate_refresh)
 
     // BEGIN_INCLUDE (refresh_complete)
+
     /**
      * When the AsyncTask finishes, it calls onRefreshComplete(), which updates the data in the
      * ListAdapter and turns off the progress bar.

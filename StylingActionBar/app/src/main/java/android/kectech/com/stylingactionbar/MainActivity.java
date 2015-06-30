@@ -1,31 +1,24 @@
 package android.kectech.com.stylingactionbar;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.kectech.com.stylingactionbar.adapter.ViewPagerAdapter;
-import android.kectech.com.stylingactionbar.tabs.VideoTab;
 import android.kectech.com.stylingactionbar.view.SlidingTabLayout;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
-
 
 public class MainActivity extends Activity {
 
-    // declareing view and variables
+    // declaring view and variables
     //Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     //CharSequence Titles[]={"Home", "Video", "Photo", "Swipe"};
-    CharSequence Titles[]={"Video", "Photo", "Home", "Swipe"};
+    CharSequence Titles[] = {"Video", "Photo", "Home", "Swipe"};
     int NumOfTabs = 4;
 
     // for communicate with other activities
@@ -115,39 +108,21 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_item_search) {
-            return true;
-        }
-
-        if (id == R.id.menu_video_tab_item_add) {
-            Log.d(MainActivity.LOGTAG, "can scan QR code now..");
-            IntentIntegrator integrator = new IntentIntegrator(this);
-            integrator.initiateScan();
-            return true;
+        switch (id) {
+            case R.id.menu_item_search:
+                return true;
+            case R.id.menu_video_tab_item_add:
+                // handle in fragment
+                // return false here
+                return false;
+//            case R.id.menu_item_quit:
+//                finish();
+//                System.exit(0);
+//                return true;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // deal with scan result
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
-            String scanContent = scanResult.getContents();
-
-            Log.d(MainActivity.LOGTAG, "QR Scan Content: " + scanContent);
-
-//            // insert into ....
-            VideoTab fragment = (VideoTab) findFragmentByPosition(1);
-
-            if (fragment != null) {
-                fragment.AddItemToList(scanContent);
-            }
-        }
-    }
-
-    public Fragment findFragmentByPosition(int position) {
-        return getFragmentManager().findFragmentByTag("android:switcher:" + pager.getId() + ":" + adapter.getItemId(position));
     }
 }
