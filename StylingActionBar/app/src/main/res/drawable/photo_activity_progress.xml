@@ -11,8 +11,8 @@
 
         <gradient
             android:angle="0"
-            android:endColor="#007DD6"
-            android:startColor="#007DD6"
+            android:endColor="@color/progress_loading"
+            android:startColor="@color/progress_loading"
             android:type="sweep"
             android:useLevel="false" />
     </shape>

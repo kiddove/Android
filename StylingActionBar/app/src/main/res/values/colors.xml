@@ -40,4 +40,10 @@
     <!--<color name="item_pressed">#84D3EF</color>-->
     <!--do not set transparent otherwise when in dark background... it's awful -->
     <color name="item_pressed">#A5D3F5</color>
+
+    <color name="progress_background">#CCCCCC</color>
+    <color name="progress_loading">#007DD6</color>
+
+    <color name="dot_normal">#ff78797A</color>
+    <color name="dot_selected">@color/tab_selected</color>
 </resources>
