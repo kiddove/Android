@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ColorPrimary">#e62117</color>
+    <color name="ColorPrimaryDark">#c31c13</color>
+    <color name="tabsScrollColor">#8a140e</color>
+    <color name="tab_highlight">#ff9ecfbf</color>
+    <!--tab-->
+    <color name="tab_background">#FFF7F7F7</color>
+    <color name="tab_text">#ff78797A</color>
+    <!--bar-->
+    <color name="bar_background">#FF303538</color>
+    <color name="bar_title_text">#ffE1E1E1</color>
+    <color name="bar_menu_text">#ffdcdcdc</color>
+    <color name="bar_tab_text">#ffdcdcdc</color>
+    <color name="bar_devider">#33dcdcdc</color>
+    <color name="simple_yellow">#ECD078</color>
+    <color name="primary_blue">#53777A</color>
+
+    <color name="sa_green">#14a804</color>
+    <color name="stacked_green">#118504</color>
+    <color name="accent_green">#97e08f</color>
+    <color name="tab_selected">#31829C</color>
+
+    <!--<color name="swipe_color_1">#B6DB49</color>-->
+    <!--<color name="swipe_color_2">#99CC00</color>-->
+    <!--<color name="swipe_color_3">#8ABD00</color>-->
+    <!--<color name="swipe_color_4">#7CAF00</color>-->
+    <color name="swipe_color_1">#A9D0F5</color>
+    <color name="swipe_color_2">#81BEF7</color>
+    <color name="swipe_color_3">#58ACFA</color>
+    <color name="swipe_color_4">#2E9AFE</color>
+    <color name="swipe_color_5">#0080FF</color>
+    <color name="swipe_color_6">#0174DF</color>
+    <color name="swipe_color_7">#045FB4</color>
+    <color name="swipe_color_8">#084B8A</color>
+
+    <color name="tab_layout_background">#FFE6E7E8</color>
+    <color name="black">#FF000000</color>
+
+    <!--<color name="item_pressed">#84D3EF</color>-->
+    <!--do not set transparent otherwise when in dark background... it's awful -->
+    <color name="item_pressed">#A5D3F5</color>
+
+    <color name="progress_background">#CCCCCC</color>
+    <color name="progress_loading">#007DD6</color>
+
+    <color name="dot_normal">#ff78797A</color>
+    <color name="dot_selected">@color/tab_selected</color>
+</resources>
