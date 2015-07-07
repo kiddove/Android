@@ -3,27 +3,24 @@ package com.kectech.android.kectechapp.listitem;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+
 /**
  * Created by Paul on 25/06/2015.
  * define the class use for custom ListView items for photo tab
  * title, desc, image(s), actually thumbs, image url(s)
+ * multiple images and thumbnails
  */
 public class PhotoListItem {
 
-    private Bitmap thumbNail = null;
     private String title = null;
     private String desc = null;
-    private String image = null;
-    private String thumb = null;
     private int position = 0;
+    public ArrayList<PhotoListItemDetail> items = null;
 
-    public PhotoListItem(@Nullable String imageURL, @Nullable String thumbURL, @Nullable String title, @Nullable String description, @Nullable Bitmap thumbNail, @Nullable int position) {
-        this.thumbNail = thumbNail;
-        this.title = title;
-        this.desc = description;
-        this.image = imageURL;
-        this.thumb = thumbURL;
-        this.position = position;
+
+    public PhotoListItem() {
+
     }
 //    public PhotoListItem(PhotoListItem item) {
 //        this.thumbNail = item.thumbNail;
@@ -33,14 +30,6 @@ public class PhotoListItem {
 //        this.thumbURL = item.thumbURL;
 //        this.position = item.position;
 //    }
-
-    public Bitmap getThumbNail() {
-        return thumbNail;
-    }
-
-    public void setThumbNail(Bitmap thumbNail) {
-        this.thumbNail = thumbNail;
-    }
 
     public String getDescription() {
         return desc;
@@ -56,22 +45,6 @@ public class PhotoListItem {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getImageURL() {
-        return image;
-    }
-
-    public void setImageURL(String imageUrl) {
-        this.image = imageUrl;
-    }
-
-    public String getThumbURL() {
-        return thumb;
-    }
-
-    public void setThumbURL(String thumbURL) {
-        this.thumb = thumbURL;
     }
 
     public int getPosition() {

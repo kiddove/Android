@@ -7,7 +7,8 @@ public enum SwipyRefreshLayoutDirection {
 
     TOP(0),
     BOTTOM(1),
-    BOTH(2);
+    BOTH(2),
+    NONE(3);
 
     private int mValue;
 
@@ -21,7 +22,7 @@ public enum SwipyRefreshLayoutDirection {
                 return direction;
             }
         }
-        return BOTH;
+        return NONE;
     }
 
 }

@@ -30,33 +30,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/photo_list_item_desc">
+        android:layout_below="@+id/photo_list_item_desc"
+        android:paddingTop="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="2dp">
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img0"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp" />
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"
+            android:layout_marginRight="2dp"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img1"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"
+            android:layout_marginRight="2dp" />
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/hall_photo_list_item_layout1"
@@ -64,34 +71,38 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/hall_photo_list_item_layout0"
-        android:visibility="gone">
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img3"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:layout_marginRight="2dp"
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img4"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:layout_marginRight="2dp"
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img5"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
@@ -100,33 +111,37 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/hall_photo_list_item_layout1"
-        android:visibility="gone">
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img6"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:layout_marginRight="2dp"
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img7"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:layout_marginRight="2dp"
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
             android:id="@+id/photo_list_item_img8"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:background="@color/PhotoBackground"
+            android:layout_weight="1"/>
     </LinearLayout>
 </RelativeLayout>

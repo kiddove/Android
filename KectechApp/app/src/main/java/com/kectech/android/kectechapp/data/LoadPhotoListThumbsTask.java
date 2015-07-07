@@ -12,6 +12,7 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
+import com.kectech.android.kectechapp.listitem.PhotoProgressUpdate;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
@@ -31,7 +32,7 @@ import java.net.URLConnection;
  * progress -- to notify which item need to refresh, still use listitem
  * result -- bitmap
  */
-public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListItem, Bitmap> {
+public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgressUpdate, Bitmap> {
     // Reference to the view which should receive the image
     private final WeakReference adapterRef;
     private final WeakReference listRef;
@@ -54,51 +55,58 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
 
                 PhotoListItem item = params[i];
 
-                String localPath = KecUtilities.getLoaclFilePathFromURL(item.getThumbURL(), MainActivity.PHOTO_SUB_FOLDER, activity);
+                // multi photo thumbs
+                for (int j = 0; j < item.items.size(); j++) {
+                    String localPath = KecUtilities.getLoaclFilePathFromURL(item.items.get(j).getThumbURL(), MainActivity.PHOTO_SUB_FOLDER, activity);
 
-                if (localPath == null)
-                    return bitmap;
-                // read from local first
-                bitmap = KecUtilities.ReadFileFromLocal(localPath);
-                if (bitmap == null) {
+                    if (localPath == null)
+                        return bitmap;
+                    // read from local first
+                    bitmap = KecUtilities.ReadFileFromLocal(localPath);
+                    if (bitmap == null) {
 
-                    URL url = new URL(item.getThumbURL());
+                        URL url = new URL(item.items.get(j).getThumbURL());
 
-                    URLConnection connection = url.openConnection();
+                        URLConnection connection = url.openConnection();
 
-                    connection.connect();
-                    InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
-                    int length = connection.getContentLength();
+                        connection.connect();
+                        InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
+                        int length = connection.getContentLength();
 
-                    if (length <= 0)
-                        return null;
+                        if (length <= 0)
+                            return null;
 
-                    File file = new File(localPath);
-                    if (!file.exists()) {
-                        if (!file.createNewFile()) {
-                            Log.e(MainActivity.LOGTAG, "create file failed.");
+                        File file = new File(localPath);
+                        if (!file.exists()) {
+                            if (!file.createNewFile()) {
+                                Log.e(MainActivity.LOGTAG, "create file failed.");
+                            }
                         }
+
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        byte buffer[] = new byte[1024 * 5];
+                        int dataSize;
+                        while ((dataSize = inputSteam.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, dataSize);
+                        }
+
+                        outputStream.flush();
+                        outputStream.close();
+
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                        //item.items.get(j).setThumbNail(bitmap);
+                        // update UI to show thumbnail
                     }
-                    //OutputStream outputStream = context.openFileOutput(localPath, Context.MODE_PRIVATE);
-                    FileOutputStream outstream = new FileOutputStream(file);
-                    byte buffer[] = new byte[1024 * 5];
-                    int dataSize;
-                    while ((dataSize = inputSteam.read(buffer)) != -1) {
-                        outstream.write(buffer, 0, dataSize);
-                    }
 
-                    outstream.flush();
-                    outstream.close();
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    PhotoProgressUpdate ppu = new PhotoProgressUpdate();
+                    ppu.position = item.getPosition();
+                    ppu.index = j;
+                    ppu.bitmap = bitmap;
+                    publishProgress(ppu);
                 }
-                params[i].setThumbNail(bitmap);
-
-                // update UI to show thumbnail
-                publishProgress(params[i]);
             }
 
         } catch (Exception e) {
@@ -123,7 +131,7 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
     }
 
     @Override
-    protected void onProgressUpdate(PhotoListItem... item) {
+    protected void onProgressUpdate(PhotoProgressUpdate... ppu) {
         // can not update UI in doInBackground...
         // so if use one thread to download multi files
         // update ui here
@@ -132,16 +140,20 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoListI
 
         PhotoListViewAdapter adapter = (PhotoListViewAdapter) adapterRef.get();
         ListView listView = (ListView) listRef.get();
-        Bitmap bitmap = item[0].getThumbNail();
-        adapter.getItem(item[0].getPosition()).setThumbNail(bitmap);
+        Bitmap bitmap = ppu[0].bitmap;
+        adapter.getItem(ppu[0].position).items.get(ppu[0].index).setThumbNail(bitmap);
         if (bitmap != null) {
 //                int i1 = listView.getFirstVisiblePosition();
 //                int i2 = listView.getLastVisiblePosition();
-            View v = listView.getChildAt(item[0].getPosition() - listView.getFirstVisiblePosition());
+            View v = listView.getChildAt(ppu[0].position - listView.getFirstVisiblePosition());
             if (v != null) {
-                ScaleImageView imgView = (ScaleImageView) v.findViewById(R.id.photo_list_item_img);
-                if (imgView != null)
+                ScaleImageView imgView = (ScaleImageView) v.findViewById(MainActivity.imageId[ppu[0].index]);
+                if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
+                    imgView.setVisibility(View.VISIBLE);
+                } else {
+                    Log.d(MainActivity.LOGTAG, "not cool at all.");
+                }
             }
         } else
             Log.e(MainActivity.LOGTAG, "result is nulls, download failed.");

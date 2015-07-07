@@ -2,9 +2,7 @@ package com.kectech.android.kectechapp.tabs;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;

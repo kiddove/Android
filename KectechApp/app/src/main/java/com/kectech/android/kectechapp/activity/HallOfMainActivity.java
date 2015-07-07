@@ -96,16 +96,16 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
                 // handle in fragment
                 // return false here
                 return false;
+//            not working here
 //            case R.id.menu_item_quit:
-//                finish();
 //                System.exit(0);
 //                return true;
-//            case android.R.id.home: {
-//                //NavUtils.navigateUpFromSameTask(this);
-//                getFragmentManager().popBackStack();
-//                finish();
-//                return true;
-//            }
+            case android.R.id.home: {
+                //NavUtils.navigateUpFromSameTask(this);
+                //getFragmentManager().popBackStack();
+                finish();
+                return true;
+            }
             default:
                 break;
         }
@@ -117,5 +117,14 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         //getFragmentManager().popBackStack();
         finish();
         //Log.d(MainActivity.LOGTAG, "Hall activity swipe out at left.");
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }

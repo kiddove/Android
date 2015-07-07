@@ -25,6 +25,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class KecUtilities {
     public static String getLoaclFilePathFromURL(String url, String subFolder, Context context) {
+        if (url == null)
+            return null;
         //Test if subfolder exists and if not create
         File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
         if (!folder.exists()) {

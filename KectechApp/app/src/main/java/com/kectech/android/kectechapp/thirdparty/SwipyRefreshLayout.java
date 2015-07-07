@@ -814,6 +814,8 @@ public class SwipyRefreshLayout extends ViewGroup {
                     return false;
                 }
                 break;
+            case NONE:
+                return false;
             case TOP:
             default:
                 if (!isEnabled() || mReturningToStart || canChildScrollUp() || mRefreshing) {

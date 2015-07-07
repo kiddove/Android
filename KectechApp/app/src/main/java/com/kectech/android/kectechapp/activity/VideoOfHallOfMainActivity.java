@@ -97,31 +97,31 @@ public class VideoOfHallOfMainActivity extends Activity {
         //return super.onOptionsItemSelected(item);
     }
 
-    // use back button to navigate backward
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // check if the key event was the Back button and if there's history
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                    if (mWebView.inCustomView()) {
-                        mWebView.hideCustomView();
-                        return true;
-                    }
-                    if (mWebView.canGoBack()) {
-                        mWebView.goBack();
-                    } else {
-                        getFragmentManager().popBackStackImmediate();
-                        finish();
-                    }
-                    return super.onKeyDown(keyCode, event);
-            }
-        }
-
-        // If it wasn't the Back key or there's no web page history, bubble up to the default
-        // system behavior (probably exit the activity)
-        return super.onKeyDown(keyCode, event);
-    }
+//    // use back button to navigate backward
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        // check if the key event was the Back button and if there's history
+//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//            switch (keyCode) {
+//                case KeyEvent.KEYCODE_BACK:
+//                    if (mWebView.inCustomView()) {
+//                        mWebView.hideCustomView();
+//                        return true;
+//                    }
+//                    if (mWebView.canGoBack()) {
+//                        mWebView.goBack();
+//                    } else {
+//                        getFragmentManager().popBackStackImmediate();
+//                        finish();
+//                    }
+//                    return super.onKeyDown(keyCode, event);
+//            }
+//        }
+//
+//        // If it wasn't the Back key or there's no web page history, bubble up to the default
+//        // system behavior (probably exit the activity)
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     @Override
     public void onPause() {
@@ -152,5 +152,22 @@ public class VideoOfHallOfMainActivity extends Activity {
     public boolean dispatchTouchEvent(MotionEvent ev){
         //onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (mWebView.inCustomView()) {
+            mWebView.hideCustomView();
+            return;
+        }
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            if (getFragmentManager().getBackStackEntryCount() == 0) {
+                super.onBackPressed();
+            } else {
+                getFragmentManager().popBackStack();
+            }
+        }
     }
 }

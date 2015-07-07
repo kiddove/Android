@@ -85,9 +85,18 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 // create parameters
                 Bundle params = new Bundle();
-                params.putString(MainActivity.PHOTO_TAB_THUMB_URL_KEY, photoListItem.getThumbURL());
-                params.putString(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, photoListItem.getImageURL());
-                //params.putStringArray();
+                // todo
+                ArrayList<String> thumbs = new ArrayList<String>();
+                ArrayList<String> images = new ArrayList<String>();
+
+                for (int i = 0; i < photoListItem.items.size(); i++) {
+                    thumbs.add(photoListItem.items.get(i).getThumbURL());
+                    images.add(photoListItem.items.get(i).getImageURL());
+                }
+                params.putStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY, thumbs);
+                params.putStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, images);
+//                params.putString(MainActivity.PHOTO_TAB_THUMB_URL_KEY, photoListItem.getThumbURL());
+//                params.putString(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, photoListItem.getImageURL());
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -136,7 +145,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             // first try to request every time ...
 
             // for test
-            String strURL = "http://173.236.36.10/cds/generateThumbnail.php";
+            String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php";
 
             try {
                 URL url = new URL(strURL);
@@ -171,7 +180,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             // for test
-            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=top&count=5";
+            String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php?type=top&count=5";
 
             try {
                 URL url = new URL(strURL);
@@ -206,7 +215,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
         protected String doInBackground(String... params) {
 
             // for test
-            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=bottom&count=5";
+            String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php?type=bottom&count=5";
 
             try {
                 URL url = new URL(strURL);

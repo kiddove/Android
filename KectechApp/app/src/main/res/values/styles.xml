@@ -24,7 +24,11 @@
 
         <!--api 21 or above need to put here... for dropdown list, api 19 or below not working here-->
         <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
-        <item name="android:itemTextAppearance">@style/MenuTextApearance</item>
+        <item name="android:itemTextAppearance">@style/MenuTextAppearance</item>
+
+        <!--cab no done button-->
+        <item name="android:actionModeCloseButtonStyle">@style/NoDoneButton</item>
+
     </style>
 
     <!--overflow menu drop down-->
@@ -47,7 +51,7 @@
         <item name="android:divider">@color/bar_devider</item>
         <item name="android:dividerHeight">2dp</item>
         <!--<item name="android:itemTextAppearance">@style/MenuTextApearance</item>-->
-        <!--<item name="android:textColor">@style/MenuTextApearance</item>-->
+        <!--<item name="android:textColor">@style/MenuTextAppearance</item>-->
     </style>
     <!--actionbar-->
     <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
@@ -68,8 +72,14 @@
         <!-- The textColor property is backward compatible with the Support Library -->
     </style>
     <!--menu item text color (in popup menu)-->
-    <style name="MenuTextApearance" parent="@android:style/TextAppearance.Holo.Widget.IconMenu.Item">
+    <style name="MenuTextAppearance" parent="@android:style/TextAppearance.Holo.Widget.IconMenu.Item">
         <item name="android:textColor">@color/bar_menu_text</item>
     </style>
 
+    <!--cab no done button-->
+    <style name="NoDoneButton" parent="@android:style/Widget.ActionButton.CloseMode">
+        <!--<item name="android:visibility">gone</item>-->
+        <!--<item name="android:background">@color/simple_yellow</item>-->
+        <!--<item name="android:text">Done</item>-->
+    </style>
 </resources>

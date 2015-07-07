@@ -8,7 +8,6 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.kectech.android.kectechapp.R;
+import com.kectech.android.kectechapp.adapter.FadePageTransformer;
 import com.kectech.android.kectechapp.data.DownLoadImageTask;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener {
 
-    private static final int imageCount = 1;
+    private int imageCount = 1;
     private ArrayList<View> viewList;
     private Activity context = null;
     //private String[] URLs = null;
@@ -43,6 +43,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     private ArrayList<View> dots;
     private int previous = 0;
 
+    private ArrayList<String> thumbs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +65,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 URLs = intent.getExtras();
                 // todo
                 // get image count here
+                thumbs = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
+                imageCount = thumbs.size();
             }
 
             // for now only one image
@@ -85,7 +88,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageview);
                 if (imageView != null) {
                     if (URLs != null) {
-                        String strThumbURL = URLs.getString(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
+                        String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
                         String thumbLocalPath = KecUtilities.getLoaclFilePathFromURL(strThumbURL, MainActivity.PHOTO_SUB_FOLDER, context);
                         Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
                         if (thumbBitmap != null) {
@@ -132,6 +135,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         });
 
         viewPager.setOnSwipeOutListener(this);
+        // fade away
+        viewPager.setPageTransformer(false, new FadePageTransformer());
 
         viewPager.setAdapter(new MyPagerAdapter(viewList));
 
@@ -159,8 +164,6 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
         switch (id) {
             case android.R.id.home: {
-                //NavUtils.navigateUpFromSameTask(this);
-                getFragmentManager().popBackStack();
                 finish();
                 return true;
             }
@@ -170,23 +173,23 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         //return super.onOptionsItemSelected(item);
     }
 
-    // use back button to navigate backword
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // check if the key event was the Back button and if there's history
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                    getFragmentManager().popBackStackImmediate();
-                    finish();
-                    return super.onKeyDown(keyCode, event);
-            }
-        }
-
-        // If it wasn't the Back key or there's no web page history, bubble up to the default
-        // system behavior (probably exit the activity)
-        return super.onKeyDown(keyCode, event);
-    }
+//    // use back button to navigate backward
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        // check if the key event was the Back button and if there's history
+//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//            switch (keyCode) {
+//                case KeyEvent.KEYCODE_BACK:
+//                    getFragmentManager().popBackStackImmediate();
+//                    finish();
+//                    return super.onKeyDown(keyCode, event);
+//            }
+//        }
+//
+//        // If it wasn't the Back key or there's no web page history, bubble up to the default
+//        // system behavior (probably exit the activity)
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     // page adapter
     private class MyPagerAdapter extends PagerAdapter {
@@ -254,14 +257,10 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);
         previous = position;
 
-//        TextView tv = (TextView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_textview);
-//        // display something like 1/6
-//        tv.setText((position + 1) + "/" + imageCount);
-
         ScaleImageView imageView = (ScaleImageView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_imageview);
         // download image async
         //String url = String.format("http://173.236.36.10/cds/samples/pets/%02d.jpg", position + 1);
-        String imageURL = URLs.getString(MainActivity.PHOTO_TAB_IMAGE_URL_KEY);
+        String imageURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY).get(position);
         String localPath = KecUtilities.getLoaclFilePathFromURL(imageURL, MainActivity.PHOTO_SUB_FOLDER, context);
         Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
         //Bitmap bitmap = null;
@@ -277,5 +276,14 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         //getFragmentManager().popBackStack();
         finish();
         //Log.d(MainActivity.LOGTAG, "photo activity swipe out at left...");
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }

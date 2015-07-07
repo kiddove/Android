@@ -3,117 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hall_list_item_layout0"
-        android:orientation="horizontal"
-        android:layout_below="@+id/hall_list_item_desc">
-        <ImageView
-            android:id="@+id/hall_list_item_img0"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:id="@+id/hall_list_item_img1"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_weight="0" />
-        <ImageView
-            android:id="@+id/hall_list_item_img2"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_weight="0" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hall_list_item_layout1"
-        android:orientation="horizontal"
-        android:layout_below="@+id/hall_list_item_layout0"
-        android:visibility="gone">
-        <ImageView
-            android:id="@+id/hall_list_item_img3"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:id="@+id/hall_list_item_img4"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_weight="0"
-            android:visibility="gone"/>
-        <ImageView
-            android:id="@+id/hall_list_item_img5"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_weight="0"
-            android:visibility="gone"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hall_list_item_layout2"
-        android:orientation="horizontal"
-        android:layout_below="@+id/hall_list_item_layout1"
-        android:visibility="gone">
-        <ImageView
-            android:id="@+id/hall_list_item_img6"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:id="@+id/hall_list_item_img7"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_weight="0"
-            android:visibility="gone"/>
-        <ImageView
-            android:id="@+id/hall_list_item_img8"
-            android:src="@drawable/ic_launcher"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/video_list_item_img_description"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_weight="0"
-            android:visibility="gone"/>
-    </LinearLayout>
-
     <TextView
         android:id="@+id/hall_list_item_title"
         android:layout_width="wrap_content"
@@ -134,5 +23,17 @@
         android:paddingRight="10dp"
         android:textColor="@color/primary_blue"
         android:layout_below="@+id/hall_list_item_title"
-        android:text="@string/action_settings" />
+        android:text="@string/action_settings"
+        android:layout_alignLeft="@+id/hall_list_item_title" />
+
+    <ImageView
+        android:id="@+id/hall_list_item_img"
+        android:src="@drawable/ic_launcher"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@string/video_list_item_img_description"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_below="@+id/hall_list_item_desc"
+        android:layout_alignLeft="@+id/hall_list_item_title"/>
 </RelativeLayout>

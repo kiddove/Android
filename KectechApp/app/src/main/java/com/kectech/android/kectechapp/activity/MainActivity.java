@@ -32,6 +32,10 @@ public class MainActivity extends Activity {
     // default user
     public final static String USER = "default";
 
+    public final static int imageId[] = {R.id.photo_list_item_img0, R.id.photo_list_item_img1, R.id.photo_list_item_img2,
+            R.id.photo_list_item_img3, R.id.photo_list_item_img4, R.id.photo_list_item_img5,
+            R.id.photo_list_item_img6, R.id.photo_list_item_img7, R.id.photo_list_item_img8,};
+
     // varaiables
     // declaring view and variables
     //Toolbar toolbar;
@@ -59,7 +63,7 @@ public class MainActivity extends Activity {
             pager = (ViewPager) findViewById(R.id.pager);
             pager.setAdapter(adapter);
 
-            // Assiging the Sliding Tab Layout View
+            // Assigning the Sliding Tab Layout View
             tabs = (SlidingTabLayout) findViewById(R.id.tabs);
             tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 

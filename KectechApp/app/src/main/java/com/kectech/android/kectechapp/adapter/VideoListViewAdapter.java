@@ -42,7 +42,7 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.video_list_item, null);
             holder = new ViewHolder();
-            holder.imageView = (ImageView)convertView.findViewById(R.id.hall_list_item_img0);
+            holder.imageView = (ImageView)convertView.findViewById(R.id.hall_list_item_img);
             //holder.imageView = null;
             holder.txtTitle = (TextView)convertView.findViewById(R.id.hall_list_item_title);
             holder.txtDesc = (TextView)convertView.findViewById(R.id.hall_list_item_desc);

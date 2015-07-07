@@ -4,13 +4,39 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tab_main_hall_list_item_check"
+        android:gravity="center"
+        android:focusable="false"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_centerVertical="true"
+        android:button="@drawable/checkbox_selector"
+        android:visibility="gone"
+        android:clickable="false"/>
+
+    <!--<ImageView-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:src="@drawable/delete"-->
+        <!--android:id="@+id/tab_main_hall_list_item_delete"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:clickable="true"-->
+        <!--android:longClickable="true"/>-->
+
     <ImageView
         android:id="@+id/tab_main_hall_list_item_img"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="@string/video_list_item_img_description"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/tab_main_hall_list_item_check"/>
 
     <TextView
         android:id="@+id/tab_main_hall_list_item_title"
