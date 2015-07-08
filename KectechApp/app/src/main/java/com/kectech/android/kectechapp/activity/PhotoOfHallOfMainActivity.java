@@ -23,6 +23,7 @@ import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +34,8 @@ import java.util.ArrayList;
  * do some research on intent param
  */
 public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener {
+
+    public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER;
 
     private int imageCount = 1;
     private ArrayList<View> viewList;
@@ -53,9 +56,9 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
         try {
             // for using action bar back button
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            //getActionBar().setDisplayHomeAsUpEnabled(true);
             // hide the icon on the left side on action bar
-            getActionBar().setDisplayShowHomeEnabled(false);
+            //getActionBar().setDisplayShowHomeEnabled(false);
 
             // get url from where activate this activity (like in hall tab click
             // receive the intent
@@ -87,9 +90,15 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 // here load thumb first if has..
                 ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageview);
                 if (imageView != null) {
+//                    imageView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            close();
+//                        }
+//                    });
                     if (URLs != null) {
                         String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
-                        String thumbLocalPath = KecUtilities.getLoaclFilePathFromURL(strThumbURL, MainActivity.PHOTO_SUB_FOLDER, context);
+                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, PhotoOfHallOfMainActivity.subFolder, context);
                         Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
                         if (thumbBitmap != null) {
                             imageView.setImageBitmap(thumbBitmap);
@@ -164,7 +173,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
         switch (id) {
             case android.R.id.home: {
-                finish();
+                close();
                 return true;
             }
             default:
@@ -261,7 +270,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         // download image async
         //String url = String.format("http://173.236.36.10/cds/samples/pets/%02d.jpg", position + 1);
         String imageURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY).get(position);
-        String localPath = KecUtilities.getLoaclFilePathFromURL(imageURL, MainActivity.PHOTO_SUB_FOLDER, context);
+        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, PhotoOfHallOfMainActivity.subFolder, context);
         Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
         //Bitmap bitmap = null;
         if (imageView != null && bitmap != null) {
@@ -273,9 +282,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     @Override
     public void onSwipeOutAtLeft() {
-        //getFragmentManager().popBackStack();
-        finish();
-        //Log.d(MainActivity.LOGTAG, "photo activity swipe out at left...");
+        close();
     }
 
     @Override
@@ -285,5 +292,10 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    private void close() {
+        finish();
+        overridePendingTransition(0, 0);
     }
 }

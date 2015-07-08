@@ -12,6 +12,8 @@ import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
 
+import java.io.File;
+
 /**
  * Created by Paul on 02/07/2015.
  * it is the activity show up when tapped on hall tab list items
@@ -19,6 +21,8 @@ import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
  * video/photo -- video / bbs
  */
 public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
+
+    public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
     CustomViewPager pager;
     HallOfMainAdapter adapter;
     SlidingTabLayout tabs;
@@ -32,9 +36,9 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 
         try {
             // for using action bar back button
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            //getActionBar().setDisplayHomeAsUpEnabled(true);
             // hide the icon on the left side on action bar
-            getActionBar().setDisplayShowHomeEnabled(false);
+            //getActionBar().setDisplayShowHomeEnabled(false);
 
             // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
             adapter = new HallOfMainAdapter(getFragmentManager(), Titles, NumOfTabs);
@@ -92,7 +96,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         switch (id) {
             case R.id.menu_item_search:
                 return true;
-            case R.id.menu_video_tab_item_add:
+            case R.id.menu_hall_tab_item_add:
                 // handle in fragment
                 // return false here
                 return false;
@@ -101,9 +105,9 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 //                System.exit(0);
 //                return true;
             case android.R.id.home: {
-                //NavUtils.navigateUpFromSameTask(this);
-                //getFragmentManager().popBackStack();
-                finish();
+//                NavUtils.navigateUpFromSameTask(this);
+//                getFragmentManager().popBackStack();
+                close();
                 return true;
             }
             default:
@@ -114,9 +118,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 
     @Override
     public void onSwipeOutAtLeft() {
-        //getFragmentManager().popBackStack();
-        finish();
-        //Log.d(MainActivity.LOGTAG, "Hall activity swipe out at left.");
+        close();
     }
 
     @Override
@@ -126,5 +128,10 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    private void close() {
+        finish();
+        overridePendingTransition(0, 0);
     }
 }

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.MainAdapter;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
+import com.kectech.android.kectechapp.util.KecUtilities;
 
 
 public class MainActivity extends Activity {
@@ -22,6 +23,11 @@ public class MainActivity extends Activity {
     public final static String PHOTO_TAB_IMAGE_URL_KEY = "imageURL";
 
     public final static String PHOTO_SUB_FOLDER = "Photo";
+    public final static String VIDEO_SUB_FOLDER = "Video";
+    public final static String HALL_SUB_FOLDER = "Hall";
+    public final static String SHOW_SUB_FOLDER = "Show";
+    public final static String PUBLIC_SUB_FOLDER = "Public";
+    public final static String SETTING_SUB_FOLDER = "Setting";
 
     // use for log tag
     public final static String LOGTAG = "kectech_log";
@@ -36,7 +42,7 @@ public class MainActivity extends Activity {
             R.id.photo_list_item_img3, R.id.photo_list_item_img4, R.id.photo_list_item_img5,
             R.id.photo_list_item_img6, R.id.photo_list_item_img7, R.id.photo_list_item_img8,};
 
-    // varaiables
+    // variables
     // declaring view and variables
     //Toolbar toolbar;
     ViewPager pager;
@@ -48,14 +54,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (!KecUtilities.createFolders(this)) {
+            Log.e(MainActivity.LOGTAG, "create folders failed.");
+            finish();
+            System.exit(0);
+            return;
+        }
 
         // get available memory size
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         Log.d(MainActivity.LOGTAG, "Max memory is " + maxMemory + "KB");
         try {
-            getActionBar().setDisplayShowHomeEnabled(false);
+            //getActionBar().setDisplayShowHomeEnabled(false);
             // hide the tile text
-            getActionBar().setDisplayShowTitleEnabled(false);
+            //getActionBar().setDisplayShowTitleEnabled(false);
             // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
             adapter = new MainAdapter(getFragmentManager(), Titles, NumOfTabs);
 
@@ -113,7 +125,7 @@ public class MainActivity extends Activity {
         switch (id) {
             case R.id.menu_item_search:
                 return true;
-            case R.id.menu_video_tab_item_add:
+            case R.id.menu_hall_tab_item_add:
                 // handle in fragment
                 // return false here
                 return false;

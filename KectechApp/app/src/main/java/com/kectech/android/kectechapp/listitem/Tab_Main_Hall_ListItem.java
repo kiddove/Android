@@ -1,46 +1,68 @@
 package com.kectech.android.kectechapp.listitem;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Paul on 16/06/2015.
  * define a class for custom listView item
  */
 public class Tab_Main_Hall_ListItem {
-    private int imgId;
-    private String strTitle;
-    private String strDesc;
+    private Bitmap bitmap;
+    private String title;
+    private String desc;
+    private int type;
+    private int position;
+    private String thumb = null;
 
-    public Tab_Main_Hall_ListItem(int imgid, String title, String desc) {
-        this.imgId = imgid;
-        this.strTitle = title;
-        this.strDesc = desc;
+    public Bitmap getImage() {
+        return bitmap;
     }
 
-    public int getImageId() {
-        return imgId;
-    }
-
-    public void setImageId(int imageId) {
-        this.imgId = imageId;
+    public void setImage(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public String getDesc() {
-        return strDesc;
+        return desc;
     }
 
     public void setDesc(String desc) {
-        this.strDesc = desc;
+        this.desc = desc;
     }
 
     public String getTitle() {
-        return strTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        this.strTitle = title;
+        this.title = title;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public String getThumbURL() {
+        return thumb;
+    }
+
+    public void setThumbURL(String thumbURL) {
+        this.thumb = thumbURL;
+    }
     @Override
     public String toString() {
-        return strTitle + "\n" + strDesc;
+        return title + "\n" + desc;
     }
 }

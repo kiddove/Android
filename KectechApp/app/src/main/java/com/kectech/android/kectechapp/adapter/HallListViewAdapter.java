@@ -7,15 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.listitem.Tab_Main_Hall_ListItem;
 
-import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,7 +58,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
 
         holder.txtDesc.setText(item.getDesc());
         holder.txtTitle.setText(item.getTitle());
-        holder.imageView.setImageResource(item.getImageId());
+        holder.imageView.setImageBitmap(item.getImage());
         holder.checkBox.setChecked(isChecked(position));
         if (showCheckBox)
             holder.checkBox.setVisibility(View.VISIBLE);

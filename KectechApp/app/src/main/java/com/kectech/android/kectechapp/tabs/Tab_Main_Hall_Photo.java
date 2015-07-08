@@ -25,9 +25,7 @@ import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
@@ -103,6 +101,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 intent.putExtras(params);
                 try {
                     startActivity(intent);
+                    getActivity().overridePendingTransition(0, 0);
                 } catch (Exception e) {
                     Log.e(MainActivity.LOGTAG, e.getMessage());
                 }
@@ -156,7 +155,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
                 //int length = connection.getContentLength();
-                return readStringFromStream(inputStream);
+                return KecUtilities.readStringFromStream(inputStream);
             } catch (Exception e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -169,7 +168,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             ArrayList<PhotoListItem> items = getListFromJson(result);
 
             if (result != null) {
-                KecUtilities.writeTabLocalData(result, MainActivity.PHOTO_SUB_FOLDER, getActivity());
+                KecUtilities.writeTabLocalData(result, PhotoOfHallOfMainActivity.subFolder, getActivity());
                 onRefreshComplete(items);
             }
             mSwipyRefreshLayout.setRefreshing(false);
@@ -191,7 +190,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
 
-                return readStringFromStream(inputStream);
+                return KecUtilities.readStringFromStream(inputStream);
 
             } catch (Exception e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -227,7 +226,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
                 //int length = connection.getContentLength();
 
-                return readStringFromStream(inputStream);
+                return KecUtilities.readStringFromStream(inputStream);
 
             } catch (Exception e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -288,7 +287,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
         ArrayList<PhotoListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(MainActivity.PHOTO_SUB_FOLDER, getActivity());
+            String strJson = KecUtilities.getTabLocalData(PhotoOfHallOfMainActivity.subFolder, getActivity());
 
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
@@ -310,7 +309,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
 
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), MainActivity.PHOTO_SUB_FOLDER, getActivity());
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), PhotoOfHallOfMainActivity.subFolder, getActivity());
 
             new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
 
@@ -327,7 +326,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
         ArrayList<PhotoListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(MainActivity.PHOTO_SUB_FOLDER, getActivity());
+            String strJson = KecUtilities.getTabLocalData(PhotoOfHallOfMainActivity.subFolder, getActivity());
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
             }
@@ -355,29 +354,13 @@ public class Tab_Main_Hall_Photo extends Fragment {
             PhotoListItem[] items = new PhotoListItem[result.size()];
             result.toArray(items);
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), MainActivity.PHOTO_SUB_FOLDER, getActivity());
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), PhotoOfHallOfMainActivity.subFolder, getActivity());
             new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
-    }
-
-    public String readStringFromStream(InputStream inputStream) {
-        String strJson = null;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                total.append(line);
-            }
-            strJson = total.toString();
-        } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "readStringFromStream occurs exception: " + e.getMessage());
-        }
-        return strJson;
     }
 
     public ArrayList<PhotoListItem> getListFromJson(String strJson) {
@@ -411,7 +394,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
     public void initList() {
         // read local file
-        String strJson = KecUtilities.getTabLocalData(MainActivity.PHOTO_SUB_FOLDER, getActivity());
+        String strJson = KecUtilities.getTabLocalData(PhotoOfHallOfMainActivity.subFolder, getActivity());
 
         if (strJson != null && !strJson.isEmpty()) {
             ArrayList<PhotoListItem> items = getListFromJson(strJson);

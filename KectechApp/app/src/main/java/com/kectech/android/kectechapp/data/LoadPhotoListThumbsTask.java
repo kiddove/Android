@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
+import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.listitem.PhotoProgressUpdate;
@@ -57,7 +57,7 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgr
 
                 // multi photo thumbs
                 for (int j = 0; j < item.items.size(); j++) {
-                    String localPath = KecUtilities.getLoaclFilePathFromURL(item.items.get(j).getThumbURL(), MainActivity.PHOTO_SUB_FOLDER, activity);
+                    String localPath = KecUtilities.getLocalFilePathFromURL(item.items.get(j).getThumbURL(), PhotoOfHallOfMainActivity.subFolder, activity);
 
                     if (localPath == null)
                         return bitmap;

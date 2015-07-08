@@ -48,8 +48,8 @@
         <!--drip list item selector-->
         <item name="android:listSelector">@drawable/droplist_item_selector</item>
         <item name="android:background">@color/bar_background</item>
-        <item name="android:divider">@color/bar_devider</item>
-        <item name="android:dividerHeight">2dp</item>
+        <item name="android:divider">@color/bar_divider</item>
+        <item name="android:dividerHeight">1dp</item>
         <!--<item name="android:itemTextAppearance">@style/MenuTextApearance</item>-->
         <!--<item name="android:textColor">@style/MenuTextAppearance</item>-->
     </style>
@@ -59,6 +59,9 @@
         <!--<item name="android:backgroundStacked">@color/simple_yellow</item>-->
         <!--<item name="android:backgroundSplit">@color/ColorPrimary</item>-->
         <item name="android:titleTextStyle">@style/AppTheme.Bar.TitleText</item>
+
+        <item name="android:displayOptions">showTitle|homeAsUp</item>
+        <!--<item name="android:displayOptions">showHome|showTitle</item>-->
     </style>
     <!--actionbar title text-->
     <style name="AppTheme.Bar.TitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
@@ -81,5 +84,21 @@
         <!--<item name="android:visibility">gone</item>-->
         <!--<item name="android:background">@color/simple_yellow</item>-->
         <!--<item name="android:text">Done</item>-->
+    </style>
+
+    <!--setDisplayShowHomeEnabled(false)-->
+    <!--setDisplayShowTitleEnabled(false)-->
+    <style name="MainTheme" parent="@style/AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/ActionBarMain</item>
+    </style>
+    <style name="ActionBarMain" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/bar_background</item>
+        <!--<item name="android:backgroundStacked">@color/simple_yellow</item>-->
+        <!--<item name="android:backgroundSplit">@color/ColorPrimary</item>-->
+        <item name="android:titleTextStyle">@style/AppTheme.Bar.TitleText</item>
+
+        <item name="android:displayOptions"></item>
+        <!--<item name="android:displayOptions">showHome|showTitle</item>-->
     </style>
 </resources>

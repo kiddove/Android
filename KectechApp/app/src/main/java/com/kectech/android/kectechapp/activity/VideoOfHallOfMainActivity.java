@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -34,7 +33,7 @@ public class VideoOfHallOfMainActivity extends Activity {
         onSwipeTouchListener = new OnSwipeTouchListener() {
             public void onSwipeOutLeft() {
                 //getFragmentManager().popBackStack();
-                finish();
+                close();
             }
 //            public void onSwipeLeft() {
 //                //Toast.makeText(VideoOfHallOfMainActivity.this, "left", Toast.LENGTH_SHORT).show();
@@ -44,9 +43,9 @@ public class VideoOfHallOfMainActivity extends Activity {
         mWebView.setOnTouchListener(onSwipeTouchListener);
 
         // for using action bar back button
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
         // hide the icon on the left side on action bar
-        getActionBar().setDisplayShowHomeEnabled(false);
+        //getActionBar().setDisplayShowHomeEnabled(false);
 
         // get url from where activate this activity (like in video tab click
         // receive the intent
@@ -88,7 +87,7 @@ public class VideoOfHallOfMainActivity extends Activity {
             case android.R.id.home: {
                 //NavUtils.navigateUpFromSameTask(this);
                 //getFragmentManager().popBackStack();
-                finish();
+                close();
                 return true;
             }
             default:
@@ -169,5 +168,10 @@ public class VideoOfHallOfMainActivity extends Activity {
                 getFragmentManager().popBackStack();
             }
         }
+    }
+
+    private void close() {
+        finish();
+        overridePendingTransition(0, 0);
     }
 }

@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
+import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
@@ -76,7 +77,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             // change the ui of progress bar
             progressBar.setMax(length);
 
-            String localPath = KecUtilities.getLoaclFilePathFromURL(file_url, MainActivity.PHOTO_SUB_FOLDER, context);
+            String localPath = KecUtilities.getLocalFilePathFromURL(file_url, PhotoOfHallOfMainActivity.subFolder, context);
             if (localPath == null)
                 return null;
 

@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,15 +20,24 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.HallOfMainActivity;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.adapter.HallListViewAdapter;
+import com.kectech.android.kectechapp.data.LoadHallListThumbsTask;
 import com.kectech.android.kectechapp.listitem.Tab_Main_Hall_ListItem;
 import com.kectech.android.kectechapp.thirdparty.*;
+import com.kectech.android.kectechapp.util.KecUtilities;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -40,13 +48,11 @@ import java.util.ArrayList;
  */
 public class Tab_Main_Hall extends Fragment {
 
-    private static final int LIST_ITEM_COUNT = 20;
-
     private static final String SCAN_TAG = "SCAN";
 
     private ListView mListView;
 
-    private HallListViewAdapter mVideoAdapter;
+    private HallListViewAdapter mAdapter;
 
     private SwipyRefreshLayout mSwipyRefreshLayout;
 
@@ -58,16 +64,16 @@ public class Tab_Main_Hall extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_main_hall, container, false);
 
-        mListView = (ListView) v.findViewById(R.id.video_tab_list);
+        mListView = (ListView) v.findViewById(R.id.hall_tab_list);
 //        mListView.setItemsCanFocus(true);
-        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.video_tab_swipy_refresh_layout);
+        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.hall_tab_swipy_refresh_layout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
 
         mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 //if (in edit mode or others do not refresh or just set listener to null or set direction to NONE?) NONE works OK.
-                DummyRefresh(direction);
+                Refresh(direction);
             }
         });
 
@@ -76,13 +82,13 @@ public class Tab_Main_Hall extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                if (mVideoAdapter.showCheckBox) {
-                    boolean checked = mVideoAdapter.isChecked(position);
+                if (mAdapter.showCheckBox) {
+                    boolean checked = mAdapter.isChecked(position);
                     onItemChecked(mMode, position, !checked);
 
                 } else {
 
-                    Tab_Main_Hall_ListItem tabMainHallListItem = mVideoAdapter.getItem(position);
+                    Tab_Main_Hall_ListItem tabMainHallListItem = mAdapter.getItem(position);
                     // get another activity to run  activity_main_hall
                     Intent intent = new Intent(getActivity(), HallOfMainActivity.class);
 
@@ -96,6 +102,7 @@ public class Tab_Main_Hall extends Fragment {
                     intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
                     try {
                         startActivity(intent);
+                        getActivity().overridePendingTransition(0, 0);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOGTAG, e.getMessage());
                         e.printStackTrace();
@@ -108,18 +115,7 @@ public class Tab_Main_Hall extends Fragment {
                 R.color.swipe_color_1, R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
-        try {
-            //ArrayList<Tab_Main_Hall_ListItem> listItems = new ArrayList<>(LIST_ITEM_COUNT);
-            ArrayList<Tab_Main_Hall_ListItem> listItems = new ArrayList<>();
-            for (int i = 0; i < LIST_ITEM_COUNT; i++) {
-                Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "title " + i, "desc " + i);
-                listItems.add(item);
-            }
-            mVideoAdapter = new HallListViewAdapter(getActivity(), R.layout.tab_main_hall_list_item, listItems);
-            mListView.setAdapter(mVideoAdapter);
-        } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
-        }
+        initList();
 
         // long click to delete
         // method 1
@@ -137,7 +133,7 @@ public class Tab_Main_Hall extends Fragment {
         // method 2
         //registerForContextMenu(mListView);
 
-        // method 3
+        // method 3 will cause flicker
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
@@ -155,125 +151,126 @@ public class Tab_Main_Hall extends Fragment {
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return prepareActionMode(mode, menu);
+                return prepareActionMode();
             }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return actionItemClicked(mode, item);
+                return actionItemClicked(item);
             }
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                destroyActionMode(mode);
+                destroyActionMode();
+                mMode = null;
             }
         });
         return v;
     }
 
-    public ArrayList<Tab_Main_Hall_ListItem> AddContent(@Nullable SwipyRefreshLayoutDirection direction) {
-        try {
-            ArrayList<Tab_Main_Hall_ListItem> listItems = new ArrayList<>();
-            for (int i = 0; i < LIST_ITEM_COUNT; i++) {
-                if (direction == null) {
-                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "title", "desc");
-                    listItems.add(item);
-                } else if (direction == SwipyRefreshLayoutDirection.TOP) {
-                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "refresh", "top" + i);
-                    listItems.add(item);
-                } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
-                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "refresh", "bottom" + i);
-                    listItems.add(item);
-                }
-            }
-            return listItems;
-        } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
-            return null;
-        }
-    }
-
-    public void DummyRefresh(SwipyRefreshLayoutDirection direction) {
-        new DummyBackgroundTask(direction).execute("whatever");
-    }
-
-    /**
-     * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
-     * the first parameter is in execute(param); can be a view holder... for async use to load the image in list view
-     */
-    private class DummyBackgroundTask extends AsyncTask<String, Void, ArrayList<Tab_Main_Hall_ListItem>> {
-
-        static final int TASK_DURATION = 3 * 1000; // 3 seconds
-
-        private SwipyRefreshLayoutDirection direction;
-
-        public DummyBackgroundTask(SwipyRefreshLayoutDirection direction) {
-            this.direction = direction;
-        }
-
-        @Override
-        protected ArrayList<Tab_Main_Hall_ListItem> doInBackground(String... params) {
-            // Sleep for a small amount of time to simulate a background-task
-            try {
-                Thread.sleep(TASK_DURATION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Return a new random list of cheeses
-            //return Cheeses.randomList(LIST_ITEM_COUNT);
-            return AddContent(this.direction);
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Tab_Main_Hall_ListItem> result) {
-            super.onPostExecute(result);
-
-            // Tell the Fragment that the refresh has completed
-            if (direction == SwipyRefreshLayoutDirection.TOP)
-                onRefreshCompleteTop(result);
-            else if (direction == SwipyRefreshLayoutDirection.BOTTOM)
-                onRefreshCompleteBottom(result);
-        }
-
-    }
-
-    private void onRefreshCompleteTop(ArrayList<Tab_Main_Hall_ListItem> result) {
-
-        // Remove all items from the ListAdapter, and then replace them with the new items
-        //mVideoAdapter.clear();
-        for (Tab_Main_Hall_ListItem item : result) {
-            //mVideoAdapter.add(item);
-            mVideoAdapter.insert(item, 0);
-        }
-
-        // Stop the refreshing indicator
-        mSwipyRefreshLayout.setRefreshing(false);
-    }
-
-    private void onRefreshCompleteBottom(ArrayList<Tab_Main_Hall_ListItem> result) {
-
-        for (Tab_Main_Hall_ListItem item : result) {
-            mVideoAdapter.add(item);
-        }
-
-        // Stop the refreshing indicator
-        mSwipyRefreshLayout.setRefreshing(false);
-
-        // scroll to proper position
-        if (result.size() > 0) {
-
-            final int position = mListView.getFirstVisiblePosition();
-            mListView.setSelection(position + 1);
-            mListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mListView.smoothScrollToPosition(position + 1);
-                }
-            });
-        }
-
-    }
+//    public ArrayList<Tab_Main_Hall_ListItem> AddContent(@Nullable SwipyRefreshLayoutDirection direction) {
+//        try {
+//            ArrayList<Tab_Main_Hall_ListItem> listItems = new ArrayList<>();
+//            for (int i = 0; i < LIST_ITEM_COUNT; i++) {
+//                if (direction == null) {
+//                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "title", "desc");
+//                    listItems.add(item);
+//                } else if (direction == SwipyRefreshLayoutDirection.TOP) {
+//                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "refresh", "top" + i);
+//                    listItems.add(item);
+//                } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+//                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "refresh", "bottom" + i);
+//                    listItems.add(item);
+//                }
+//            }
+//            return listItems;
+//        } catch (Exception e) {
+//            Log.e(MainActivity.LOGTAG, e.getMessage());
+//            return null;
+//        }
+//    }
+//
+//    public void DummyRefresh(SwipyRefreshLayoutDirection direction) {
+//        new DummyBackgroundTask(direction).execute("whatever");
+//    }
+//
+//    /**
+//     * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
+//     * the first parameter is in execute(param); can be a view holder... for async use to load the image in list view
+//     */
+//    private class DummyBackgroundTask extends AsyncTask<String, Void, ArrayList<Tab_Main_Hall_ListItem>> {
+//
+//        static final int TASK_DURATION = 3 * 1000; // 3 seconds
+//
+//        private SwipyRefreshLayoutDirection direction;
+//
+//        public DummyBackgroundTask(SwipyRefreshLayoutDirection direction) {
+//            this.direction = direction;
+//        }
+//
+//        @Override
+//        protected ArrayList<Tab_Main_Hall_ListItem> doInBackground(String... params) {
+//            // Sleep for a small amount of time to simulate a background-task
+//            try {
+//                Thread.sleep(TASK_DURATION);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//            // Return a new random list of cheeses
+//            //return Cheeses.randomList(LIST_ITEM_COUNT);
+//            return AddContent(this.direction);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(ArrayList<Tab_Main_Hall_ListItem> result) {
+//            super.onPostExecute(result);
+//
+//            // Tell the Fragment that the refresh has completed
+//            if (direction == SwipyRefreshLayoutDirection.TOP)
+//                onRefreshCompleteTop(result);
+//            else if (direction == SwipyRefreshLayoutDirection.BOTTOM)
+//                onRefreshCompleteBottom(result);
+//        }
+//
+//    }
+//
+//    private void onRefreshCompleteTop(ArrayList<Tab_Main_Hall_ListItem> result) {
+//
+//        // Remove all items from the ListAdapter, and then replace them with the new items
+//        //mVideoAdapter.clear();
+//        for (Tab_Main_Hall_ListItem item : result) {
+//            //mVideoAdapter.add(item);
+//            mVideoAdapter.insert(item, 0);
+//        }
+//
+//        // Stop the refreshing indicator
+//        mSwipyRefreshLayout.setRefreshing(false);
+//    }
+//
+//    private void onRefreshCompleteBottom(ArrayList<Tab_Main_Hall_ListItem> result) {
+//
+//        for (Tab_Main_Hall_ListItem item : result) {
+//            mVideoAdapter.add(item);
+//        }
+//
+//        // Stop the refreshing indicator
+//        mSwipyRefreshLayout.setRefreshing(false);
+//
+//        // scroll to proper position
+//        if (result.size() > 0) {
+//
+//            final int position = mListView.getFirstVisiblePosition();
+//            mListView.setSelection(position + 1);
+//            mListView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mListView.smoothScrollToPosition(position + 1);
+//                }
+//            });
+//        }
+//
+//    }
 
     // detect when this fragment is visible
     @Override
@@ -288,8 +285,10 @@ public class Tab_Main_Hall extends Fragment {
 
         if (!isVisibleToUser) {
             //hide cab
-            if (mMode != null)
+            if (mMode != null) {
                 mMode.finish();
+                mMode = null;
+            }
         }
     }
 
@@ -307,14 +306,21 @@ public class Tab_Main_Hall extends Fragment {
         // clear the existing items, otherwise new item will be appended to it.
         menu.clear();
         inflater.inflate(R.menu.menu_hall_tab, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem menuItem = menu.findItem(R.id.menu_hall_tab_item_add);
+        if (menuItem != null) {
+            inflater.inflate(R.menu.hall_tab_add_submenu, menuItem.getSubMenu());
+        }
+        //super.onCreateOptionsMenu(menu, inflater);
     }
 
-    // addan item to list from scaned result
+    // add an item to list from scanned result
     public void AddItemToList(String url) {
 
-        Tab_Main_Hall_ListItem tabMainHallListItem = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, SCAN_TAG, url);
-        mVideoAdapter.insert(tabMainHallListItem, 0);
+
+//        // todo
+//        Tab_Main_Hall_ListItem tabMainHallListItem = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, SCAN_TAG, url);
+//        mAdapter.insert(tabMainHallListItem, 0);
+        Log.d(MainActivity.LOGTAG, url);
     }
 
     @Override
@@ -324,12 +330,12 @@ public class Tab_Main_Hall extends Fragment {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.menu_video_tab_item_add:
+            case R.id.menu_hall_tab_item_edit:
+                mMode = getActivity().startActionMode(new ModeCallback());
+                return true;
+            case R.id.hall_tab_add_sub_scan:
                 IntentIntegrator integrator = new IntentIntegrator(this);
                 integrator.initiateScan();
-                return true;
-            case R.id.menu_video_tab_item_edit:
-                mMode = getActivity().startActionMode(new ModeCallback());
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -347,7 +353,8 @@ public class Tab_Main_Hall extends Fragment {
                 if (!scanContent.isEmpty()) {
 //            // insert into ....
                     try {
-                        AddItemToList(scanContent);
+                        // todo
+                        //AddItemToList(scanContent);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOGTAG, e.getMessage());
                         e.printStackTrace();
@@ -360,7 +367,7 @@ public class Tab_Main_Hall extends Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         String[] option = {"YES", "NO"};
-        if (v.getId() == R.id.video_tab_list) {
+        if (v.getId() == R.id.hall_tab_list) {
             //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
             menu.setHeaderTitle("Delete");
             for (int i = 0; i < option.length; i++) {
@@ -389,24 +396,23 @@ public class Tab_Main_Hall extends Fragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            boolean bRet = prepareActionMode(mode, menu);
-            mVideoAdapter.notifyDataSetChanged();
+            boolean bRet = prepareActionMode();
+            mAdapter.notifyDataSetChanged();
             return bRet;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            destroyActionMode(mode);
-            mVideoAdapter.notifyDataSetChanged();
+            destroyActionMode();
+            mAdapter.notifyDataSetChanged();
+            mMode = null;
         }
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return actionItemClicked(mode, item);
+            return actionItemClicked(item);
         }
     }
-
-    ;
 
     private View getListItemViewByPosition(int position) {
 
@@ -417,7 +423,7 @@ public class Tab_Main_Hall extends Fragment {
         final int lastPosition = mListView.getChildCount() - 1 + firstPosition;
 
         if (position < firstPosition || position > lastPosition) {
-            return mVideoAdapter.getView(position, null, mListView);
+            return mAdapter.getView(position, null, mListView);
         } else {
             final int childIndex = position - firstPosition;
             return mListView.getChildAt(childIndex);
@@ -427,11 +433,11 @@ public class Tab_Main_Hall extends Fragment {
     private void onItemChecked(ActionMode mode, int position, boolean checked) {
         if (checked) {
             num++;
-            mVideoAdapter.setSelection(position, checked);
+            mAdapter.setSelection(position, checked);
             // set check
         } else {
             num--;
-            mVideoAdapter.removeSelect(position);
+            mAdapter.removeSelect(position);
         }
 
 //                View itemView = mListView.getChildAt(position);
@@ -450,29 +456,321 @@ public class Tab_Main_Hall extends Fragment {
         inflater.inflate(R.menu.menu_hall_tab_cab, menu);
     }
 
-    private boolean prepareActionMode(ActionMode mode, Menu menu) {
+    private boolean prepareActionMode() {
         // Here, you can checked selected items to adapt available actions
         // set NONE
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.NONE);
-        mVideoAdapter.showCheckBox = true;
+        mAdapter.showCheckBox = true;
         return false;
     }
 
-    private void destroyActionMode(ActionMode mode) {
+    private void destroyActionMode() {
         // set NONE to BOTH
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-        mVideoAdapter.showCheckBox = false;
-        mVideoAdapter.clear();
+        mAdapter.showCheckBox = false;
+        mAdapter.clear();
         num = 0;
     }
 
-    private boolean actionItemClicked(ActionMode mode, MenuItem item) {
+    private boolean actionItemClicked(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.hall_tab_action_delete:
                 Toast.makeText(getActivity(), num + " items should be deleted.", Toast.LENGTH_SHORT).show();
+                mMode.finish();
                 return true;
             default:
                 return false;
         }
+    }
+
+
+    // for download thumbs
+    // may need to write 3 task
+    private class UpdateThumbListTask extends AsyncTask<String, Void, String> {
+
+        public UpdateThumbListTask() {
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // step1 Read from loacl if has data
+            // step2 if not send http request
+            // if updated write to local... after refresh... a lot of work to do
+            // first try to request every time ...
+
+            // for test
+            String strURL = "http://173.236.36.10/cds/generateThumbnail.php";
+
+            try {
+                URL url = new URL(strURL);
+
+                URLConnection connection = url.openConnection();
+
+                connection.connect();
+
+                InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
+                //int length = connection.getContentLength();
+                return KecUtilities.readStringFromStream(inputStream);
+            } catch (Exception e) {
+                Log.e(MainActivity.LOGTAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
+
+            if (result != null) {
+                KecUtilities.writeTabLocalData(result, HallOfMainActivity.subFolder, getActivity());
+                onRefreshComplete(items);
+            }
+            mSwipyRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private class UpdateThumbListTaskTop extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            // for test
+            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=top&count=5";
+
+            try {
+                URL url = new URL(strURL);
+
+                URLConnection connection = url.openConnection();
+
+                connection.connect();
+
+                InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
+
+                return KecUtilities.readStringFromStream(inputStream);
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOGTAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
+
+            onRefreshCompleteTop(items);
+            mSwipyRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private class UpdateThumbListTaskBottom extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+
+            // for test
+            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=bottom&count=5";
+
+            try {
+                URL url = new URL(strURL);
+
+                URLConnection connection = url.openConnection();
+
+                connection.connect();
+
+                InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
+                //int length = connection.getContentLength();
+
+                return KecUtilities.readStringFromStream(inputStream);
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOGTAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
+
+            // todo
+            // write to local file
+            onRefreshCompleteBottom(items);
+            mSwipyRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    // refresh list
+    public void Refresh(SwipyRefreshLayoutDirection direction) {
+
+        // actually bottom and init can use same interface??
+        if (direction == SwipyRefreshLayoutDirection.TOP) {
+            new UpdateThumbListTaskTop().execute("todo");
+        } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+            new UpdateThumbListTaskBottom().execute("todo");
+        } else
+            // use as init
+            new UpdateThumbListTask().execute("todo");
+    }
+
+    public void initList() {
+        // read local file
+        String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder, getActivity());
+
+        if (strJson != null && !strJson.isEmpty()) {
+            ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(strJson);
+            if (items != null) {
+                onRefreshComplete(items);
+            }
+        } else {
+            Refresh(SwipyRefreshLayoutDirection.BOTH);
+        }
+    }
+
+    public ArrayList<Tab_Main_Hall_ListItem> getListFromJson(String strJson) {
+        try {
+            Gson gson = new Gson();
+
+            Type typeOfObjects = new TypeToken<ArrayList<Tab_Main_Hall_ListItem>>() {
+            }.getType();
+
+            return gson.fromJson(strJson, typeOfObjects);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+        }
+        return null;
+    }
+
+    public String getJsonFromObject(ArrayList<Tab_Main_Hall_ListItem> items) {
+        try {
+            Gson gson = new Gson();
+
+            Type typeOfObjects = new TypeToken<ArrayList<Tab_Main_Hall_ListItem>>() {
+            }.getType();
+
+            return gson.toJson(items, typeOfObjects);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // for the first time when init using this
+    private void onRefreshComplete(ArrayList<Tab_Main_Hall_ListItem> result) {
+        if (result == null)
+            return;
+        if (mAdapter != null) {
+            Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
+        }
+        try {
+            // first add to adapter and listview
+            mAdapter = new HallListViewAdapter(getActivity(), R.layout.tab_main_hall_list_item, result);
+            mListView.setAdapter(mAdapter);
+
+            // now can start another task to load image async
+            // we need url and position, if we use one thread to do all the download, so we store position in listitem.
+            // be sure that the size of the array won't be too large, it's kind of waste the memory...
+
+
+            // determine position
+            int position = 0;
+            for (Tab_Main_Hall_ListItem item : result) {
+                item.setPosition(position);
+                position++;
+            }
+            Tab_Main_Hall_ListItem[] items = new Tab_Main_Hall_ListItem[result.size()];
+            result.toArray(items);
+
+            new LoadHallListThumbsTask(getActivity(), mAdapter, mListView).execute(items);
+
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+        }
+
+        mSwipyRefreshLayout.setRefreshing(false);
+    }
+
+    private void onRefreshCompleteTop(ArrayList<Tab_Main_Hall_ListItem> result) {
+        if (result == null)
+            return;
+        ArrayList<Tab_Main_Hall_ListItem> localData = null;
+        try {
+            // read local data, must have some, because of init
+            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder, getActivity());
+
+            if (strJson != null && !strJson.isEmpty()) {
+                localData = getListFromJson(strJson);
+            }
+            // first add/insert into adapter/list
+            // suppose result is ordered.
+            // should insert into list from the last item...
+
+            Tab_Main_Hall_ListItem[] items = new Tab_Main_Hall_ListItem[result.size()];
+            for (int position = result.size() - 1; position >= 0; position--) {
+
+                Tab_Main_Hall_ListItem item = result.get(position);
+                mAdapter.insert(item, 0);
+                if (localData != null)
+                    localData.add(0, item);
+                item.setPosition(position);
+                items[position] = item;
+            }
+
+
+            // write to local not append, write
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
+
+            new LoadHallListThumbsTask(getActivity(), mAdapter, mListView).execute(items);
+
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+        }
+
+        mSwipyRefreshLayout.setRefreshing(false);
+    }
+
+    private void onRefreshCompleteBottom(ArrayList<Tab_Main_Hall_ListItem> result) {
+        if (result == null)
+            return;
+        ArrayList<Tab_Main_Hall_ListItem> localData = null;
+        try {
+            // read local data, must have some, because of init
+            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder, getActivity());
+            if (strJson != null && !strJson.isEmpty()) {
+                localData = getListFromJson(strJson);
+            }
+            // 1. add/insert into adapter/list and set the correct position
+            int position = mAdapter.getCount();
+            for (Tab_Main_Hall_ListItem item : result) {
+                item.setPosition(position);
+                mAdapter.add(item);
+                if (localData != null)
+                    localData.add(item);
+                position++;
+            }
+
+            if (result.size() > 0) {
+                final int currentPosition = mListView.getFirstVisiblePosition();
+                mListView.setSelection(currentPosition + 1);
+                mListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListView.smoothScrollToPosition(currentPosition + 1);
+                    }
+                });
+            }
+
+            Tab_Main_Hall_ListItem[] items = new Tab_Main_Hall_ListItem[result.size()];
+            result.toArray(items);
+            // write to local not append, write
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
+            new LoadHallListThumbsTask(getActivity(), mAdapter, mListView).execute(items);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+        }
+
+        mSwipyRefreshLayout.setRefreshing(false);
     }
 }
