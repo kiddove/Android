@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,6 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 
 
 public class VideoOfHallOfMainActivity extends Activity {
+
+    //public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER;
 
     HTML5WebView mWebView;
 
@@ -52,7 +55,7 @@ public class VideoOfHallOfMainActivity extends Activity {
         String url = "http://192.168.9.40/demo/test.html";
         Intent intent = getIntent();
         if (intent != null)
-            url = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_URL);
+            url = intent.getStringExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL);
 
         if (mWebView != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -96,31 +99,30 @@ public class VideoOfHallOfMainActivity extends Activity {
         //return super.onOptionsItemSelected(item);
     }
 
-//    // use back button to navigate backward
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        // check if the key event was the Back button and if there's history
-//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-//            switch (keyCode) {
-//                case KeyEvent.KEYCODE_BACK:
-//                    if (mWebView.inCustomView()) {
-//                        mWebView.hideCustomView();
-//                        return true;
-//                    }
-//                    if (mWebView.canGoBack()) {
-//                        mWebView.goBack();
-//                    } else {
-//                        getFragmentManager().popBackStackImmediate();
-//                        finish();
-//                    }
-//                    return super.onKeyDown(keyCode, event);
-//            }
-//        }
-//
-//        // If it wasn't the Back key or there's no web page history, bubble up to the default
-//        // system behavior (probably exit the activity)
-//        return super.onKeyDown(keyCode, event);
-//    }
+    // use back button to navigate backward
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // check if the key event was the Back button and if there's history
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    if (mWebView.inCustomView()) {
+                        mWebView.hideCustomView();
+                        return true;
+                    }
+                    if (mWebView.canGoBack()) {
+                        mWebView.goBack();
+                    } else {
+                        close();
+                    }
+                    return super.onKeyDown(keyCode, event);
+            }
+        }
+
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onPause() {

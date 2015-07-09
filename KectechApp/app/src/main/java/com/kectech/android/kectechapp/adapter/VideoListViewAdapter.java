@@ -42,10 +42,10 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.video_list_item, null);
             holder = new ViewHolder();
-            holder.imageView = (ImageView)convertView.findViewById(R.id.hall_list_item_img);
+            holder.imageView = (ImageView)convertView.findViewById(R.id.hall_video_list_item_img);
             //holder.imageView = null;
-            holder.txtTitle = (TextView)convertView.findViewById(R.id.hall_list_item_title);
-            holder.txtDesc = (TextView)convertView.findViewById(R.id.hall_list_item_desc);
+            holder.txtTitle = (TextView)convertView.findViewById(R.id.hall_video_list_item_title);
+            holder.txtDesc = (TextView)convertView.findViewById(R.id.hall_video_list_item_desc);
             convertView.setTag(holder);
         }
         else
@@ -53,7 +53,7 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
 
         holder.txtDesc.setText(item.getDesc());
         holder.txtTitle.setText(item.getTitle());
-        holder.imageView.setImageResource(item.getImageId());
+        holder.imageView.setImageBitmap(item.getImage());
         //holder.imageView = null;
 
         return convertView;

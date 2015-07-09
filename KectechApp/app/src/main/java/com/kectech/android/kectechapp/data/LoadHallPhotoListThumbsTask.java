@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.kectech.android.kectechapp.activity.MainActivity;
-import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.listitem.PhotoProgressUpdate;
@@ -32,16 +31,18 @@ import java.net.URLConnection;
  * progress -- to notify which item need to refresh, still use listitem
  * result -- bitmap
  */
-public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgressUpdate, Bitmap> {
+public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgressUpdate, Bitmap> {
     // Reference to the view which should receive the image
     private final WeakReference adapterRef;
     private final WeakReference listRef;
     private Activity activity;
+    private String subFolder;
 
-    public LoadPhotoListThumbsTask(Activity activity, PhotoListViewAdapter adapter, ListView listView) {
+    public LoadHallPhotoListThumbsTask(Activity activity, PhotoListViewAdapter adapter, ListView listView, String subFolder) {
         this.adapterRef = new WeakReference(adapter);
         this.listRef = new WeakReference(listView);
         this.activity = activity;
+        this.subFolder = subFolder;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class LoadPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgr
 
                 // multi photo thumbs
                 for (int j = 0; j < item.items.size(); j++) {
-                    String localPath = KecUtilities.getLocalFilePathFromURL(item.items.get(j).getThumbURL(), PhotoOfHallOfMainActivity.subFolder, activity);
+                    String localPath = KecUtilities.getLocalFilePathFromURL(item.items.get(j).getThumbURL(), subFolder, activity);
 
                     if (localPath == null)
                         return bitmap;

@@ -1,8 +1,10 @@
 package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,6 +13,7 @@ import com.kectech.android.kectechapp.adapter.HallOfMainAdapter;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
+import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.File;
 
@@ -28,6 +31,8 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
     SlidingTabLayout tabs;
     CharSequence Titles[] = {"Video", "BBS"};
     int NumOfTabs = 2;
+    int tabType = 0;
+    int tabId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +40,27 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         setContentView(R.layout.activity_main_hall);
 
         try {
+
+            // depends on type, may be different num of tabs
+            // for test
+            // todo to be continued...
+            Intent intent = getIntent();
+            String url = null;
+            if (intent != null) {
+                tabType = intent.getIntExtra(MainActivity.HALL_OF_MAIN_TYPE, 0);
+                tabId = intent.getIntExtra(MainActivity.HALL_OF_MAIN_ID, 0);
+                NumOfTabs = tabType % 2 == 0 ? 2 : 1;
+                KecUtilities.createSubFolders(this, MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + tabId);
+            }
+
+
             // for using action bar back button
             //getActionBar().setDisplayHomeAsUpEnabled(true);
             // hide the icon on the left side on action bar
             //getActionBar().setDisplayShowHomeEnabled(false);
 
             // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-            adapter = new HallOfMainAdapter(getFragmentManager(), Titles, NumOfTabs);
+            adapter = new HallOfMainAdapter(getFragmentManager(), Titles, NumOfTabs, tabType, tabId, this);
 
             // Assigning ViewPager View and setting the adapter
             pager = (CustomViewPager) findViewById(R.id.hall_activity_pager);
@@ -133,5 +152,22 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
     private void close() {
         finish();
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+    }
+
+    // use back button to navigate backward
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // check if the key event was the Back button and if there's history
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    close();
+                    return super.onKeyDown(keyCode, event);
+            }
+        }
+
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
     }
 }

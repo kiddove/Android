@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,8 +36,6 @@ import java.util.ArrayList;
  */
 public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener {
 
-    public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER;
-
     private int imageCount = 1;
     private ArrayList<View> viewList;
     private Activity context = null;
@@ -47,6 +46,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     private int previous = 0;
 
     private ArrayList<String> thumbs;
+
+    public String subFolder = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +71,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 // get image count here
                 thumbs = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
                 imageCount = thumbs.size();
+                subFolder = URLs.getString(MainActivity.MAIN_HALL_PHOTO_FOLDER, null);
             }
 
             // for now only one image
@@ -96,9 +98,9 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 //                            close();
 //                        }
 //                    });
-                    if (URLs != null) {
+                    if (URLs != null && subFolder != null) {
                         String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
-                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, PhotoOfHallOfMainActivity.subFolder, context);
+                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, subFolder, context);
                         Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
                         if (thumbBitmap != null) {
                             imageView.setImageBitmap(thumbBitmap);
@@ -182,23 +184,22 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         //return super.onOptionsItemSelected(item);
     }
 
-//    // use back button to navigate backward
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        // check if the key event was the Back button and if there's history
-//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-//            switch (keyCode) {
-//                case KeyEvent.KEYCODE_BACK:
-//                    getFragmentManager().popBackStackImmediate();
-//                    finish();
-//                    return super.onKeyDown(keyCode, event);
-//            }
-//        }
-//
-//        // If it wasn't the Back key or there's no web page history, bubble up to the default
-//        // system behavior (probably exit the activity)
-//        return super.onKeyDown(keyCode, event);
-//    }
+    // use back button to navigate backward
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // check if the key event was the Back button and if there's history
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    close();
+                    return super.onKeyDown(keyCode, event);
+            }
+        }
+
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
+    }
 
     // page adapter
     private class MyPagerAdapter extends PagerAdapter {
@@ -262,6 +263,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     // set current
     public void setCurrentPage(int position) {
+        if (subFolder == null || subFolder == null)
+            return;
         dots.get(previous).setBackgroundResource(R.drawable.dot_normal);
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);
         previous = position;
@@ -270,13 +273,13 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         // download image async
         //String url = String.format("http://173.236.36.10/cds/samples/pets/%02d.jpg", position + 1);
         String imageURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY).get(position);
-        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, PhotoOfHallOfMainActivity.subFolder, context);
+        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, subFolder, context);
         Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
         //Bitmap bitmap = null;
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            new DownLoadImageTask(imageView, context).execute(imageURL);
+            new DownLoadImageTask(imageView, context, subFolder).execute(imageURL);
         }
     }
 

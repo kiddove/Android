@@ -1,6 +1,7 @@
 package com.kectech.android.kectechapp.tabs;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,13 +19,14 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
-import com.kectech.android.kectechapp.data.LoadPhotoListThumbsTask;
+import com.kectech.android.kectechapp.data.LoadHallPhotoListThumbsTask;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout;
 import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -41,14 +43,34 @@ import java.util.ArrayList;
  */
 public class Tab_Main_Hall_Photo extends Fragment {
 
-    private static final int LIST_ITEM_COUNT = 10;
-
     // list
     private ListView mListView;
     // adapter
     private PhotoListViewAdapter mPhotoAdapter;
     // swipyrefreshlayout
     private SwipyRefreshLayout mSwipyRefreshLayout;
+
+    private int tabType = 0;
+    private int tabId = 0;
+
+    private String subFolder = null;
+
+    public void setType(int tabType) {
+        this.tabType = tabType;
+    }
+
+    public void setId(int tabId) {
+        this.tabId = tabId;
+    }
+
+    public void createSubFolder(Context context) {
+        String folder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + tabId + File.separator + MainActivity.PHOTO_SUB_FOLDER;
+        if (KecUtilities.createSubFolders(context, folder)) {
+            subFolder = folder;
+        } else
+            subFolder = null;
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,6 +115,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 }
                 params.putStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY, thumbs);
                 params.putStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, images);
+                params.putString(MainActivity.MAIN_HALL_PHOTO_FOLDER, subFolder);
 //                params.putString(MainActivity.PHOTO_TAB_THUMB_URL_KEY, photoListItem.getThumbURL());
 //                params.putString(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, photoListItem.getImageURL());
 
@@ -167,8 +190,8 @@ public class Tab_Main_Hall_Photo extends Fragment {
             super.onPostExecute(result);
             ArrayList<PhotoListItem> items = getListFromJson(result);
 
-            if (result != null) {
-                KecUtilities.writeTabLocalData(result, PhotoOfHallOfMainActivity.subFolder, getActivity());
+            if (result != null && subFolder != null) {
+                KecUtilities.writeTabLocalData(result, subFolder, getActivity());
                 onRefreshComplete(items);
             }
             mSwipyRefreshLayout.setRefreshing(false);
@@ -248,7 +271,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
     // for the first time when init using this
     private void onRefreshComplete(ArrayList<PhotoListItem> result) {
-        if (result == null)
+        if (result == null || subFolder == null)
             return;
         if (mPhotoAdapter != null) {
             Log.d(MainActivity.LOGTAG, "ListView(mPhotoAdapter) already had data, and will be cleared...");
@@ -272,7 +295,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             PhotoListItem[] items = new PhotoListItem[result.size()];
             result.toArray(items);
 
-            new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
+            new LoadHallPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView, subFolder).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -282,12 +305,12 @@ public class Tab_Main_Hall_Photo extends Fragment {
     }
 
     private void onRefreshCompleteTop(ArrayList<PhotoListItem> result) {
-        if (result == null)
+        if (result == null || subFolder == null)
             return;
         ArrayList<PhotoListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(PhotoOfHallOfMainActivity.subFolder, getActivity());
+            String strJson = KecUtilities.getTabLocalData(subFolder, getActivity());
 
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
@@ -309,9 +332,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
 
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), PhotoOfHallOfMainActivity.subFolder, getActivity());
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder, getActivity());
 
-            new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
+            new LoadHallPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView, subFolder).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -321,12 +344,12 @@ public class Tab_Main_Hall_Photo extends Fragment {
     }
 
     private void onRefreshCompleteBottom(ArrayList<PhotoListItem> result) {
-        if (result == null)
+        if (result == null || subFolder == null)
             return;
         ArrayList<PhotoListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(PhotoOfHallOfMainActivity.subFolder, getActivity());
+            String strJson = KecUtilities.getTabLocalData(subFolder, getActivity());
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
             }
@@ -354,8 +377,8 @@ public class Tab_Main_Hall_Photo extends Fragment {
             PhotoListItem[] items = new PhotoListItem[result.size()];
             result.toArray(items);
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), PhotoOfHallOfMainActivity.subFolder, getActivity());
-            new LoadPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView).execute(items);
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder, getActivity());
+            new LoadHallPhotoListThumbsTask(getActivity(), mPhotoAdapter, mListView, subFolder).execute(items);
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }
@@ -393,8 +416,10 @@ public class Tab_Main_Hall_Photo extends Fragment {
     }
 
     public void initList() {
+        if (subFolder == null)
+            return;
         // read local file
-        String strJson = KecUtilities.getTabLocalData(PhotoOfHallOfMainActivity.subFolder, getActivity());
+        String strJson = KecUtilities.getTabLocalData(subFolder, getActivity());
 
         if (strJson != null && !strJson.isEmpty()) {
             ArrayList<PhotoListItem> items = getListFromJson(strJson);
@@ -413,4 +438,16 @@ public class Tab_Main_Hall_Photo extends Fragment {
 //        // for using different menu
 //        setHasOptionsMenu(true);
 //    }
+
+    // detect when this fragment is visible
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes visible.");
+        } else {
+            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes invisible.");
+        }
+    }
 }

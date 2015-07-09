@@ -51,8 +51,6 @@ import java.util.List;
  */
 public class Tab_Main_Hall extends Fragment {
 
-    private static final String SCAN_TAG = "SCAN";
-
     private ListView mListView;
 
     private HallListViewAdapter mAdapter;
@@ -96,13 +94,9 @@ public class Tab_Main_Hall extends Fragment {
                     Intent intent = new Intent(getActivity(), HallOfMainActivity.class);
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    //String url = "https://www.youtube.com/embed/quNeZeiO5pc";
-                    String url = "http://192.168.9.40/demo/test.html";
+                    intent.putExtra(MainActivity.HALL_OF_MAIN_TYPE, tabMainHallListItem.getType());
+                    intent.putExtra(MainActivity.HALL_OF_MAIN_ID, tabMainHallListItem.getId());
 
-                    if (tabMainHallListItem.getTitle().equals(SCAN_TAG)) {
-                        url = tabMainHallListItem.getDesc();
-                    }
-                    intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
                     try {
                         startActivity(intent);
                         //getActivity().overridePendingTransition(0, 0);
@@ -172,123 +166,19 @@ public class Tab_Main_Hall extends Fragment {
         return v;
     }
 
-//    public ArrayList<Tab_Main_Hall_ListItem> AddContent(@Nullable SwipyRefreshLayoutDirection direction) {
-//        try {
-//            ArrayList<Tab_Main_Hall_ListItem> listItems = new ArrayList<>();
-//            for (int i = 0; i < LIST_ITEM_COUNT; i++) {
-//                if (direction == null) {
-//                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "title", "desc");
-//                    listItems.add(item);
-//                } else if (direction == SwipyRefreshLayoutDirection.TOP) {
-//                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "refresh", "top" + i);
-//                    listItems.add(item);
-//                } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
-//                    Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, "refresh", "bottom" + i);
-//                    listItems.add(item);
-//                }
-//            }
-//            return listItems;
-//        } catch (Exception e) {
-//            Log.e(MainActivity.LOGTAG, e.getMessage());
-//            return null;
-//        }
-//    }
-//
-//    public void DummyRefresh(SwipyRefreshLayoutDirection direction) {
-//        new DummyBackgroundTask(direction).execute("whatever");
-//    }
-//
-//    /**
-//     * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
-//     * the first parameter is in execute(param); can be a view holder... for async use to load the image in list view
-//     */
-//    private class DummyBackgroundTask extends AsyncTask<String, Void, ArrayList<Tab_Main_Hall_ListItem>> {
-//
-//        static final int TASK_DURATION = 3 * 1000; // 3 seconds
-//
-//        private SwipyRefreshLayoutDirection direction;
-//
-//        public DummyBackgroundTask(SwipyRefreshLayoutDirection direction) {
-//            this.direction = direction;
-//        }
-//
-//        @Override
-//        protected ArrayList<Tab_Main_Hall_ListItem> doInBackground(String... params) {
-//            // Sleep for a small amount of time to simulate a background-task
-//            try {
-//                Thread.sleep(TASK_DURATION);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//            // Return a new random list of cheeses
-//            //return Cheeses.randomList(LIST_ITEM_COUNT);
-//            return AddContent(this.direction);
-//        }
-//
-//        @Override
-//        protected void onPostExecute(ArrayList<Tab_Main_Hall_ListItem> result) {
-//            super.onPostExecute(result);
-//
-//            // Tell the Fragment that the refresh has completed
-//            if (direction == SwipyRefreshLayoutDirection.TOP)
-//                onRefreshCompleteTop(result);
-//            else if (direction == SwipyRefreshLayoutDirection.BOTTOM)
-//                onRefreshCompleteBottom(result);
-//        }
-//
-//    }
-//
-//    private void onRefreshCompleteTop(ArrayList<Tab_Main_Hall_ListItem> result) {
-//
-//        // Remove all items from the ListAdapter, and then replace them with the new items
-//        //mVideoAdapter.clear();
-//        for (Tab_Main_Hall_ListItem item : result) {
-//            //mVideoAdapter.add(item);
-//            mVideoAdapter.insert(item, 0);
-//        }
-//
-//        // Stop the refreshing indicator
-//        mSwipyRefreshLayout.setRefreshing(false);
-//    }
-//
-//    private void onRefreshCompleteBottom(ArrayList<Tab_Main_Hall_ListItem> result) {
-//
-//        for (Tab_Main_Hall_ListItem item : result) {
-//            mVideoAdapter.add(item);
-//        }
-//
-//        // Stop the refreshing indicator
-//        mSwipyRefreshLayout.setRefreshing(false);
-//
-//        // scroll to proper position
-//        if (result.size() > 0) {
-//
-//            final int position = mListView.getFirstVisiblePosition();
-//            mListView.setSelection(position + 1);
-//            mListView.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mListView.smoothScrollToPosition(position + 1);
-//                }
-//            });
-//        }
-//
-//    }
 
     // detect when this fragment is visible
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-//        if (isVisibleToUser) {
-//            Log.i(MainActivity.LOGTAG, "Video Tab visible need refresh data..");
-//            // todo
-//            // get data...
-//        }
-
-        if (!isVisibleToUser) {
+        if (isVisibleToUser) {
+            Log.d(MainActivity.LOGTAG, "tab_main_hall becomes visible.");
+            // todo
+            // get data...
+        } else {
             //hide cab
+            Log.d(MainActivity.LOGTAG, "tab_main_hall becomes invisible.");
             if (mMode != null) {
                 mMode.finish();
                 mMode = null;
@@ -854,4 +744,27 @@ public class Tab_Main_Hall extends Fragment {
         mSwipyRefreshLayout.setRefreshing(false);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall onPause.");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall onStop.");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall onStart.");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall onResume.");
+    }
 }

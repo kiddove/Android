@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,10 +18,15 @@ public class MainActivity extends Activity {
 
     // strings
     // for communicate with other activities
-    public final static String EXTRA_MESSAGE_URL = "com.kectech.message.url";
+    // hall activity of main
+    public final static String VIDEO_OF_HALL_OF_MAIN_URL = "video_hall_of_main_url";
+    public final static String HALL_OF_MAIN_TYPE = "event_hall_type";
+    public final static String HALL_OF_MAIN_ID = "event_hall_id";
+
     public final static String PHOTO_TAB_THUMB_URL_KEY = "thumbURL";
     // may have plenty
     public final static String PHOTO_TAB_IMAGE_URL_KEY = "imageURL";
+    public final static String MAIN_HALL_PHOTO_FOLDER = "tab_photo_hall_main_folder";
 
     public final static String PHOTO_SUB_FOLDER = "Photo";
     public final static String VIDEO_SUB_FOLDER = "Video";
@@ -48,7 +54,7 @@ public class MainActivity extends Activity {
     ViewPager pager;
     MainAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Hall", "Shows", "Public", "Setting"};
+    CharSequence Titles[] = {"Hall", "Shows", "Public", "Me"};
     int NumOfTabs = 4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,5 +144,23 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // use back button to navigate backward
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // check if the key event was the Back button and if there's history
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    //getFragmentManager().popBackStackImmediate();
+                    //finish();
+                    return super.onKeyDown(keyCode, event);
+            }
+        }
+
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
     }
 }

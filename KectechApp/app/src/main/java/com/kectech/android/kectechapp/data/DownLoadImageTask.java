@@ -1,6 +1,7 @@
 package com.kectech.android.kectechapp.data;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -37,11 +38,13 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
     private final WeakReference imageRef;
     private Activity context;
     private ProgressBar progressBar;
+    private String subFolder;
 
-    public DownLoadImageTask(ImageView imageView, Activity context) {
+    public DownLoadImageTask(ImageView imageView, Activity context, String subFolder) {
         imageRef = new WeakReference(imageView);
         this.context = context;
         progressBar = (ProgressBar) context.findViewById(R.id.photo_activity_progressbar);
+        this.subFolder = subFolder;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             // change the ui of progress bar
             progressBar.setMax(length);
 
-            String localPath = KecUtilities.getLocalFilePathFromURL(file_url, PhotoOfHallOfMainActivity.subFolder, context);
+            String localPath = KecUtilities.getLocalFilePathFromURL(file_url, subFolder, context);
             if (localPath == null)
                 return null;
 

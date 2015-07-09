@@ -123,62 +123,92 @@ public class KecUtilities {
 
         // 4 tabs
         // under user
-        File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + ").");
-                return false;
+        try {
+            File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + ").");
+                    return false;
+                }
             }
-        }
-        // hall
-        folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + ").");
-                return false;
+            // hall
+            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + ").");
+                    return false;
+                }
             }
-        }
 
-        // show
-        folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + ").");
-                return false;
+            // show
+            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + ").");
+                    return false;
+                }
             }
-        }
 
-        // public
-        folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER + ").");
-                return false;
+            // public
+            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER + ").");
+                    return false;
+                }
             }
-        }
 
-        // setting
-        folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER + ").");
-                return false;
+            // setting
+            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER + ").");
+                    return false;
+                }
             }
+            // now has id, every id has photo and video
+//            // video and photo in hall
+//            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER);
+//            if (!folder.exists()) {
+//                if (!folder.mkdir()) {
+//                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER + ").");
+//                    return false;
+//                }
+//            }
+//            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER);
+//            if (!folder.exists()) {
+//                if (!folder.mkdir()) {
+//                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER + ").");
+//                    return false;
+//                }
+//            }
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+            e.printStackTrace();;
+            return false;
         }
-        // video and photo in hall
-        folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER + ").");
-                return false;
+        return true;
+    }
+
+    public static boolean createSubFolders(Context context, String subFolder) {
+        // one for each tab
+        // hall, show, public, setting
+        // inside each tab(except setting, for now only hall) there are video and photo
+
+        // 4 tabs
+        // under user
+        try {
+            File folder = new File(context.getFilesDir() + File.separator + subFolder);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOGTAG, "create folder failed(" + subFolder + ").");
+                    return false;
+                }
             }
-        }
-        folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER);
-        if (!folder.exists()) {
-            if (!folder.mkdir()) {
-                Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER + ").");
-                return false;
-            }
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+            e.printStackTrace();;
+            return false;
         }
         return true;
     }

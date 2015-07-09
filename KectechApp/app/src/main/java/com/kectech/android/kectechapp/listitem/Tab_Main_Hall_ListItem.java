@@ -71,6 +71,14 @@ public class Tab_Main_Hall_ListItem {
     public void setThumbURL(String thumbURL) {
         this.thumb = thumbURL;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     @Override
     public String toString() {
         return title + "\n" + desc;
