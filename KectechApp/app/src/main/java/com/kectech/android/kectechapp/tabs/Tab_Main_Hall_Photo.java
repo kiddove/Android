@@ -101,7 +101,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 intent.putExtras(params);
                 try {
                     startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
+                    getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                 } catch (Exception e) {
                     Log.e(MainActivity.LOGTAG, e.getMessage());
                 }

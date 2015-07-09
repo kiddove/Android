@@ -132,6 +132,6 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 
     private void close() {
         finish();
-        overridePendingTransition(0, 0);
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
     }
 }

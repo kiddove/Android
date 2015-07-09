@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -39,6 +41,7 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 16/06/2015.
@@ -102,7 +105,8 @@ public class Tab_Main_Hall extends Fragment {
                     intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
                     try {
                         startActivity(intent);
-                        getActivity().overridePendingTransition(0, 0);
+                        //getActivity().overridePendingTransition(0, 0);
+                        getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOGTAG, e.getMessage());
                         e.printStackTrace();
@@ -133,7 +137,7 @@ public class Tab_Main_Hall extends Fragment {
         // method 2
         //registerForContextMenu(mListView);
 
-        // method 3 will cause flicker
+        // method 3
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
@@ -475,14 +479,90 @@ public class Tab_Main_Hall extends Fragment {
     private boolean actionItemClicked(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.hall_tab_action_delete:
-                Toast.makeText(getActivity(), num + " items should be deleted.", Toast.LENGTH_SHORT).show();
-                mMode.finish();
+                // do in another thread?
+                //Toast.makeText(getActivity(), num + " items should be deleted.", Toast.LENGTH_SHORT).show();
+                deleteFromList();
                 return true;
             default:
                 return false;
         }
     }
 
+    private void deleteFromList() {
+        if (mAdapter.isSelectionEmpty()) {
+            return;
+        }
+
+        // todo
+        // first start animation, when animation ends, delete and finish
+
+        AnimationSet as = new AnimationSet(true);
+        as.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                mMode.finish();
+                mMode = null;
+                // do this in another thread
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        ArrayList<Tab_Main_Hall_ListItem> localData = new ArrayList<Tab_Main_Hall_ListItem>();
+                        for (int i = 0; i < mAdapter.getCount(); i++)
+                        // remember to clear bitmap... other wise the json will be so huge...
+                        // if set null directly, seems image will be null in the list
+                        // so... new item..
+                        {
+                            Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(mAdapter.getItem(i));
+                            localData.add(item);
+                        }
+                        // write to local
+                        KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
+
+                        localData.clear();
+                    }
+                };
+                thread.start();
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        //for (int i = 0; i < mAdapter.getCount(); i++) {
+        for (int i = mAdapter.getCount() - 1; i >= 0; i--) {
+            if (!mAdapter.isChecked(i))
+                continue;
+            // after remove, objects will change
+            // so the next one will be wrong position
+            // thus delete from the last
+//
+            // start animation
+            // need use view holder, and must wait until pre one done....
+            Animation animation = mAdapter.deleteCell(getListItemViewByPosition(i), i);
+            // this is not working, order is not correct
+            //animation.setStartOffset(j * HallListViewAdapter.ANIMATION_DURATION);
+            as.addAnimation(animation);
+
+//            mAdapter.remove(mAdapter.getItem(i));
+//            mAdapter.notifyDataSetChanged();
+
+        }
+
+        List<Animation> la = as.getAnimations();
+        for (int i = 0; i < la.size(); i++) {
+            la.get(i).setStartOffset(i * HallListViewAdapter.ANIMATION_DURATION);
+        }
+        mListView.startAnimation(as);
+
+    }
 
     // for download thumbs
     // may need to write 3 task
@@ -642,7 +722,7 @@ public class Tab_Main_Hall extends Fragment {
         return null;
     }
 
-    public String getJsonFromObject(ArrayList<Tab_Main_Hall_ListItem> items) {
+    public static String getJsonFromObject(ArrayList<Tab_Main_Hall_ListItem> items) {
         try {
             Gson gson = new Gson();
 
@@ -665,7 +745,7 @@ public class Tab_Main_Hall extends Fragment {
             Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
-            // first add to adapter and listview
+            // first add to adapter and listView
             mAdapter = new HallListViewAdapter(getActivity(), R.layout.tab_main_hall_list_item, result);
             mListView.setAdapter(mAdapter);
 
@@ -773,4 +853,5 @@ public class Tab_Main_Hall extends Fragment {
 
         mSwipyRefreshLayout.setRefreshing(false);
     }
+
 }

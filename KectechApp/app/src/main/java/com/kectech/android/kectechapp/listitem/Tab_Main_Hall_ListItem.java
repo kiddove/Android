@@ -7,12 +7,22 @@ import android.graphics.Bitmap;
  * define a class for custom listView item
  */
 public class Tab_Main_Hall_ListItem {
-    private Bitmap bitmap;
+    private Bitmap bitmap = null;
     private String title;
     private String desc;
     private int type;
     private int position;
     private String thumb = null;
+    private int id;
+
+    public Tab_Main_Hall_ListItem(Tab_Main_Hall_ListItem item) {
+        this.title = item.title;
+        this.desc = item.desc;
+        this.type = item.type;
+        this.position = item.position;
+        this.thumb = item.thumb;
+        this.id = item.id;
+    }
 
     public Bitmap getImage() {
         return bitmap;

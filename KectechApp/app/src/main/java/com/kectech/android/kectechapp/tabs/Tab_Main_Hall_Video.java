@@ -74,7 +74,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 }
                 intent.putExtra(MainActivity.EXTRA_MESSAGE_URL, url);
                 startActivity(intent);
-                getActivity().overridePendingTransition(0, 0);
+                getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 

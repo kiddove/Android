@@ -9,6 +9,7 @@ import android.view.View;
  */
 public class FadePageTransformer implements ViewPager.PageTransformer {
     private static float MIN_SCALE = 0.75f;
+    @Override
     public void transformPage(View view, float position) {
         int pageWidth = view.getWidth();
 
