@@ -28,6 +28,7 @@
 
         <!--cab no done button-->
         <item name="android:actionModeCloseButtonStyle">@style/NoDoneButton</item>
+        <item name="android:actionModeStyle">@style/actionMode</item>
 
     </style>
 
@@ -100,5 +101,18 @@
 
         <item name="android:displayOptions"></item>
         <!--<item name="android:displayOptions">showHome|showTitle</item>-->
+    </style>
+
+    <style name="actionMode" parent="@android:style/Widget.Holo.Light.ActionMode">
+        <item name="android:background">@color/bar_background</item>
+        <item name="android:titleTextStyle">@style/actionMode.title</item>
+        <item name="android:subtitleTextStyle">@style/actionMode.subtitle</item>
+    </style>
+
+    <style name="actionMode.title" parent="@android:style/TextAppearance.Holo.Widget.ActionMode.Title">
+        <item name="android:textColor">@color/bar_menu_text</item>
+    </style>
+    <style name="actionMode.subtitle" parent="@android:style/TextAppearance.Holo.Widget.ActionMode.Subtitle">
+        <item name="android:textColor">@color/bar_menu_text</item>
     </style>
 </resources>

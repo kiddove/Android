@@ -86,7 +86,10 @@ public class Tab_Main_Hall extends Fragment {
                 if (mAdapter.showCheckBox) {
                     boolean checked = mAdapter.isChecked(position);
                     onItemChecked(mMode, position, !checked);
-
+                    // if no selected
+                    if (mAdapter.isSelectionEmpty()) {
+                        stopActionMode();
+                    }
                 } else {
 
                     Tab_Main_Hall_ListItem tabMainHallListItem = mAdapter.getItem(position);
@@ -174,15 +177,11 @@ public class Tab_Main_Hall extends Fragment {
 
         if (isVisibleToUser) {
             Log.d(MainActivity.LOGTAG, "tab_main_hall becomes visible.");
-            // todo
-            // get data...
+            // todo if visible refresh data
         } else {
             //hide cab
             Log.d(MainActivity.LOGTAG, "tab_main_hall becomes invisible.");
-            if (mMode != null) {
-                mMode.finish();
-                mMode = null;
-            }
+            stopActionMode();
         }
     }
 
@@ -211,7 +210,7 @@ public class Tab_Main_Hall extends Fragment {
     public void AddItemToList(String url) {
 
 
-//        // todo
+//        // todo get scan url or input id , or sth  to be continued...
 //        Tab_Main_Hall_ListItem tabMainHallListItem = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, SCAN_TAG, url);
 //        mAdapter.insert(tabMainHallListItem, 0);
         Log.d(MainActivity.LOGTAG, url);
@@ -247,7 +246,7 @@ public class Tab_Main_Hall extends Fragment {
                 if (!scanContent.isEmpty()) {
 //            // insert into ....
                     try {
-                        // todo
+                        // todo scan result, to be continued...
                         //AddItemToList(scanContent);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -380,10 +379,9 @@ public class Tab_Main_Hall extends Fragment {
 
     private void deleteFromList() {
         if (mAdapter.isSelectionEmpty()) {
+            stopActionMode();
             return;
         }
-
-        // todo
         // first start animation, when animation ends, delete and finish
 
         AnimationSet as = new AnimationSet(true);
@@ -396,13 +394,12 @@ public class Tab_Main_Hall extends Fragment {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                mMode.finish();
-                mMode = null;
+                stopActionMode();
                 // do this in another thread
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
-                        ArrayList<Tab_Main_Hall_ListItem> localData = new ArrayList<Tab_Main_Hall_ListItem>();
+                        ArrayList<Tab_Main_Hall_ListItem> localData = new ArrayList<>();
                         for (int i = 0; i < mAdapter.getCount(); i++)
                         // remember to clear bitmap... other wise the json will be so huge...
                         // if set null directly, seems image will be null in the list
@@ -563,9 +560,6 @@ public class Tab_Main_Hall extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
-
-            // todo
-            // write to local file
             onRefreshCompleteBottom(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }
@@ -766,5 +760,12 @@ public class Tab_Main_Hall extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(MainActivity.LOGTAG, "tab_main_hall onResume.");
+    }
+
+    private void stopActionMode() {
+        if (mMode != null) {
+            mMode.finish();
+            mMode = null;
+        }
     }
 }

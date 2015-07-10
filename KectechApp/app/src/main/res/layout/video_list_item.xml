@@ -28,11 +28,11 @@
 
     <ImageView
         android:id="@+id/hall_video_list_item_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="120dp"
+        android:layout_height="72dp"
         android:contentDescription="@string/video_list_item_img_description"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_below="@+id/hall_video_list_item_desc"
         android:layout_alignLeft="@+id/hall_video_list_item_title"/>
 </RelativeLayout>

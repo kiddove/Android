@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -101,7 +102,7 @@ public class VideoOfHallOfMainActivity extends Activity {
 
     // use back button to navigate backward
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         // check if the key event was the Back button and if there's history
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {

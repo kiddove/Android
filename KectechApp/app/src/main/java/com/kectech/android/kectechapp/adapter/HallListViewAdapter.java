@@ -52,7 +52,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
 
         try {
             if (convertView == null || ((ViewHolder)convertView.getTag()).needInflate) {
-                convertView = layoutInflater.inflate(R.layout.tab_main_hall_list_item, null);
+                convertView = layoutInflater.inflate(R.layout.tab_main_hall_list_item, parent, false);
                 holder = new ViewHolder();
                 holder.imageView = (ImageView) convertView.findViewById(R.id.tab_main_hall_list_item_img);
                 //holder.imageView = null;

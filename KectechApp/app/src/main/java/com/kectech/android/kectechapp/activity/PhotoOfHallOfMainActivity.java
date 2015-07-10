@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -24,7 +25,6 @@ import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -44,8 +44,6 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     // for dots
     private ArrayList<View> dots;
     private int previous = 0;
-
-    private ArrayList<String> thumbs;
 
     public String subFolder = null;
     @Override
@@ -67,9 +65,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             Intent intent = getIntent();
             if (intent != null) {
                 URLs = intent.getExtras();
-                // todo
-                // get image count here
-                thumbs = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
+                ArrayList<String> thumbs = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
                 imageCount = thumbs.size();
                 subFolder = URLs.getString(MainActivity.MAIN_HALL_PHOTO_FOLDER, null);
             }
@@ -77,9 +73,9 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             // for now only one image
 
             // init
-            LayoutInflater layoutInflater = getLayoutInflater().from(this);
-            viewList = new ArrayList<View>();
-            dots = new ArrayList<View>();
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            viewList = new ArrayList<>();
+            dots = new ArrayList<>();
 
             // dots
             LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.photo_activity_dots_group);
@@ -186,7 +182,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     // use back button to navigate backward
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         // check if the key event was the Back button and if there's history
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {
@@ -263,7 +259,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     // set current
     public void setCurrentPage(int position) {
-        if (subFolder == null || subFolder == null)
+        if (subFolder == null)
             return;
         dots.get(previous).setBackgroundResource(R.drawable.dot_normal);
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);

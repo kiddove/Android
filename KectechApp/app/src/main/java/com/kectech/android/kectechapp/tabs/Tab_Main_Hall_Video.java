@@ -95,7 +95,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                // todo set correct url of video page
+                // todo set correct url of video page, now all items are test url.
                 intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
@@ -425,8 +425,6 @@ public class Tab_Main_Hall_Video extends Fragment {
             super.onPostExecute(result);
             ArrayList<VideoListItem> items = getListFromJson(result);
 
-            // todo
-            // write to local file
             onRefreshCompleteBottom(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }

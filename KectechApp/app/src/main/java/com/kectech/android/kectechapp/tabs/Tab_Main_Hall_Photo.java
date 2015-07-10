@@ -105,9 +105,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 // create parameters
                 Bundle params = new Bundle();
-                // todo
-                ArrayList<String> thumbs = new ArrayList<String>();
-                ArrayList<String> images = new ArrayList<String>();
+
+                ArrayList<String> thumbs = new ArrayList<>();
+                ArrayList<String> images = new ArrayList<>();
 
                 for (int i = 0; i < photoListItem.items.size(); i++) {
                     thumbs.add(photoListItem.items.get(i).getThumbURL());
@@ -262,8 +262,6 @@ public class Tab_Main_Hall_Photo extends Fragment {
             super.onPostExecute(result);
             ArrayList<PhotoListItem> items = getListFromJson(result);
 
-            // todo
-            // write to local file
             onRefreshCompleteBottom(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }

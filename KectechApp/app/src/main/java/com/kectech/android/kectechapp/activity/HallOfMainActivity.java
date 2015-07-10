@@ -3,6 +3,7 @@ package com.kectech.android.kectechapp.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -45,7 +46,6 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             // for test
             // todo to be continued...
             Intent intent = getIntent();
-            String url = null;
             if (intent != null) {
                 tabType = intent.getIntExtra(MainActivity.HALL_OF_MAIN_TYPE, 0);
                 tabId = intent.getIntExtra(MainActivity.HALL_OF_MAIN_ID, 0);
@@ -156,7 +156,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 
     // use back button to navigate backward
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         // check if the key event was the Back button and if there's history
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {

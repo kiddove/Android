@@ -61,12 +61,12 @@ public class SwipyRefreshLayout extends ViewGroup {
     private static final float MAX_SWIPE_DISTANCE_FACTOR = .6f;
     private static final int REFRESH_TRIGGER_DISTANCE = 120;
     
-    // Maps to ProgressBar.Large style
-    public static final int LARGE = MaterialProgressDrawable.LARGE;
-    // Maps to ProgressBar default style
-    public static final int DEFAULT = MaterialProgressDrawable.DEFAULT;
-
-    private static final String LOG_TAG = SwipyRefreshLayout.class.getSimpleName();
+//    // Maps to ProgressBar.Large style
+//    public static final int LARGE = MaterialProgressDrawable.LARGE;
+//    // Maps to ProgressBar default style
+//    public static final int DEFAULT = MaterialProgressDrawable.DEFAULT;
+//
+//    private static final String LOG_TAG = SwipyRefreshLayout.class.getSimpleName();
 
     private static final int MAX_ALPHA = 255;
     private static final int STARTING_PROGRESS_ALPHA = (int) (.3f * MAX_ALPHA);
@@ -112,7 +112,7 @@ public class SwipyRefreshLayout extends ViewGroup {
     private boolean mIsBeingDragged;
     private int mActivePointerId = INVALID_POINTER;
     // Whether this item is scaled up rather than clipped
-    private boolean mScale;
+    private boolean mScale = false;
 
     // Target is returning to its start offset because it was cancelled or a
     // refresh was triggered.
@@ -133,15 +133,15 @@ public class SwipyRefreshLayout extends ViewGroup {
 
     private MaterialProgressDrawable mProgress;
 
-    private Animation mScaleAnimation;
+    //private Animation mScaleAnimation;
 
-    private Animation mScaleDownAnimation;
+    //private Animation mScaleDownAnimation;
 
     private Animation mAlphaStartAnimation;
 
     private Animation mAlphaMaxAnimation;
 
-    private Animation mScaleDownToStartAnimation;
+    //private Animation mScaleDownToStartAnimation;
 
     private float mSpinnerFinalOffset;
 
@@ -152,7 +152,7 @@ public class SwipyRefreshLayout extends ViewGroup {
     private int mCircleHeight;
 
     // Whether the client has set a custom starting position;
-    private boolean mUsingCustomStart;
+    private boolean mUsingCustomStart = false;
 
     private AnimationListener mRefreshListener = new AnimationListener() {
         @Override
@@ -391,18 +391,18 @@ public class SwipyRefreshLayout extends ViewGroup {
             // Don't adjust the alpha during appearance otherwise.
             mProgress.setAlpha(MAX_ALPHA);
         }
-        mScaleAnimation = new Animation() {
+        Animation scaleAnimation = new Animation() {
             @Override
             public void applyTransformation(float interpolatedTime, Transformation t) {
                 setAnimationProgress(interpolatedTime);
             }
         };
-        mScaleAnimation.setDuration(mMediumAnimationDuration);
+        scaleAnimation.setDuration(mMediumAnimationDuration);
         if (listener != null) {
             mCircleView.setAnimationListener(listener);
         }
         mCircleView.clearAnimation();
-        mCircleView.startAnimation(mScaleAnimation);
+        mCircleView.startAnimation(scaleAnimation);
     }
 
     /**
@@ -433,16 +433,16 @@ public class SwipyRefreshLayout extends ViewGroup {
     }
 
     private void startScaleDownAnimation(AnimationListener listener) {
-        mScaleDownAnimation = new Animation() {
+        Animation scaleDownAnimation = new Animation() {
             @Override
             public void applyTransformation(float interpolatedTime, Transformation t) {
                 setAnimationProgress(1 - interpolatedTime);
             }
         };
-        mScaleDownAnimation.setDuration(SCALE_DOWN_DURATION);
+        scaleDownAnimation.setDuration(SCALE_DOWN_DURATION);
         mCircleView.setAnimationListener(listener);
         mCircleView.clearAnimation();
-        mCircleView.startAnimation(mScaleDownAnimation);
+        mCircleView.startAnimation(scaleDownAnimation);
     }
 
     private void startProgressAlphaStartAnimation() {
@@ -1051,7 +1051,7 @@ public class SwipyRefreshLayout extends ViewGroup {
         } else {
             mStartingScale = ViewCompat.getScaleX(mCircleView);
         }
-        mScaleDownToStartAnimation = new Animation() {
+        Animation scaleDownToStartAnimation = new Animation() {
             @Override
             public void applyTransformation(float interpolatedTime, Transformation t) {
                 float targetScale = (mStartingScale + (-mStartingScale * interpolatedTime));
@@ -1059,12 +1059,12 @@ public class SwipyRefreshLayout extends ViewGroup {
                 moveToStart(interpolatedTime);
             }
         };
-        mScaleDownToStartAnimation.setDuration(SCALE_DOWN_DURATION);
+        scaleDownToStartAnimation.setDuration(SCALE_DOWN_DURATION);
         if (listener != null) {
             mCircleView.setAnimationListener(listener);
         }
         mCircleView.clearAnimation();
-        mCircleView.startAnimation(mScaleDownToStartAnimation);
+        mCircleView.startAnimation(scaleDownToStartAnimation);
     }
 
     private void setTargetOffsetTopAndBottom(int offset, boolean requiresUpdate) {

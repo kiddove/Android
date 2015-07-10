@@ -29,16 +29,19 @@ public class KecUtilities {
         if (url == null)
             return null;
         // use base64 to encode the url then use as filename store on local dir
-        byte[] data = null;
         try {
-            data = url.getBytes(MainActivity.ENCODING);
+            byte[] data = url.getBytes(MainActivity.ENCODING);
+
+            String fileName = Base64.encodeToString(data, Base64.DEFAULT);
+            File file = new File(context.getFilesDir() + File.separator + subFolder + File.separator + fileName);
+            return file.getAbsolutePath();
         } catch (UnsupportedEncodingException uee) {
             uee.printStackTrace();
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        String fileName = Base64.encodeToString(data, Base64.DEFAULT);
-        File file = new File(context.getFilesDir() + File.separator + subFolder + File.separator + fileName);
-        return file.getAbsolutePath();
     }
 
     public static Bitmap ReadFileFromLocal(String filePath) {
@@ -59,15 +62,18 @@ public class KecUtilities {
 
     // for save & load json file
     public static String getTabLocalData(String subFolder, Context context) {
-        BufferedReader br = null;
-        String strJson = null;
+        BufferedReader br;
+        String strJson;
         try {
             StringBuffer output = new StringBuffer();
             String filePath = context.getFilesDir() + File.separator + subFolder + File.separator + "list.txt";
+            File file = new File(filePath);
+            if (!file.exists())
+                return null;
             br = new BufferedReader(new FileReader(filePath));
-            String line = "";
+            String line;
             while ((line = br.readLine()) != null) {
-                output.append(line + "\n");
+                output.append(line);
             }
             strJson = output.toString();
 
@@ -86,7 +92,9 @@ public class KecUtilities {
         try {
             File file = new File(context.getFilesDir() + File.separator + subFolder + File.separator + "list.txt");
             if (!file.exists()) {
-                file.createNewFile();
+                if (!file.createNewFile()) {
+                    Log.e(MainActivity.LOGTAG, "create file failed.(" + subFolder + File.separator + "list.txt).");
+                }
             }
 
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
@@ -184,7 +192,7 @@ public class KecUtilities {
 //            }
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
-            e.printStackTrace();;
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -207,7 +215,7 @@ public class KecUtilities {
             }
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
-            e.printStackTrace();;
+            e.printStackTrace();
             return false;
         }
         return true;

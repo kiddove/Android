@@ -38,7 +38,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
         TextView txtTile;
         TextView txtDesc;
         public ViewHolder () {
-            imageViews = new ArrayList<ScaleImageView>();
+            imageViews = new ArrayList<>();
             txtTile = null;
             txtDesc = null;
         }
@@ -54,7 +54,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
             if (convertView == null) {
                 /* There is no view at this position, we create a new one.
            In this case by inflating an xml layout */
-                convertView = layoutInflater.inflate(R.layout.photo_list_item, null);
+                convertView = layoutInflater.inflate(R.layout.photo_list_item, parent, false);
                 holder = new ViewHolder();
 
                 try {

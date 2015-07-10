@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,9 +28,7 @@ public class HTML5WebView extends WebView {
 	private View								mCustomView;
 	private FrameLayout							mCustomViewContainer;
 	private WebChromeClient.CustomViewCallback 	mCustomViewCallback;
-	
-	private FrameLayout							mContentView;
-	private FrameLayout							mBrowserFrameLayout;
+
 	private FrameLayout							mLayout;
 	
     static final String LOGTAG = "HTML5WebView";
@@ -39,12 +38,12 @@ public class HTML5WebView extends WebView {
 		Activity a = (Activity) mContext;
 		
 		mLayout = new FrameLayout(context);
+
+		FrameLayout browserFrameLayout = (FrameLayout) LayoutInflater.from(a).inflate(R.layout.activity_video_html5, null);
+		FrameLayout contentView = (FrameLayout) browserFrameLayout.findViewById(R.id.main_content);
+		mCustomViewContainer = (FrameLayout) browserFrameLayout.findViewById(R.id.fullscreen_custom_content);
 		
-		mBrowserFrameLayout = (FrameLayout) LayoutInflater.from(a).inflate(R.layout.activity_video_html5, null);
-		mContentView = (FrameLayout) mBrowserFrameLayout.findViewById(R.id.main_content);
-		mCustomViewContainer = (FrameLayout) mBrowserFrameLayout.findViewById(R.id.fullscreen_custom_content);
-		
-		mLayout.addView(mBrowserFrameLayout, COVER_SCREEN_PARAMS);
+		mLayout.addView(browserFrameLayout, COVER_SCREEN_PARAMS);
 
 		mWebChromeClient = new MyWebChromeClient();
 	    setWebChromeClient(mWebChromeClient);
@@ -68,7 +67,7 @@ public class HTML5WebView extends WebView {
 	    // enable Web Storage: localStorage, sessionStorage
 	    s.setDomStorageEnabled(true);
 	    
-	    mContentView.addView(this);
+	    contentView.addView(this);
 	}
 
 	public HTML5WebView(Context context) {
@@ -99,7 +98,7 @@ public class HTML5WebView extends WebView {
 	}
     
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_BACK) {
     		if ((mCustomView == null) && canGoBack()){
     			goBack();
@@ -163,7 +162,7 @@ public class HTML5WebView extends WebView {
 		
 		@Override
 		public View getVideoLoadingProgressView() {
-			//Log.i(LOGTAG, "here in on getVideoLoadingPregressView");
+			//Log.i(LOGTAG, "here in on getVideoLoadingProgressView");
 			
 	        if (mVideoProgressView == null) {
 	            LayoutInflater inflater = LayoutInflater.from(mContext);

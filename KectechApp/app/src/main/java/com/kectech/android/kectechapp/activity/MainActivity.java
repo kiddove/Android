@@ -2,8 +2,10 @@ package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -148,7 +150,7 @@ public class MainActivity extends Activity {
 
     // use back button to navigate backward
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         // check if the key event was the Back button and if there's history
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {

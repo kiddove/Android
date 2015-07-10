@@ -34,13 +34,13 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         VideoListItem item = getItem(position);
 
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.video_list_item, null);
+            convertView = layoutInflater.inflate(R.layout.video_list_item, parent, false);
             holder = new ViewHolder();
             holder.imageView = (ImageView)convertView.findViewById(R.id.hall_video_list_item_img);
             //holder.imageView = null;

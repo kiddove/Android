@@ -57,8 +57,6 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
 
                 VideoListItem item = params[i];
 
-
-                // todo change folder
                 String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), subFolder, activity);
 
                 if (localPath == null)

@@ -55,8 +55,6 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
 
                 Tab_Main_Hall_ListItem item = params[i];
 
-
-                // todo change folder
                 String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), HallOfMainActivity.subFolder, activity);
 
                 if (localPath == null)
