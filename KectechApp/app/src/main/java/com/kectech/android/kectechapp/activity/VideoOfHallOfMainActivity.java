@@ -26,7 +26,7 @@ public class VideoOfHallOfMainActivity extends Activity {
 
     HTML5WebView mWebView;
 
-    private OnSwipeTouchListener onSwipeTouchListener;
+    //private OnSwipeTouchListener onSwipeTouchListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,7 @@ public class VideoOfHallOfMainActivity extends Activity {
         mWebView = new HTML5WebView(this);
         setContentView(mWebView.getLayout());
 
-        onSwipeTouchListener = new OnSwipeTouchListener() {
+        OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
             public void onSwipeOutLeft() {
                 //getFragmentManager().popBackStack();
                 close();
@@ -44,7 +44,7 @@ public class VideoOfHallOfMainActivity extends Activity {
 //            }
         };
 
-        mWebView.setOnTouchListener(onSwipeTouchListener);
+        mWebView.setOnTouchListener(swipeTouchListener);
 
         // for using action bar back button
         //getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -151,7 +151,7 @@ public class VideoOfHallOfMainActivity extends Activity {
         }
     }
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev){
+    public boolean dispatchTouchEvent(@NonNull MotionEvent ev){
         //onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }

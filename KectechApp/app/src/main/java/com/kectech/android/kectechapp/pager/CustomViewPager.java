@@ -15,7 +15,6 @@ import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 public class CustomViewPager extends ViewPager {
 
     float mStartDragX;
-    float x = 0;
     OnSwipeOutListener mOnSwipeOutListener;
 
     public CustomViewPager(Context context) {

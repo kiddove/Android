@@ -46,6 +46,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     private int previous = 0;
 
     public String subFolder = null;
+    private DownLoadImageTask preTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,7 +276,12 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            new DownLoadImageTask(imageView, context, subFolder).execute(imageURL);
+            if (preTask != null) {
+                preTask.cancel(true);
+                preTask = null;
+            }
+            preTask = new DownLoadImageTask(imageView, context, subFolder);
+            preTask.execute(imageURL);
         }
     }
 

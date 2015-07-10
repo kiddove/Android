@@ -31,7 +31,7 @@ import java.net.URLConnection;
  * progress -- to notify which item need to refresh, still use listitem
  * result -- bitmap
  */
-public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgressUpdate, Bitmap> {
+public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoProgressUpdate, Integer> {
     // Reference to the view which should receive the image
     private final WeakReference adapterRef;
     private final WeakReference listRef;
@@ -46,24 +46,26 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
     }
 
     @Override
-    protected Bitmap doInBackground(PhotoListItem... params) {
+    protected Integer doInBackground(PhotoListItem... params) {
         if (params.length < 1)
-            return null;
-        Bitmap bitmap = null;
+            return -1;
         try {
 
-            for (int i = 0; i < params.length; i++) {
-
-                PhotoListItem item = params[i];
+            for (PhotoListItem item : params) {
+                if (isCancelled())
+                    return -1;
+//            for (int i = 0; i < params.length; i++) {
+//
+//                PhotoListItem item = params[i];
 
                 // multi photo thumbs
                 for (int j = 0; j < item.items.size(); j++) {
                     String localPath = KecUtilities.getLocalFilePathFromURL(item.items.get(j).getThumbURL(), subFolder, activity);
 
                     if (localPath == null)
-                        return bitmap;
+                        continue;
                     // read from local first
-                    bitmap = KecUtilities.ReadFileFromLocal(localPath);
+                    Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
                     if (bitmap == null) {
 
                         URL url = new URL(item.items.get(j).getThumbURL());
@@ -114,12 +116,12 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }
 
-        return bitmap;
+        return 0;
     }
 
     @Override
-    protected void onPostExecute(Bitmap result) {
-        super.onPostExecute(result);
+    protected void onPostExecute(Integer noUse) {
+        super.onPostExecute(noUse);
 //
 //        if (isCancelled()) {
 //            result = null;

@@ -8,9 +8,10 @@ import android.view.View;
  * maybe use in multiple photos activity
  */
 public class FadePageTransformer implements ViewPager.PageTransformer {
-    private static float MIN_SCALE = 0.75f;
+    //private static float MIN_SCALE = 0.75f;
     @Override
     public void transformPage(View view, float position) {
+        final float MIN_SCALE = 0.75f;
         int pageWidth = view.getWidth();
 
         if (position < -1) { // [-Infinity,-1)

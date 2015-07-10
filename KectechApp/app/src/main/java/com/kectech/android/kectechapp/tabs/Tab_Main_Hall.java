@@ -647,7 +647,7 @@ public class Tab_Main_Hall extends Fragment {
             Tab_Main_Hall_ListItem[] items = new Tab_Main_Hall_ListItem[result.size()];
             result.toArray(items);
 
-            new LoadHallListThumbsTask(getActivity(), mAdapter, mListView).execute(items);
+            new LoadHallListThumbsTask(getActivity(), mListView).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -686,7 +686,7 @@ public class Tab_Main_Hall extends Fragment {
             // write to local not append, write
             KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
 
-            new LoadHallListThumbsTask(getActivity(), mAdapter, mListView).execute(items);
+            new LoadHallListThumbsTask(getActivity(), mListView).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -730,7 +730,7 @@ public class Tab_Main_Hall extends Fragment {
             result.toArray(items);
             // write to local not append, write
             KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
-            new LoadHallListThumbsTask(getActivity(), mAdapter, mListView).execute(items);
+            new LoadHallListThumbsTask(getActivity(), mListView).execute(items);
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }

@@ -12,7 +12,6 @@ import android.widget.ListView;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.HallOfMainActivity;
 import com.kectech.android.kectechapp.activity.MainActivity;
-import com.kectech.android.kectechapp.adapter.HallListViewAdapter;
 import com.kectech.android.kectechapp.listitem.Tab_Main_Hall_ListItem;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
@@ -32,33 +31,36 @@ import java.net.URLConnection;
  * progress -- to notify which item need to refresh, still use listitem
  * result -- bitmap
  */
-public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Tab_Main_Hall_ListItem, Bitmap> {
+public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Tab_Main_Hall_ListItem, Integer> {
     // Reference to the view which should receive the image
-    private final WeakReference adapterRef;
+    //private final WeakReference adapterRef;
     private final WeakReference listRef;
     private Activity activity;
 
-    public LoadHallListThumbsTask(Activity activity, HallListViewAdapter adapter, ListView listView) {
-        this.adapterRef = new WeakReference(adapter);
+    public LoadHallListThumbsTask(Activity activity, ListView listView) {
+        //this.adapterRef = new WeakReference(adapter);
         this.listRef = new WeakReference(listView);
         this.activity = activity;
     }
 
     @Override
-    protected Bitmap doInBackground(Tab_Main_Hall_ListItem... params) {
+    protected Integer doInBackground(Tab_Main_Hall_ListItem... params) {
         if (params.length < 1)
-            return null;
+            return -1;
         Bitmap bitmap = null;
         try {
 
-            for (int i = 0; i < params.length; i++) {
+            for(Tab_Main_Hall_ListItem item : params) {
+                if (isCancelled())
+                    break;
+            //for (int i = 0; i < params.length; i++) {
 
-                Tab_Main_Hall_ListItem item = params[i];
+                //Tab_Main_Hall_ListItem item = params[i];
 
                 String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), HallOfMainActivity.subFolder, activity);
 
                 if (localPath == null)
-                    return bitmap;
+                    continue;
                 // read from local first
                 bitmap = KecUtilities.ReadFileFromLocal(localPath);
                 if (bitmap == null) {
@@ -72,7 +74,7 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
                     int length = connection.getContentLength();
 
                     if (length <= 0)
-                        return null;
+                        continue;
 
                     File file = new File(localPath);
                     if (!file.exists()) {
@@ -106,14 +108,13 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }
-
-        return bitmap;
+        return 0;
     }
 
     @Override
-    protected void onPostExecute(Bitmap result) {
-        super.onPostExecute(result);
-//
+    protected void onPostExecute(Integer noUse) {
+        super.onPostExecute(noUse);
+
 //        if (isCancelled()) {
 //            result = null;
 //        }
@@ -132,7 +133,7 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
         // in this thread, to notify UI show the thumb image
 //        if (adapterRef != null && listRef != null) {
 //
-        HallListViewAdapter adapter = (HallListViewAdapter) adapterRef.get();
+        //HallListViewAdapter adapter = (HallListViewAdapter) adapterRef.get();
         ListView listView = (ListView) listRef.get();
         Bitmap bitmap = item[0].getImage();
         if (bitmap != null) {

@@ -182,7 +182,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             VideoListItem[] items = new VideoListItem[result.size()];
             result.toArray(items);
 
-            new LoadHallVideoListThumbsTask(getActivity(), mVideoAdapter, mListView, subFolder).execute(items);
+            new LoadHallVideoListThumbsTask(getActivity(), mListView, subFolder).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -221,7 +221,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             // write to local not append, write
             KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder, getActivity());
 
-            new LoadHallVideoListThumbsTask(getActivity(), mVideoAdapter, mListView, subFolder).execute(items);
+            new LoadHallVideoListThumbsTask(getActivity(), mListView, subFolder).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -265,7 +265,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             result.toArray(items);
             // write to local not append, write
             KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder, getActivity());
-            new LoadHallVideoListThumbsTask(getActivity(), mVideoAdapter, mListView, subFolder).execute(items);
+            new LoadHallVideoListThumbsTask(getActivity(), mListView, subFolder).execute(items);
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }

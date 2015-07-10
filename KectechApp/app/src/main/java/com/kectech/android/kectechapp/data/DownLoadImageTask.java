@@ -1,7 +1,6 @@
 package com.kectech.android.kectechapp.data;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -12,7 +11,6 @@ import android.widget.ProgressBar;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
-import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
@@ -96,6 +94,10 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             int dataSize;
             int loadedSize = 0;
             while ((dataSize = inputSteam.read(buffer)) != -1) {
+                if (isCancelled()) {
+                    outstream.close();
+                    return null;
+                }
                 loadedSize += dataSize;
                 publishProgress(loadedSize);
                 outstream.write(buffer, 0, dataSize);

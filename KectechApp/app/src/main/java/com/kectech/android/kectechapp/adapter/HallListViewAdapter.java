@@ -28,7 +28,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
     private  Context context;
     public boolean showCheckBox = false;
 
-    private HashMap<Integer, Boolean> selection = new HashMap<Integer, Boolean>();
+    private HashMap<Integer, Boolean> selection = new HashMap<>();
     public HallListViewAdapter(Context context, int resourceId, ArrayList<Tab_Main_Hall_ListItem> items) {
         super(context, resourceId, items);
         this.context = context;
@@ -45,7 +45,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         Tab_Main_Hall_ListItem item = getItem(position);
 
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);

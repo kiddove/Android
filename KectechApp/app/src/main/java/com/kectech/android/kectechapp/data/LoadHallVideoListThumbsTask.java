@@ -34,13 +34,13 @@ import java.net.URLConnection;
  */
 public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoListItem, Bitmap> {
     // Reference to the view which should receive the image
-    private final WeakReference adapterRef;
+    //private final WeakReference adapterRef;
     private final WeakReference listRef;
     private Activity activity;
     private String subFolder = null;
 
-    public LoadHallVideoListThumbsTask(Activity activity, VideoListViewAdapter adapter, ListView listView, @Nullable String subFolder) {
-        this.adapterRef = new WeakReference(adapter);
+    public LoadHallVideoListThumbsTask(Activity activity, ListView listView, @Nullable String subFolder) {
+        //this.adapterRef = new WeakReference(adapter);
         this.listRef = new WeakReference(listView);
         this.activity = activity;
         this.subFolder = subFolder;
@@ -53,9 +53,10 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
         Bitmap bitmap = null;
         try {
 
-            for (int i = 0; i < params.length; i++) {
-
-                VideoListItem item = params[i];
+            for (VideoListItem item : params) {
+//            for (int i = 0; i < params.length; i++) {
+//
+//                VideoListItem item = params[i];
 
                 String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), subFolder, activity);
 
@@ -134,7 +135,7 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
         // in this thread, to notify UI show the thumb image
 //        if (adapterRef != null && listRef != null) {
 //
-        VideoListViewAdapter adapter = (VideoListViewAdapter) adapterRef.get();
+        //VideoListViewAdapter adapter = (VideoListViewAdapter) adapterRef.get();
         ListView listView = (ListView) listRef.get();
         Bitmap bitmap = item[0].getImage();
         if (bitmap != null) {

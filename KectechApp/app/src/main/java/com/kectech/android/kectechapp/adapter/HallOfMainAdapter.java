@@ -3,18 +3,14 @@ package com.kectech.android.kectechapp.adapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentPagerAdapter;
 
-import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.tabs.Tab_Main_Hall_Photo;
 import com.kectech.android.kectechapp.tabs.Tab_Main_Hall_Video;
-import com.kectech.android.kectechapp.util.KecUtilities;
-
-import java.io.File;
 
 /**
  * Created by Paul on 02/07/2015.
+ * adapter for hall activity contains one or tow tabs.
  */
 public class HallOfMainAdapter extends FragmentPagerAdapter {
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
