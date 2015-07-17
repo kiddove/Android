@@ -1,6 +1,5 @@
 package com.kectech.android.kectechapp.data;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
-import com.kectech.android.kectechapp.adapter.VideoListViewAdapter;
 import com.kectech.android.kectechapp.listitem.VideoListItem;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
