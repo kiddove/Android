@@ -22,7 +22,9 @@ public class MainActivity extends Activity {
     // hall activity of main
     public final static String VIDEO_OF_HALL_OF_MAIN_URL = "video_hall_of_main_url";
     public final static String HALL_OF_MAIN_TYPE = "event_hall_type";
-    public final static String HALL_OF_MAIN_ID = "event_hall_id";
+    public final static String HALL_OF_MAIN_ID = "event_hall_id";   //  used as timestamp... no id
+    public final static String HALL_OF_MAIN_NAME = "event_hall_name";
+    public final static String HALL_OF_MAIN_FOLLOW = "event_hall_follow_name";
 
     public final static String PHOTO_TAB_THUMB_URL_KEY = "thumbURL";
     // may have plenty
@@ -43,11 +45,11 @@ public class MainActivity extends Activity {
     public final static String ENCODING = "UTF-8";
 
     // default user
-    public final static String USER = "default";
+    public final static String USER = "kevin@kectech.com"; // kdlinx@kdlinx.com, kevin@kectech.com
 
-    public final static int imageId[] = {R.id.photo_list_item_img0, R.id.photo_list_item_img1, R.id.photo_list_item_img2,
-            R.id.photo_list_item_img3, R.id.photo_list_item_img4, R.id.photo_list_item_img5,
-            R.id.photo_list_item_img6, R.id.photo_list_item_img7, R.id.photo_list_item_img8,};
+    public final static int imageId[] = {R.id.hall_photo_list_item_img0, R.id.hall_photo_list_item_img1, R.id.hall_photo_list_item_img2,
+            R.id.hall_photo_list_item_img3, R.id.hall_photo_list_item_img4, R.id.hall_photo_list_item_img5,
+            R.id.hall_photo_list_item_img6, R.id.hall_photo_list_item_img7, R.id.hall_photo_list_item_img8,};
 
     // variables
     // declaring view and variables
@@ -61,7 +63,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (!KecUtilities.createFolders(this)) {
+        KecUtilities.context = this;
+        if (!KecUtilities.createFolders()) {
             Log.e(MainActivity.LOGTAG, "create folders failed.");
             finish();
             System.exit(0);
@@ -87,7 +90,7 @@ public class MainActivity extends Activity {
             tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
             // use this interface to use you own view, e.g. can add icon instead of text
-            // for pageview or titleview? we will see
+            // for pageView or titleView? we will see
             //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
             // do NOT use 0 for 2nd param, will cause exception
             //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -23,10 +24,11 @@ import java.io.UnsupportedEncodingException;
  * all subFolder format like user/hall/video, means MainActivity.USER + File.separator + ....., without separator at beginning nor end.
  */
 public class KecUtilities {
+    public static Context context = null;
 
-    public static String getLocalFilePathFromURL(String url, String subFolder, Context context) {
+    public static String getLocalFilePathFromURL(String url, String subFolder) {
         // subfolder should be exist after calling createFolders
-        if (url == null)
+        if (url == null || context == null)
             return null;
         // use base64 to encode the url then use as filename store on local dir
         try {
@@ -61,10 +63,12 @@ public class KecUtilities {
     }
 
     // for save & load json file
-    public static String getTabLocalData(String subFolder, Context context) {
+    public static String getTabLocalData(String subFolder) {
         BufferedReader br;
         String strJson;
         try {
+            if (context == null)
+                return null;
             StringBuffer output = new StringBuffer();
             String filePath = context.getFilesDir() + File.separator + subFolder + File.separator + "list.txt";
             File file = new File(filePath);
@@ -80,16 +84,25 @@ public class KecUtilities {
             return strJson;
         } catch (FileNotFoundException fne) {
             Log.e(MainActivity.LOGTAG, "File not found: " + fne.getMessage());
-        } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
-            e.printStackTrace();
+            fne.printStackTrace();
+        } catch (NullPointerException npe) {
+            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            npe.printStackTrace();
+        } catch (IOException ioe) {
+            Log.e(MainActivity.LOGTAG, ioe.getMessage());
+            ioe.printStackTrace();
         }
         return null;
     }
 
-    public static void writeTabLocalData(String strJson, String subFolder, Context context) {
+    public static void writeTabLocalData(String strJson, String subFolder) {
 
         try {
+            if (context == null) {
+                Log.e(MainActivity.LOGTAG, "context is null.");
+                return;
+            }
+
             File file = new File(context.getFilesDir() + File.separator + subFolder + File.separator + "list.txt");
             if (!file.exists()) {
                 if (!file.createNewFile()) {
@@ -102,9 +115,12 @@ public class KecUtilities {
             bw.write(strJson);
             bw.flush();
             bw.close();
-        } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
-            e.printStackTrace();
+        } catch (NullPointerException npe) {
+            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            npe.printStackTrace();
+        } catch (IOException ioe) {
+            Log.e(MainActivity.LOGTAG, ioe.getMessage());
+            ioe.printStackTrace();
         }
     }
 
@@ -124,7 +140,7 @@ public class KecUtilities {
         return strJson;
     }
 
-    public static boolean createFolders(Context context) {
+    public static boolean createFolders() {
         // one for each tab
         // hall, show, public, setting
         // inside each tab(except setting, for now only hall) there are video and photo
@@ -132,6 +148,8 @@ public class KecUtilities {
         // 4 tabs
         // under user
         try {
+            if (context == null)
+                return false;
             File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
@@ -198,7 +216,7 @@ public class KecUtilities {
         return true;
     }
 
-    public static boolean createSubFolders(Context context, String subFolder) {
+    public static boolean createSubFolders(String subFolder) {
         // one for each tab
         // hall, show, public, setting
         // inside each tab(except setting, for now only hall) there are video and photo
@@ -206,6 +224,8 @@ public class KecUtilities {
         // 4 tabs
         // under user
         try {
+            if (context == null)
+                return false;
             File folder = new File(context.getFilesDir() + File.separator + subFolder);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {

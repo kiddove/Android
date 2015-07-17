@@ -34,14 +34,15 @@ import java.net.URLConnection;
 public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
     // Reference to the view which should receive the image
     private final WeakReference imageRef;
+    // may be null, if finish is called
     private Activity context;
     private ProgressBar progressBar;
     private String subFolder;
 
     public DownLoadImageTask(ImageView imageView, Activity context, String subFolder) {
-        imageRef = new WeakReference(imageView);
+        this.imageRef = new WeakReference(imageView);
         this.context = context;
-        progressBar = (ProgressBar) context.findViewById(R.id.photo_activity_progressbar);
+        this.progressBar = (ProgressBar) this.context.findViewById(R.id.photo_activity_progressbar);
         this.subFolder = subFolder;
     }
 
@@ -78,7 +79,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             // change the ui of progress bar
             progressBar.setMax(length);
 
-            String localPath = KecUtilities.getLocalFilePathFromURL(file_url, subFolder, context);
+            String localPath = KecUtilities.getLocalFilePathFromURL(file_url, subFolder);
             if (localPath == null)
                 return null;
 
@@ -141,4 +142,8 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
         progressBar.setProgress(progress[0]);
     }
 
+    @Override
+    protected void onCancelled() {
+        progressBar.setVisibility(View.GONE);
+    }
 }

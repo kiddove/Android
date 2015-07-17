@@ -35,13 +35,11 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
     // Reference to the view which should receive the image
     private final WeakReference adapterRef;
     private final WeakReference listRef;
-    private Activity activity;
     private String subFolder;
 
-    public LoadHallPhotoListThumbsTask(Activity activity, PhotoListViewAdapter adapter, ListView listView, String subFolder) {
+    public LoadHallPhotoListThumbsTask(PhotoListViewAdapter adapter, ListView listView, String subFolder) {
         this.adapterRef = new WeakReference(adapter);
         this.listRef = new WeakReference(listView);
-        this.activity = activity;
         this.subFolder = subFolder;
     }
 
@@ -60,7 +58,7 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
 
                 // multi photo thumbs
                 for (int j = 0; j < item.items.size(); j++) {
-                    String localPath = KecUtilities.getLocalFilePathFromURL(item.items.get(j).getThumbURL(), subFolder, activity);
+                    String localPath = KecUtilities.getLocalFilePathFromURL(item.items.get(j).getThumbURL(), subFolder);
 
                     if (localPath == null)
                         continue;
@@ -143,6 +141,8 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
 
         PhotoListViewAdapter adapter = (PhotoListViewAdapter) adapterRef.get();
         ListView listView = (ListView) listRef.get();
+        if (adapter == null || listView == null)
+            return;
         Bitmap bitmap = ppu[0].bitmap;
         adapter.getItem(ppu[0].position).items.get(ppu[0].index).setThumbNail(bitmap);
         if (bitmap != null) {

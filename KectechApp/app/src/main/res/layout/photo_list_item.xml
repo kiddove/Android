@@ -4,7 +4,7 @@
     android:layout_height="fill_parent">
 
     <TextView
-        android:id="@+id/photo_list_item_title"
+        android:id="@+id/hall_photo_list_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
@@ -15,14 +15,14 @@
         android:text="@string/hello_world" />
 
     <TextView
-        android:id="@+id/photo_list_item_desc"
+        android:id="@+id/hall_photo_list_item_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textColor="@color/primary_blue"
-        android:layout_below="@+id/photo_list_item_title"
+        android:layout_below="@+id/hall_photo_list_item_title"
         android:text="@string/action_settings" />
 
     <LinearLayout
@@ -30,14 +30,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/photo_list_item_desc"
+        android:layout_below="@+id/hall_photo_list_item_desc"
         android:paddingTop="2dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="2dp">
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img0"
+            android:id="@+id/hall_photo_list_item_img0"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -47,7 +47,7 @@
             android:layout_marginRight="2dp"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img1"
+            android:id="@+id/hall_photo_list_item_img1"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -57,7 +57,7 @@
             android:layout_marginRight="2dp" />
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img2"
+            android:id="@+id/hall_photo_list_item_img2"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -76,7 +76,7 @@
         android:paddingRight="5dp">
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img3"
+            android:id="@+id/hall_photo_list_item_img3"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -86,7 +86,7 @@
             android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img4"
+            android:id="@+id/hall_photo_list_item_img4"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -96,7 +96,7 @@
             android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img5"
+            android:id="@+id/hall_photo_list_item_img5"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -116,7 +116,7 @@
         android:paddingRight="5dp">
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img6"
+            android:id="@+id/hall_photo_list_item_img6"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -126,7 +126,7 @@
             android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img7"
+            android:id="@+id/hall_photo_list_item_img7"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"
@@ -136,7 +136,7 @@
             android:layout_weight="1"/>
 
         <com.kectech.android.kectechapp.thirdparty.ScaleImageView
-            android:id="@+id/photo_list_item_img8"
+            android:id="@+id/hall_photo_list_item_img8"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/photo_list_item_img_description"

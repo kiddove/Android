@@ -1,7 +1,7 @@
 package com.kectech.android.kectechapp.tabs;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -48,22 +49,47 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     private SwipyRefreshLayout mSwipyRefreshLayout;
 
-    private int tabType = 0;
     private int tabId = 0;
+    private String tabName;
+    private String strType;
+    private String tabFollow;
 
     private String subFolder = null;
+    private Activity activity;
 
     public void setType(int tabType) {
-        this.tabType = tabType;
+
+        switch (tabType) {
+            case 1:
+                // public
+                break;
+            case 2:
+                // showroom
+                break;
+            case 3:
+                // eventhall
+                strType = "&eh=";
+                break;
+            default:
+                break;
+        }
     }
 
     public void setId(int tabId) {
         this.tabId = tabId;
     }
 
-    public void createSubFolder(Context context) {
+    public void setName(String name) {
+        this.tabName = name;
+    }
+
+    public void setFollow(String follow) {
+        this.tabFollow = follow;
+    }
+
+    public void createSubFolder() {
         String folder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + tabId + File.separator + MainActivity.VIDEO_SUB_FOLDER;
-        if (KecUtilities.createSubFolders(context, folder)) {
+        if (KecUtilities.createSubFolders(folder)) {
             subFolder = folder;
         } else
             subFolder = null;
@@ -91,14 +117,14 @@ public class Tab_Main_Hall_Video extends Fragment {
 
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
                 // get another activity to run
-                Intent intent = new Intent(getActivity(), VideoOfHallOfMainActivity.class);
+                Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 // todo set correct url of video page, now all items are test url.
                 intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 
@@ -115,13 +141,14 @@ public class Tab_Main_Hall_Video extends Fragment {
         // read from local first
         if (subFolder == null)
             return;
-        String strJson = KecUtilities.getTabLocalData(subFolder, getActivity());
+        String strJson = KecUtilities.getTabLocalData(subFolder);
 
+        ArrayList<VideoListItem> items = null;
         if (strJson != null && !strJson.isEmpty()) {
-            ArrayList<VideoListItem> items = getListFromJson(strJson);
-            if (items != null) {
-                onRefreshComplete(items);
-            }
+            items = getListFromJson(strJson);
+        }
+        if (items != null && !items.isEmpty()) {
+            onRefreshComplete(items);
         } else {
             Refresh(SwipyRefreshLayoutDirection.BOTH);
         }
@@ -158,14 +185,16 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     // for the first time when init using this
     private void onRefreshComplete(ArrayList<VideoListItem> result) {
-        if (result == null)
+        if (result == null || result.isEmpty())
             return;
         if (mVideoAdapter != null) {
             Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
+            if (activity == null)
+                return;
             // first add to adapter and listView
-            mVideoAdapter = new VideoListViewAdapter(getActivity(), R.layout.video_list_item, result);
+            mVideoAdapter = new VideoListViewAdapter(activity, R.layout.video_list_item, result);
             mListView.setAdapter(mVideoAdapter);
 
             // now can start another task to load image async
@@ -182,22 +211,27 @@ public class Tab_Main_Hall_Video extends Fragment {
             VideoListItem[] items = new VideoListItem[result.size()];
             result.toArray(items);
 
-            new LoadHallVideoListThumbsTask(getActivity(), mListView, subFolder).execute(items);
+            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
 
-        } catch (Exception e) {
+        } catch (NullPointerException npe) {
+            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            npe.printStackTrace();
+        }
+        catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
+            e.printStackTrace();
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
     }
 
     private void onRefreshCompleteTop(ArrayList<VideoListItem> result) {
-        if (result == null || subFolder == null)
+        if (result == null || subFolder == null || result.isEmpty())
             return;
         ArrayList<VideoListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(subFolder, getActivity());
+            String strJson = KecUtilities.getTabLocalData(subFolder);
 
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
@@ -219,9 +253,9 @@ public class Tab_Main_Hall_Video extends Fragment {
 
 
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder, getActivity());
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
 
-            new LoadHallVideoListThumbsTask(getActivity(), mListView, subFolder).execute(items);
+            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -231,12 +265,12 @@ public class Tab_Main_Hall_Video extends Fragment {
     }
 
     private void onRefreshCompleteBottom(ArrayList<VideoListItem> result) {
-        if (result == null || subFolder == null)
+        if (result == null || subFolder == null || result.isEmpty())
             return;
         ArrayList<VideoListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(subFolder, getActivity());
+            String strJson = KecUtilities.getTabLocalData(subFolder);
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
             }
@@ -250,7 +284,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 position++;
             }
 
-            if (result.size() > 0) {
+            //if (result.size() > 0) {
                 final int currentPosition = mListView.getFirstVisiblePosition();
                 mListView.setSelection(currentPosition + 1);
                 mListView.post(new Runnable() {
@@ -259,13 +293,13 @@ public class Tab_Main_Hall_Video extends Fragment {
                         mListView.smoothScrollToPosition(currentPosition + 1);
                     }
                 });
-            }
+            //}
 
             VideoListItem[] items = new VideoListItem[result.size()];
             result.toArray(items);
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder, getActivity());
-            new LoadHallVideoListThumbsTask(getActivity(), mListView, subFolder).execute(items);
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
+            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }
@@ -315,27 +349,31 @@ public class Tab_Main_Hall_Video extends Fragment {
 
         // actually bottom and init can use same interface??
         if (direction == SwipyRefreshLayoutDirection.TOP) {
-            new UpdateThumbListTaskTop().execute("todo");
+            new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
         } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
-            new UpdateThumbListTaskBottom().execute("todo");
+            int i = mVideoAdapter.getCount();
+            new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
         } else
             // use as init
-            new UpdateThumbListTask().execute("todo");
+            new UpdateThumbListTask().execute(0);
     }
 
     // for download thumbs
     // may need to write 3 task
-    private class UpdateThumbListTask extends AsyncTask<String, Void, String> {
+    private class UpdateThumbListTask extends AsyncTask<Integer, Void, String> {
 
         public UpdateThumbListTask() {
         }
 
         @Override
-        protected String doInBackground(String... params) {
-
+        protected String doInBackground(Integer... params) {
+            if (strType == null || strType.isEmpty())
+                return null;
             try {
 
-                String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?tabtype=" + tabType;
+                //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?tabtype=" + tabType;
+                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=&count=6&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);;
+
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
@@ -356,20 +394,23 @@ public class Tab_Main_Hall_Video extends Fragment {
             super.onPostExecute(result);
             ArrayList<VideoListItem> items = getListFromJson(result);
 
-            if (result != null) {
-                KecUtilities.writeTabLocalData(result, subFolder, getActivity());
+            if (result != null && !items.isEmpty()) {
+                KecUtilities.writeTabLocalData(result, subFolder);
                 onRefreshComplete(items);
             }
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdateThumbListTaskTop extends AsyncTask<String, Void, String> {
+    private class UpdateThumbListTaskTop extends AsyncTask<Integer, Void, String> {
         @Override
-        protected String doInBackground(String... params) {
-
+        protected String doInBackground(Integer... params) {
+            if (strType == null || strType.isEmpty())
+                return null;
             try {
-                String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=top&count=5&tabtype=" + tabType;
+                int id = params[0];
+                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);;
+                //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=top&count=5&tabtype=" + tabType;
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
@@ -390,19 +431,26 @@ public class Tab_Main_Hall_Video extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            if (isCancelled())
+                return;
             ArrayList<VideoListItem> items = getListFromJson(result);
 
-            onRefreshCompleteTop(items);
+            if (items != null && !items.isEmpty())
+                onRefreshCompleteTop(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdateThumbListTaskBottom extends AsyncTask<String, Void, String> {
+    private class UpdateThumbListTaskBottom extends AsyncTask<Integer, Void, String> {
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Integer... params) {
 
+            if (strType == null || strType.isEmpty())
+                return null;
             try {
-                String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=bottom&count=5&tabtype=" + tabType;
+                int id = params[0];
+                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
+                //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=bottom&count=5&tabtype=" + tabType;
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
@@ -423,10 +471,51 @@ public class Tab_Main_Hall_Video extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if (isCancelled())
+                return;
+
             ArrayList<VideoListItem> items = getListFromJson(result);
 
-            onRefreshCompleteBottom(items);
+            if (items != null && !items.isEmpty())
+                onRefreshCompleteBottom(items);
+
             mSwipyRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onPause.");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStop.");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStart.");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onResume.");
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.activity = null;
     }
 }

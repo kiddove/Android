@@ -2,6 +2,12 @@ package com.kectech.android.kectechapp.listitem;
 
 import android.graphics.Bitmap;
 
+import com.kectech.android.kectechapp.activity.MainActivity;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
+
 /**
  * Created by Paul on 16/06/2015.
  * define a class for custom listView item
@@ -14,6 +20,8 @@ public class Tab_Main_Hall_ListItem {
     private int position;
     private String thumb = null;
     private int id;
+    private String keyid;
+    private String follow;
 
     public Tab_Main_Hall_ListItem(Tab_Main_Hall_ListItem item) {
         this.title = item.title;
@@ -22,6 +30,8 @@ public class Tab_Main_Hall_ListItem {
         this.position = item.position;
         this.thumb = item.thumb;
         this.id = item.id;
+        this.keyid = item.keyid;
+        this.follow = item.follow;
     }
 
     public Bitmap getImage() {
@@ -33,15 +43,11 @@ public class Tab_Main_Hall_ListItem {
     }
 
     public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
+        return desc.replace("<br/>", "\n");
     }
 
     public String getTitle() {
-        return title;
+        return title.replace("<br/>", "\n");
     }
 
     public void setTitle(String title) {
@@ -50,10 +56,6 @@ public class Tab_Main_Hall_ListItem {
 
     public int getType() {
         return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public int getPosition() {
@@ -65,19 +67,37 @@ public class Tab_Main_Hall_ListItem {
     }
 
     public String getThumbURL() {
-        return thumb;
-    }
-
-    public void setThumbURL(String thumbURL) {
-        this.thumb = thumbURL;
+        try {
+            //return thumb;
+            switch (type) {
+                case 1:
+                    // public
+                    return null;
+                case 2:
+                    // show room
+                    return null;
+                case 3:
+                    // event hall
+                    return "http://www.kdlinx.com/EHLogo.ashx?type=0&owner=" + this.follow + "&eh=" + URLEncoder.encode(this.keyid, MainActivity.ENCODING);
+                default:
+                    return null;
+            }
+        } catch (UnsupportedEncodingException uee) {
+            uee.printStackTrace();
+            return null;
+        }
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getName() {
+        return keyid;
+    }
+
+    public String getFollow() {
+        return follow;
     }
     @Override
     public String toString() {

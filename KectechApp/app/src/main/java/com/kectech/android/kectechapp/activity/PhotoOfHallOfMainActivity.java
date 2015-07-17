@@ -87,7 +87,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             for (int i = 0; i < imageCount; i++) {
                 View v = layoutInflater.inflate(R.layout.photo_activity_image_fragment, null);
                 // here load thumb first if has..
-                ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageview);
+                ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);
                 if (imageView != null) {
 //                    imageView.setOnClickListener(new View.OnClickListener() {
 //                        @Override
@@ -97,7 +97,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 //                    });
                     if (URLs != null && subFolder != null) {
                         String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
-                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, subFolder, context);
+                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, subFolder);
                         Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
                         if (thumbBitmap != null) {
                             imageView.setImageBitmap(thumbBitmap);
@@ -121,7 +121,6 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
         // default select
         dots.get(0).setBackgroundResource(R.drawable.dot_selected);
-        context = this;
 
         // pager
         CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
@@ -262,24 +261,23 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     public void setCurrentPage(int position) {
         if (subFolder == null)
             return;
+        if (preTask != null) {
+            preTask.cancel(true);
+            preTask = null;
+        }
         dots.get(previous).setBackgroundResource(R.drawable.dot_normal);
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);
         previous = position;
 
-        ScaleImageView imageView = (ScaleImageView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_imageview);
+        ScaleImageView imageView = (ScaleImageView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_imageView);
         // download image async
-        //String url = String.format("http://173.236.36.10/cds/samples/pets/%02d.jpg", position + 1);
         String imageURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY).get(position);
-        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, subFolder, context);
+        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, subFolder);
         Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
         //Bitmap bitmap = null;
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            if (preTask != null) {
-                preTask.cancel(true);
-                preTask = null;
-            }
             preTask = new DownLoadImageTask(imageView, context, subFolder);
             preTask.execute(imageURL);
         }

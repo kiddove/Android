@@ -27,13 +27,6 @@ import java.io.File;
 public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 
     public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
-    CustomViewPager pager;
-    HallOfMainAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Video", "BBS"};
-    int NumOfTabs = 2;
-    int tabType = 0;
-    int tabId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +34,15 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         setContentView(R.layout.activity_main_hall);
 
         try {
-
+            CustomViewPager pager;
+            HallOfMainAdapter adapter;
+            SlidingTabLayout tabs;
+            int NumOfTabs = 1;
+            int tabType = 0;
+            int tabId = 0;
+            String tabName = "";
+            String tabFollowName = "";
+            CharSequence Titles[] = {getResources().getString(R.string.title_activity_main_hall_Video), getResources().getString(R.string.title_activity_main_hall_photo)};
             // depends on type, may be different num of tabs
             // for test
             // todo to be continued...
@@ -49,8 +50,9 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             if (intent != null) {
                 tabType = intent.getIntExtra(MainActivity.HALL_OF_MAIN_TYPE, 0);
                 tabId = intent.getIntExtra(MainActivity.HALL_OF_MAIN_ID, 0);
-                NumOfTabs = tabType % 2 == 0 ? 2 : 1;
-                KecUtilities.createSubFolders(this, MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + tabId);
+                tabName = intent.getStringExtra(MainActivity.HALL_OF_MAIN_NAME);
+                tabFollowName = intent.getStringExtra(MainActivity.HALL_OF_MAIN_FOLLOW);
+                KecUtilities.createSubFolders(MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + tabId);
             }
 
 
@@ -60,7 +62,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             //getActionBar().setDisplayShowHomeEnabled(false);
 
             // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-            adapter = new HallOfMainAdapter(getFragmentManager(), Titles, NumOfTabs, tabType, tabId, this);
+            adapter = new HallOfMainAdapter(getFragmentManager(), Titles, NumOfTabs, tabType, tabId, tabName, tabFollowName);
 
             // Assigning ViewPager View and setting the adapter
             pager = (CustomViewPager) findViewById(R.id.hall_activity_pager);
@@ -72,7 +74,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
             // use this interface to use you own view, e.g. can add icon instead of text
-            // for pageview or titleview? we will see
+            // for pageView or titleView? we will see
             //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
             // do NOT use 0 for 2nd param, will cause exception
             //tabs.setCustomTabView(R.layout.tab_title, R.id.tab_title_text);
@@ -140,14 +142,14 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         close();
     }
 
-    @Override
-    public void onBackPressed(){
-        if (getFragmentManager().getBackStackEntryCount() == 0) {
-            super.onBackPressed();
-        } else {
-            getFragmentManager().popBackStack();
-        }
-    }
+//    @Override
+//    public void onBackPressed(){
+//        if (getFragmentManager().getBackStackEntryCount() == 0) {
+//            super.onBackPressed();
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
+//    }
 
     private void close() {
         finish();
@@ -169,5 +171,10 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         // If it wasn't the Back key or there's no web page history, bubble up to the default
         // system behavior (probably exit the activity)
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

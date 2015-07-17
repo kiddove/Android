@@ -17,18 +17,20 @@ public class HallOfMainAdapter extends FragmentPagerAdapter {
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
 
     int tabType;
-    int tabId;
-    Context context;
+    int tabId;  // for storage
+    String tabName;
+    String tabFollow;
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public HallOfMainAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabs, int tabType, int tabId, Context context) {
+    public HallOfMainAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabs, int tabType, int tabId, String tabName, String tabFollow) {
         super(fm);
 
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabs;
         this.tabType = tabType;
         this.tabId = tabId;
-        this.context = context;
+        this.tabName = tabName;
+        this.tabFollow = tabFollow;
     }
 
     //This method return the fragment for the every position in the View Pager
@@ -40,14 +42,16 @@ public class HallOfMainAdapter extends FragmentPagerAdapter {
                 Tab_Main_Hall_Video tabVideo =  new Tab_Main_Hall_Video();
                 tabVideo.setType(tabType);
                 tabVideo.setId(tabId);
-                tabVideo.createSubFolder(context);
+                tabVideo.setName(tabName);
+                tabVideo.setFollow(tabFollow);
+                tabVideo.createSubFolder();
                 return tabVideo;
             }
             case 1: {
                 Tab_Main_Hall_Photo tabPhoto =  new Tab_Main_Hall_Photo();
                 tabPhoto.setType(tabType);
                 tabPhoto.setId(tabId);
-                tabPhoto.createSubFolder(context);
+                tabPhoto.createSubFolder();
                 return tabPhoto;
             }
             default:

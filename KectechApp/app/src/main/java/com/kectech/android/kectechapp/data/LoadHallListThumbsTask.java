@@ -35,37 +35,34 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
     // Reference to the view which should receive the image
     //private final WeakReference adapterRef;
     private final WeakReference listRef;
-    private Activity activity;
 
-    public LoadHallListThumbsTask(Activity activity, ListView listView) {
+    public LoadHallListThumbsTask(ListView listView) {
         //this.adapterRef = new WeakReference(adapter);
         this.listRef = new WeakReference(listView);
-        this.activity = activity;
     }
 
     @Override
     protected Integer doInBackground(Tab_Main_Hall_ListItem... params) {
         if (params.length < 1)
             return -1;
-        Bitmap bitmap = null;
+
         try {
 
             for(Tab_Main_Hall_ListItem item : params) {
                 if (isCancelled())
                     break;
             //for (int i = 0; i < params.length; i++) {
-
-                //Tab_Main_Hall_ListItem item = params[i];
-
-                String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), HallOfMainActivity.subFolder, activity);
+                String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), HallOfMainActivity.subFolder);
 
                 if (localPath == null)
                     continue;
                 // read from local first
-                bitmap = KecUtilities.ReadFileFromLocal(localPath);
+                Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
                 if (bitmap == null) {
 
-                    URL url = new URL(item.getThumbURL());
+                    //URL url = new URL("http://www.kdlinx.com/EHLogo.ashx?type=0&owner=masonluo@kectech.com&eh=111");
+                    String ss = item.getThumbURL();
+                    URL url = new URL(ss);
 
                     URLConnection connection = url.openConnection();
 
@@ -131,9 +128,9 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
         // so if use one thread to download multi files
         // update ui here
         // in this thread, to notify UI show the thumb image
-//        if (adapterRef != null && listRef != null) {
-//
-        //HallListViewAdapter adapter = (HallListViewAdapter) adapterRef.get();
+        if (isCancelled()) {
+            return;
+        }
         ListView listView = (ListView) listRef.get();
         Bitmap bitmap = item[0].getImage();
         if (bitmap != null) {

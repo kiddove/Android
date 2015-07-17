@@ -63,11 +63,11 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
                 convertView.setTag(holder);
             } else
                 holder = (ViewHolder) convertView.getTag();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
             return convertView;
         }
+
         holder.txtDesc.setText(item.getDesc());
         holder.txtTitle.setText(item.getTitle());
         holder.imageView.setImageBitmap(item.getImage());

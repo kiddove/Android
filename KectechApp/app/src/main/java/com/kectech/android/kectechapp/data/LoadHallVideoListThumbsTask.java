@@ -28,21 +28,19 @@ import java.net.URLConnection;
 /**
  * Created by Paul on 25/06/2015.
  * used for loading thumbs for the photo tab ListView's item
- * params (for the task not the constructor)-- object, thumbs url? listitem position? String?
- * progress -- to notify which item need to refresh, still use listitem
+ * params (for the task not the constructor)-- object, thumbs url? list item position? String?
+ * progress -- to notify which item need to refresh, still use list item
  * result -- bitmap
  */
 public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoListItem, Bitmap> {
     // Reference to the view which should receive the image
     //private final WeakReference adapterRef;
     private final WeakReference listRef;
-    private Activity activity;
     private String subFolder = null;
 
-    public LoadHallVideoListThumbsTask(Activity activity, ListView listView, @Nullable String subFolder) {
+    public LoadHallVideoListThumbsTask(ListView listView, @Nullable String subFolder) {
         //this.adapterRef = new WeakReference(adapter);
         this.listRef = new WeakReference(listView);
-        this.activity = activity;
         this.subFolder = subFolder;
     }
 
@@ -58,7 +56,7 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
 //
 //                VideoListItem item = params[i];
 
-                String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), subFolder, activity);
+                String localPath = KecUtilities.getLocalFilePathFromURL(item.getThumbURL(), subFolder);
 
                 if (localPath == null)
                     return bitmap;
@@ -136,21 +134,27 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
 //        if (adapterRef != null && listRef != null) {
 //
         //VideoListViewAdapter adapter = (VideoListViewAdapter) adapterRef.get();
-        ListView listView = (ListView) listRef.get();
-        Bitmap bitmap = item[0].getImage();
-        if (bitmap != null) {
+        try {
+            ListView listView = (ListView) listRef.get();
+            if (listView == null)
+                return;
+            Bitmap bitmap = item[0].getImage();
+            if (bitmap != null) {
 //                int i1 = listView.getFirstVisiblePosition();
 //                int i2 = listView.getLastVisiblePosition();
-            View v = listView.getChildAt(item[0].getPosition() - listView.getFirstVisiblePosition());
-            if (v != null) {
-                ImageView imgView = (ImageView) v.findViewById(R.id.hall_video_list_item_img);
-                if (imgView != null) {
-                    imgView.setImageBitmap(bitmap);
-                } else {
-                    Log.d(MainActivity.LOGTAG, "not cool at all.");
+                View v = listView.getChildAt(item[0].getPosition() - listView.getFirstVisiblePosition());
+                if (v != null) {
+                    ImageView imgView = (ImageView) v.findViewById(R.id.hall_video_list_item_img);
+                    if (imgView != null) {
+                        imgView.setImageBitmap(bitmap);
+                    } else {
+                        Log.d(MainActivity.LOGTAG, "not cool at all.");
+                    }
                 }
-            }
-        } else
-            Log.e(MainActivity.LOGTAG, "result is nulls, download failed.");
+            } else
+                Log.e(MainActivity.LOGTAG, "result is nulls, download failed.");
+        } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, e.getMessage());
+        }
     }
 }

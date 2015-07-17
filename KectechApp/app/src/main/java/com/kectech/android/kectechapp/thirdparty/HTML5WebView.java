@@ -52,7 +52,7 @@ public class HTML5WebView extends WebView {
 	       
 	    // Configure the webview
 	    WebSettings s = getSettings();
-	    //s.setBuiltInZoomControls(true);
+	    s.setBuiltInZoomControls(true);
 	    s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 	    s.setUseWideViewPort(true);
 	    s.setLoadWithOverviewMode(true);

@@ -1,5 +1,6 @@
 package com.kectech.android.kectechapp.tabs;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -60,6 +61,7 @@ public class Tab_Main_Hall extends Fragment {
     private ActionMode mMode;
 
     private int num = 0;
+    private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,16 +96,18 @@ public class Tab_Main_Hall extends Fragment {
 
                     Tab_Main_Hall_ListItem tabMainHallListItem = mAdapter.getItem(position);
                     // get another activity to run  activity_main_hall
-                    Intent intent = new Intent(getActivity(), HallOfMainActivity.class);
+                    Intent intent = new Intent(activity, HallOfMainActivity.class);
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra(MainActivity.HALL_OF_MAIN_TYPE, tabMainHallListItem.getType());
                     intent.putExtra(MainActivity.HALL_OF_MAIN_ID, tabMainHallListItem.getId());
+                    intent.putExtra(MainActivity.HALL_OF_MAIN_NAME, tabMainHallListItem.getName());
+                    intent.putExtra(MainActivity.HALL_OF_MAIN_FOLLOW, tabMainHallListItem.getFollow());
 
                     try {
                         startActivity(intent);
                         //getActivity().overridePendingTransition(0, 0);
-                        getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                        activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOGTAG, e.getMessage());
                         e.printStackTrace();
@@ -224,7 +228,7 @@ public class Tab_Main_Hall extends Fragment {
 
         switch (id) {
             case R.id.menu_hall_tab_item_edit:
-                mMode = getActivity().startActionMode(new ModeCallback());
+                mMode = activity.startActionMode(new ModeCallback());
                 return true;
             case R.id.hall_tab_add_sub_scan:
                 IntentIntegrator integrator = new IntentIntegrator(this);
@@ -275,7 +279,7 @@ public class Tab_Main_Hall extends Fragment {
         int menuItemIndex = item.getItemId();
         String[] option = {"YES", "NO"};
 
-        Toast.makeText(getActivity(), option[menuItemIndex] + " selected.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, option[menuItemIndex] + " selected.", Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -409,7 +413,7 @@ public class Tab_Main_Hall extends Fragment {
                             localData.add(item);
                         }
                         // write to local
-                        KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
+                        KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), HallOfMainActivity.subFolder);
 
                         localData.clear();
                     }
@@ -453,20 +457,20 @@ public class Tab_Main_Hall extends Fragment {
 
     // for download thumbs
     // may need to write 3 task
-    private class UpdateThumbListTask extends AsyncTask<String, Void, String> {
+    private class UpdateThumbListTask extends AsyncTask<Integer, Void, String> {
 
         public UpdateThumbListTask() {
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            // step1 Read from loacl if has data
+        protected String doInBackground(Integer... params) {
+            // step1 Read from local if has data
             // step2 if not send http request
             // if updated write to local... after refresh... a lot of work to do
             // first try to request every time ...
-
             // for test
-            String strURL = "http://173.236.36.10/cds/generateThumbnail.php";
+            //String strURL = "http://173.236.36.10/cds/generateThumbnail.php";
+            String strURL = "http://198.105.216.190/generateThumbnail.ashx?id=&count=6&user=" + MainActivity.USER;
 
             try {
                 URL url = new URL(strURL);
@@ -489,19 +493,21 @@ public class Tab_Main_Hall extends Fragment {
             super.onPostExecute(result);
             ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
 
-            if (result != null) {
-                KecUtilities.writeTabLocalData(result, HallOfMainActivity.subFolder, getActivity());
+            if (result != null && !items.isEmpty()) {
+                KecUtilities.writeTabLocalData(result, HallOfMainActivity.subFolder);
                 onRefreshComplete(items);
             }
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdateThumbListTaskTop extends AsyncTask<String, Void, String> {
+    private class UpdateThumbListTaskTop extends AsyncTask<Integer, Void, String> {
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Integer... params) {
             // for test
-            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=top&count=5";
+            int id = params[0];
+//            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=top&count=5";
+            String strURL = "http://198.105.216.190/generateThumbnail.ashx?id=" + id + "&count=2" + "&direction=after&user=" + MainActivity.USER;
 
             try {
                 URL url = new URL(strURL);
@@ -524,19 +530,25 @@ public class Tab_Main_Hall extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            if (isCancelled())
+                return;
+
             ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
 
-            onRefreshCompleteTop(items);
+            if (items != null && !items.isEmpty())
+                onRefreshCompleteTop(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdateThumbListTaskBottom extends AsyncTask<String, Void, String> {
+    private class UpdateThumbListTaskBottom extends AsyncTask<Integer, Void, String> {
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Integer... params) {
 
+            int id = params[0];
             // for test
-            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=bottom&count=5";
+            //String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=bottom&count=5";
+            String strURL = "http://198.105.216.190/generateThumbnail.ashx?id=" + id + "&count=2" + "&direction=before&user=" + MainActivity.USER;
 
             try {
                 URL url = new URL(strURL);
@@ -559,8 +571,11 @@ public class Tab_Main_Hall extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if (isCancelled())
+                return;
             ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(result);
-            onRefreshCompleteBottom(items);
+            if (items != null && !items.isEmpty())
+                onRefreshCompleteBottom(items);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
@@ -570,26 +585,34 @@ public class Tab_Main_Hall extends Fragment {
 
         // actually bottom and init can use same interface??
         if (direction == SwipyRefreshLayoutDirection.TOP) {
-            new UpdateThumbListTaskTop().execute("todo");
+            new UpdateThumbListTaskTop().execute(mAdapter.getItem(0).getId());
         } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
-            new UpdateThumbListTaskBottom().execute("todo");
+            int i = mAdapter.getCount();
+            new UpdateThumbListTaskBottom().execute(mAdapter.getItem(i - 1).getId());
         } else
             // use as init
-            new UpdateThumbListTask().execute("todo");
+            new UpdateThumbListTask().execute(0);
     }
 
     public void initList() {
-        // read local file
-        String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder, getActivity());
+        // only called on createView, so sync with server here.
+        // clear local file
+
+        // or request a version of list file, if changed, then start all over??
+        // todo to be continued, right now just simply start it over.
+        String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder);
+
+        ArrayList<Tab_Main_Hall_ListItem> items = null;
 
         if (strJson != null && !strJson.isEmpty()) {
-            ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(strJson);
-            if (items != null) {
-                onRefreshComplete(items);
-            }
+            items = getListFromJson(strJson);
+        }
+        if (items != null && !items.isEmpty()) {
+            onRefreshComplete(items);
         } else {
             Refresh(SwipyRefreshLayoutDirection.BOTH);
         }
+//        Refresh(SwipyRefreshLayoutDirection.BOTH);
     }
 
     public ArrayList<Tab_Main_Hall_ListItem> getListFromJson(String strJson) {
@@ -623,14 +646,14 @@ public class Tab_Main_Hall extends Fragment {
 
     // for the first time when init using this
     private void onRefreshComplete(ArrayList<Tab_Main_Hall_ListItem> result) {
-        if (result == null)
+        if (result == null || result.isEmpty())
             return;
         if (mAdapter != null) {
             Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
             // first add to adapter and listView
-            mAdapter = new HallListViewAdapter(getActivity(), R.layout.tab_main_hall_list_item, result);
+            mAdapter = new HallListViewAdapter(activity, R.layout.tab_main_hall_list_item, result);
             mListView.setAdapter(mAdapter);
 
             // now can start another task to load image async
@@ -647,7 +670,10 @@ public class Tab_Main_Hall extends Fragment {
             Tab_Main_Hall_ListItem[] items = new Tab_Main_Hall_ListItem[result.size()];
             result.toArray(items);
 
-            new LoadHallListThumbsTask(getActivity(), mListView).execute(items);
+            new LoadHallListThumbsTask(mListView).execute(items);
+//            LoadHallListThumbsTask task = new LoadHallListThumbsTask(mListView);
+//            task.execute(items);
+//            currentTask.add(task);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -657,12 +683,12 @@ public class Tab_Main_Hall extends Fragment {
     }
 
     private void onRefreshCompleteTop(ArrayList<Tab_Main_Hall_ListItem> result) {
-        if (result == null)
+        if (result == null || result.isEmpty())
             return;
         ArrayList<Tab_Main_Hall_ListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder, getActivity());
+            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder);
 
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
@@ -684,9 +710,12 @@ public class Tab_Main_Hall extends Fragment {
 
 
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder);
 
-            new LoadHallListThumbsTask(getActivity(), mListView).execute(items);
+            new LoadHallListThumbsTask(mListView).execute(items);
+//            LoadHallListThumbsTask task = new LoadHallListThumbsTask(mListView);
+//            task.execute(items);
+//            currentTask.add(task);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
@@ -696,12 +725,12 @@ public class Tab_Main_Hall extends Fragment {
     }
 
     private void onRefreshCompleteBottom(ArrayList<Tab_Main_Hall_ListItem> result) {
-        if (result == null)
+        if (result == null || result.isEmpty())
             return;
         ArrayList<Tab_Main_Hall_ListItem> localData = null;
         try {
             // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder, getActivity());
+            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder);
             if (strJson != null && !strJson.isEmpty()) {
                 localData = getListFromJson(strJson);
             }
@@ -715,7 +744,7 @@ public class Tab_Main_Hall extends Fragment {
                 position++;
             }
 
-            if (result.size() > 0) {
+            if (!result.isEmpty()) {
                 final int currentPosition = mListView.getFirstVisiblePosition();
                 mListView.setSelection(currentPosition + 1);
                 mListView.post(new Runnable() {
@@ -729,8 +758,13 @@ public class Tab_Main_Hall extends Fragment {
             Tab_Main_Hall_ListItem[] items = new Tab_Main_Hall_ListItem[result.size()];
             result.toArray(items);
             // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder, getActivity());
-            new LoadHallListThumbsTask(getActivity(), mListView).execute(items);
+            KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder);
+            new LoadHallListThumbsTask(mListView).execute(items);
+
+//            LoadHallListThumbsTask task = new LoadHallListThumbsTask(mListView);
+//            task.execute(items);
+//            currentTask.add(task);
+
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, e.getMessage());
         }
@@ -748,6 +782,11 @@ public class Tab_Main_Hall extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(MainActivity.LOGTAG, "tab_main_hall onStop.");
+
+//        for (LoadHallListThumbsTask task : currentTask) {
+//            task.cancel(true);
+//        }
+//        currentTask.clear();
     }
 
     @Override
@@ -767,5 +806,18 @@ public class Tab_Main_Hall extends Fragment {
             mMode.finish();
             mMode = null;
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        this.activity = null;
     }
 }

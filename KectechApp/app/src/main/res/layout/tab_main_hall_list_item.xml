@@ -45,7 +45,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textSize="22sp"
+        android:textSize="24sp"
         android:textColor="@color/simple_yellow"
         android:layout_toRightOf="@+id/tab_main_hall_list_item_img"
         android:text="@string/hello_world" />
@@ -54,7 +54,7 @@
         android:id="@+id/tab_main_hall_list_item_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textColor="@color/primary_blue"

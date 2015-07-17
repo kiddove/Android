@@ -18,7 +18,7 @@
     <string name="video_list_item_img_description">description for video tab item img</string>
     <string name="photo_list_item_img_description">description for photo tab item img</string>
     <string name="title_activity_main_hall">Hall</string>
-    <string name="title_activity_main_hall_photo">BBS</string>
+    <string name="title_activity_main_hall_photo">POST</string>
     <string name="title_activity_main_hall_Video">Video</string>
     <string name="loading_video">Loading video</string>
     <string name="tab_default_string">To be continued...</string>

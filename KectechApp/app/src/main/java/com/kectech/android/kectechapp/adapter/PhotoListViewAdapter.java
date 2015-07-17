@@ -66,8 +66,8 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
                         //imageView.setVisibility(View.VISIBLE);
                         holder.imageViews.add(imageView);
                     }
-                    holder.txtTile = (TextView) convertView.findViewById(R.id.photo_list_item_title);
-                    holder.txtDesc = (TextView) convertView.findViewById(R.id.photo_list_item_desc);
+                    holder.txtTile = (TextView) convertView.findViewById(R.id.hall_photo_list_item_title);
+                    holder.txtDesc = (TextView) convertView.findViewById(R.id.hall_photo_list_item_desc);
                     convertView.setTag(holder);
 
 //                    // how about after setTag

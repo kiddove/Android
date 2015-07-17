@@ -8,12 +8,20 @@ import android.graphics.Bitmap;
  */
 public class VideoListItem {
     private Bitmap bitmap = null;
-    private String thumb;
+    private String icon;
     private String title;
-    private String desc;
+    private String description;
     private int position;
     private String url;
+    private int id;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public Bitmap getImage() {
         return bitmap;
     }
@@ -23,11 +31,11 @@ public class VideoListItem {
     }
 
     public String getDesc() {
-        return desc;
+        return description;
     }
 
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.description = desc;
     }
 
     public String getTitle() {
@@ -47,14 +55,15 @@ public class VideoListItem {
     }
 
     public String getThumbURL() {
-        return thumb;
+        return icon;
     }
 
     public void setThumbURL(String thumbURL) {
-        this.thumb = thumbURL;
+        this.icon = thumbURL;
     }
 
     public String getVideoUrl() {
+        //return "http://192.168.9.40/demo/test.html";
         return url;
     }
 
@@ -63,6 +72,6 @@ public class VideoListItem {
     }
     @Override
     public String toString() {
-        return title + "\n" + desc;
+        return title + "\n" + description;
     }
 }
