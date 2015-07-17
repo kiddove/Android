@@ -133,6 +133,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
         ImageView imageView = (ImageView) imageRef.get();
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
+            bitmap.recycle();
         } else
             Log.e(MainActivity.LOGTAG, "Error while downloading the image");
 

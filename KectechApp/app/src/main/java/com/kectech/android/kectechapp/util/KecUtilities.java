@@ -11,6 +11,7 @@ import com.kectech.android.kectechapp.activity.MainActivity;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -55,10 +56,34 @@ public class KecUtilities {
             File file = new File(filePath);
 
             if (file.exists()) {
-                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                try {
+//                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                } catch (OutOfMemoryError ome) {
+                    // only load 100 * 100
+                    try {
+                        BitmapFactory.Options o = new BitmapFactory.Options();
+                        o.inJustDecodeBounds = true;
+                        BitmapFactory.decodeStream(new FileInputStream(file), null, o);
+
+                        final int width = 100;
+                        final int height = 100;
+                        int scale = 1;
+                        while (o.outWidth / scale / 2 >= 100 && o.outHeight / scale / 2 >= 100)
+                            scale *= 2;
+
+                        // Decode with inSampleSize
+                        BitmapFactory.Options o2 = new BitmapFactory.Options();
+                        o2.inSampleSize = scale;
+                        return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
+
+                    } catch (FileNotFoundException fnfe) {
+                        Log.e(MainActivity.LOGTAG, "file not found when trying load scaled img: " + fnfe.getMessage());
+                        fnfe.printStackTrace();
+                        return null;
+                    }
+                //}
             }
         }
-
         return bitmap;
     }
 

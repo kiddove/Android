@@ -55,7 +55,7 @@ public class VideoListItem {
     }
 
     public String getThumbURL() {
-        return icon;
+        return icon.replaceAll(" ", "%20");
     }
 
     public void setThumbURL(String thumbURL) {

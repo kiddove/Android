@@ -12,7 +12,7 @@ public class PhotoListItemDetail {
     private String thumb = null;
 
     public String getImageURL() {
-        return image;
+        return image.replaceAll(" ", "%20");
     }
 
     public void setImageURL(String imageUrl) {
@@ -20,7 +20,7 @@ public class PhotoListItemDetail {
     }
 
     public String getThumbURL() {
-        return thumb;
+        return thumb.replaceAll(" ", "%20");
     }
 
     public void setThumbURL(String thumbURL) {

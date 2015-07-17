@@ -449,7 +449,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 return null;
             try {
                 int id = params[0];
-                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
+                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=before&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=bottom&count=5&tabtype=" + tabType;
                 URL url = new URL(strURL);
 
