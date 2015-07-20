@@ -38,6 +38,10 @@ public class MainActivity extends Activity {
     public final static String PUBLIC_SUB_FOLDER = "Public";
     public final static String SETTING_SUB_FOLDER = "Setting";
 
+    // for network
+    public final static int CONNECTION_TIMEOUT = 3000;
+    public final static int DOWNLOAD_BUFFER = 1024 * 10;
+
     // use for log tag
     public final static String LOGTAG = "kectech_log";
 

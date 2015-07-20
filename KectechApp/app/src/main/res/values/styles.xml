@@ -30,6 +30,8 @@
         <item name="android:actionModeCloseButtonStyle">@style/NoDoneButton</item>
         <item name="android:actionModeStyle">@style/actionMode</item>
 
+        <!--<item name="android:homeAsUpIndicator">@drawable/check</item>-->
+        <!--<item name="android:buttonStyle">@style/login.button</item>-->
     </style>
 
     <!--overflow menu drop down-->
@@ -114,5 +116,20 @@
     </style>
     <style name="actionMode.subtitle" parent="@android:style/TextAppearance.Holo.Widget.ActionMode.Subtitle">
         <item name="android:textColor">@color/bar_menu_text</item>
+    </style>
+
+    <!--button-->
+    <style name="login.button" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/login_button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
     </style>
 </resources>

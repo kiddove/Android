@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -65,36 +66,43 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
 
                     URLConnection connection = url.openConnection();
 
-                    connection.connect();
-                    InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
-                    int length = connection.getContentLength();
+                    try {
+                        connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                        connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
+                        connection.connect();
 
-                    if (length <= 0)
-                        continue;
+                        InputStream inputSteam = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
+                        int length = connection.getContentLength();
 
-                    File file = new File(localPath);
-                    if (!file.exists()) {
-                        if (!file.createNewFile()) {
-                            Log.e(MainActivity.LOGTAG, "create file failed.");
+                        if (length <= 0)
+                            continue;
+
+                        File file = new File(localPath);
+                        if (!file.exists()) {
+                            if (!file.createNewFile()) {
+                                Log.e(MainActivity.LOGTAG, "create file failed.");
+                            }
                         }
+
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        byte buffer[] = new byte[MainActivity.DOWNLOAD_BUFFER];
+                        int dataSize;
+                        while ((dataSize = inputSteam.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, dataSize);
+                        }
+
+                        outputStream.flush();
+                        outputStream.close();
+
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                        //item.items.get(j).setThumbNail(bitmap);
+                        // update UI to show thumbnail
+                    } catch (SocketTimeoutException e) {
+                        Log.d(MainActivity.LOGTAG, "time out: " + e.getMessage());
                     }
-
-                    FileOutputStream outputStream = new FileOutputStream(file);
-                    byte buffer[] = new byte[1024 * 5];
-                    int dataSize;
-                    while ((dataSize = inputSteam.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, dataSize);
-                    }
-
-                    outputStream.flush();
-                    outputStream.close();
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    //item.items.get(j).setThumbNail(bitmap);
-                    // update UI to show thumbnail
                 }
                 item.setImage(bitmap);
 
@@ -145,6 +153,6 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
                 }
             }
         } else
-            Log.e(MainActivity.LOGTAG, "result is nulls, download failed.");
+            Log.e(MainActivity.LOGTAG, "result is null, download failed.");
     }
 }

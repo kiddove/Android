@@ -48,7 +48,8 @@
         android:textSize="24sp"
         android:textColor="@color/simple_yellow"
         android:layout_toRightOf="@+id/tab_main_hall_list_item_img"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tab_main_hall_list_item_desc"

@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -68,50 +69,57 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
 
             URLConnection connection = url.openConnection();
 
-            connection.connect();
-            InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
-            int length = connection.getContentLength();
+            try {
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
 
-            if (length <= 0)
-                return null;
-            //progressBar.setMax(100);
+                connection.connect();
+                InputStream inputSteam = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
+                int length = connection.getContentLength();
 
-            // change the ui of progress bar
-            progressBar.setMax(length);
-
-            String localPath = KecUtilities.getLocalFilePathFromURL(file_url, subFolder);
-            if (localPath == null)
-                return null;
-
-            File file = new File(localPath);
-            if (!file.exists()) {
-                if (!file.createNewFile()) {
-                    Log.e(MainActivity.LOGTAG, "create file failed.");
-                }
-            }
-            //OutputStream outputStream = context.openFileOutput(localPath, Context.MODE_PRIVATE);
-            FileOutputStream outstream = new FileOutputStream(file);
-            byte buffer[] = new byte[1024 * 5];
-            int dataSize;
-            int loadedSize = 0;
-            while ((dataSize = inputSteam.read(buffer)) != -1) {
-                if (isCancelled()) {
-                    outstream.close();
+                if (length <= 0)
                     return null;
+                //progressBar.setMax(100);
+
+                // change the ui of progress bar
+                progressBar.setMax(length);
+
+                String localPath = KecUtilities.getLocalFilePathFromURL(file_url, subFolder);
+                if (localPath == null)
+                    return null;
+
+                File file = new File(localPath);
+                if (!file.exists()) {
+                    if (!file.createNewFile()) {
+                        Log.e(MainActivity.LOGTAG, "create file failed.");
+                    }
                 }
-                loadedSize += dataSize;
-                publishProgress(loadedSize);
-                outstream.write(buffer, 0, dataSize);
-            }
+                //OutputStream outputStream = context.openFileOutput(localPath, Context.MODE_PRIVATE);
+                FileOutputStream outstream = new FileOutputStream(file);
+                byte buffer[] = new byte[MainActivity.DOWNLOAD_BUFFER];
+                int dataSize;
+                int loadedSize = 0;
+                while ((dataSize = inputSteam.read(buffer)) != -1) {
+                    if (isCancelled()) {
+                        outstream.close();
+                        return null;
+                    }
+                    loadedSize += dataSize;
+                    publishProgress(loadedSize);
+                    outstream.write(buffer, 0, dataSize);
+                }
 
-            outstream.close();
+                outstream.close();
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            File fileImage = new File(localPath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                File fileImage = new File(localPath);
 
-            if (fileImage.exists()) {
-                bitmap = BitmapFactory.decodeFile(fileImage.getAbsolutePath());
+                if (fileImage.exists()) {
+                    bitmap = BitmapFactory.decodeFile(fileImage.getAbsolutePath());
+                }
+            } catch (SocketTimeoutException ste) {
+                Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
             }
 
         } catch (Exception e) {

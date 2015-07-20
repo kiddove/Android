@@ -56,9 +56,9 @@
         </activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:theme="@style/MainTheme">
+            android:theme="@style/MainTheme"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

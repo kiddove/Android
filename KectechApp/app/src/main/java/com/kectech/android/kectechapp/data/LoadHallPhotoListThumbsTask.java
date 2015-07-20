@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -67,36 +69,41 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
 
                         URL url = new URL(item.items.get(j).getThumbURL());
 
-                        URLConnection connection = url.openConnection();
+                        try {
+                            URLConnection connection = url.openConnection();
+                            connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                            connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
+                            connection.connect();
+                            InputStream inputSteam = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
+                            int length = connection.getContentLength();
 
-                        connection.connect();
-                        InputStream inputSteam = new BufferedInputStream(url.openStream(), 10240);
-                        int length = connection.getContentLength();
+                            if (length <= 0)
+                                return null;
 
-                        if (length <= 0)
-                            return null;
-
-                        File file = new File(localPath);
-                        if (!file.exists()) {
-                            if (!file.createNewFile()) {
-                                Log.e(MainActivity.LOGTAG, "create file failed.");
+                            File file = new File(localPath);
+                            if (!file.exists()) {
+                                if (!file.createNewFile()) {
+                                    Log.e(MainActivity.LOGTAG, "create file failed.");
+                                }
                             }
+
+                            FileOutputStream outputStream = new FileOutputStream(file);
+                            byte buffer[] = new byte[MainActivity.DOWNLOAD_BUFFER];
+                            int dataSize;
+                            while ((dataSize = inputSteam.read(buffer)) != -1) {
+                                outputStream.write(buffer, 0, dataSize);
+                            }
+
+                            outputStream.flush();
+                            outputStream.close();
+
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                        } catch (SocketTimeoutException ste) {
+                            Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
                         }
-
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        byte buffer[] = new byte[1024 * 5];
-                        int dataSize;
-                        while ((dataSize = inputSteam.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, dataSize);
-                        }
-
-                        outputStream.flush();
-                        outputStream.close();
-
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-                        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                         //item.items.get(j).setThumbNail(bitmap);
                         // update UI to show thumbnail
                     }
@@ -158,7 +165,7 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
                 }
             }
         } else
-            Log.e(MainActivity.LOGTAG, "result is nulls, download failed.");
+            Log.e(MainActivity.LOGTAG, "result is null, download failed.");
     }
 //    }
 }

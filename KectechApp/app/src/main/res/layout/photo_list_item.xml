@@ -10,9 +10,10 @@
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textColor="@color/simple_yellow"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/hall_photo_list_item_desc"

@@ -29,6 +29,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -181,9 +182,11 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 connection.connect();
 
-                InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
+                InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
                 //int length = connection.getContentLength();
                 return KecUtilities.readStringFromStream(inputStream);
+            } catch (SocketTimeoutException ste) {
+                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (Exception e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -216,10 +219,12 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 connection.connect();
 
-                InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
+                InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
 
                 return KecUtilities.readStringFromStream(inputStream);
 
+            } catch (SocketTimeoutException ste) {
+                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (Exception e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -254,11 +259,13 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 connection.connect();
 
-                InputStream inputStream = new BufferedInputStream(url.openStream(), 10 * 1024);
+                InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
                 //int length = connection.getContentLength();
 
                 return KecUtilities.readStringFromStream(inputStream);
 
+            } catch (SocketTimeoutException ste) {
+                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (Exception e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }

@@ -10,15 +10,16 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textSize="22sp"
+        android:textSize="24sp"
         android:textColor="@color/simple_yellow"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/hall_video_list_item_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textColor="@color/primary_blue"
