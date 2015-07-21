@@ -34,14 +34,17 @@ public class MainAdapter extends FragmentPagerAdapter {
                 return new Tab_Main_Hall();
             }
             case 1: {
-                return new Tab_Main_Show();
-            }
-            case 2: {
-                return new Tab_Main_Public();
-            }
-            case 3: {
                 return new Tab_Main_Setting();
             }
+//            case 1: {
+//                return new Tab_Main_Show();
+//            }
+//            case 2: {
+//                return new Tab_Main_Public();
+//            }
+//            case 3: {
+//                return new Tab_Main_Setting();
+//            }
             default:
                 return null;
         }

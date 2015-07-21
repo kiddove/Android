@@ -42,6 +42,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
         TextView txtDesc;
         // for delete animation
         boolean needInflate;
+        TextView txtMemo;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -59,12 +60,13 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
                 holder.txtTitle = (TextView) convertView.findViewById(R.id.tab_main_hall_list_item_title);
                 holder.txtDesc = (TextView) convertView.findViewById(R.id.tab_main_hall_list_item_desc);
                 holder.checkBox = (CheckBox) convertView.findViewById(R.id.tab_main_hall_list_item_check);
+                holder.txtMemo = (TextView) convertView.findViewById(R.id.tab_main_hall_list_item_memo);
                 holder.needInflate = false;
                 convertView.setTag(holder);
             } else
                 holder = (ViewHolder) convertView.getTag();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             return convertView;
         }
 
@@ -72,6 +74,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
         holder.txtTitle.setText(item.getTitle());
         holder.imageView.setImageBitmap(item.getImage());
         holder.checkBox.setChecked(isChecked(position));
+        holder.txtMemo.setText(item.getMemo());
         if (showCheckBox)
             holder.checkBox.setVisibility(View.VISIBLE);
         else holder.checkBox.setVisibility(View.GONE);

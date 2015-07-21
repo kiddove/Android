@@ -37,6 +37,7 @@ import com.kectech.android.kectechapp.thirdparty.*;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
@@ -110,7 +111,7 @@ public class Tab_Main_Hall extends Fragment {
                         //getActivity().overridePendingTransition(0, 0);
                         activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                     } catch (Exception e) {
-                        Log.e(MainActivity.LOGTAG, e.getMessage());
+                        Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -254,7 +255,7 @@ public class Tab_Main_Hall extends Fragment {
                         // todo scan result, to be continued...
                         //AddItemToList(scanContent);
                     } catch (Exception e) {
-                        Log.e(MainActivity.LOGTAG, e.getMessage());
+                        Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -485,7 +486,7 @@ public class Tab_Main_Hall extends Fragment {
                 return KecUtilities.readStringFromStream(inputStream);
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
@@ -525,7 +526,7 @@ public class Tab_Main_Hall extends Fragment {
 
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
@@ -569,7 +570,7 @@ public class Tab_Main_Hall extends Fragment {
 
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
@@ -631,7 +632,7 @@ public class Tab_Main_Hall extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
         return null;
     }
@@ -645,7 +646,7 @@ public class Tab_Main_Hall extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -683,7 +684,7 @@ public class Tab_Main_Hall extends Fragment {
 //            currentTask.add(task);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
@@ -725,7 +726,7 @@ public class Tab_Main_Hall extends Fragment {
 //            currentTask.add(task);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
@@ -773,7 +774,7 @@ public class Tab_Main_Hall extends Fragment {
 //            currentTask.add(task);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);

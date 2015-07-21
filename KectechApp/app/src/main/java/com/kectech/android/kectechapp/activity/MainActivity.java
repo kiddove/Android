@@ -61,8 +61,11 @@ public class MainActivity extends Activity {
     ViewPager pager;
     MainAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Hall", "Shows", "Public", "Me"};
-    int NumOfTabs = 4;
+//    CharSequence Titles[] = {"Hall", "Shows", "Public", "Me"};
+//    int NumOfTabs = 4;
+    CharSequence Titles[] = {"Shows", "Me"};
+    int NumOfTabs = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

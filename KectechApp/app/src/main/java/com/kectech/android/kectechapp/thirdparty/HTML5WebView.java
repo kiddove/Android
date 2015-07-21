@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -45,28 +46,28 @@ public class HTML5WebView extends WebView {
 		
 		mLayout.addView(browserFrameLayout, COVER_SCREEN_PARAMS);
 
-		mWebChromeClient = new MyWebChromeClient();
-	    setWebChromeClient(mWebChromeClient);
-	    
-	    setWebViewClient(new MyWebViewClient());
+
 	       
-	    // Configure the webview
+	    // Configure the webView
 	    WebSettings s = getSettings();
-	    s.setBuiltInZoomControls(true);
+	    //s.setBuiltInZoomControls(true);
 	    s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 	    s.setUseWideViewPort(true);
 	    s.setLoadWithOverviewMode(true);
 	    s.setSavePassword(true);
 	    s.setSaveFormData(true);
 	    s.setJavaScriptEnabled(true);
-	    
+
 //	    // enable navigator.geolocation
 //	    s.setGeolocationEnabled(true);
 //	    s.setGeolocationDatabasePath("/data/data/org.itri.html5webview/databases/");
-	    
+
 	    // enable Web Storage: localStorage, sessionStorage
 	    s.setDomStorageEnabled(true);
-	    
+        mWebChromeClient = new MyWebChromeClient();
+        setWebChromeClient(mWebChromeClient);
+
+        setWebViewClient(new MyWebViewClient());
 	    contentView.addView(this);
 	}
 
@@ -194,7 +195,11 @@ public class HTML5WebView extends WebView {
 	        view.loadUrl(url);
 	        return true;
 	    }
-	}
+//        @Override
+//        public void onPageFinished(WebView view, String url) {
+//
+//        }
+    }
 	
 	static final FrameLayout.LayoutParams COVER_SCREEN_PARAMS =
         new FrameLayout.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

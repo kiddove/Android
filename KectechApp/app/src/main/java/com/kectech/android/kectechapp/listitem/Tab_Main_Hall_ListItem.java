@@ -103,4 +103,20 @@ public class Tab_Main_Hall_ListItem {
     public String toString() {
         return title + "\n" + desc;
     }
+
+    public String getMemo() {
+        switch (type) {
+            case 1:
+                // public
+                return "Publicshow " + "@kevin";
+            case 2:
+                // show room
+                return "Showroom " + "@kevin";
+            case 3:
+                // event hall
+                return "Eventhall " + "@kevin";
+            default:
+                return null;
+        }
+    }
 }

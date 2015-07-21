@@ -30,21 +30,26 @@ public class VideoOfHallOfMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_videol);
+        //setContentView(R.layout.activity_video);
         mWebView = new HTML5WebView(this);
         setContentView(mWebView.getLayout());
-
-        OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
-            public void onSwipeOutLeft() {
-                //getFragmentManager().popBackStack();
-                close();
-            }
-//            public void onSwipeLeft() {
-//                //Toast.makeText(VideoOfHallOfMainActivity.this, "left", Toast.LENGTH_SHORT).show();
+////////////////////////////////////////////////////////////////
+//        // important
+//        // this will cause webView "mInputDispatcher rejected the event", mean can not dispatch touch event..
+//
+//        OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
+//            public void onSwipeOutLeft() {
+//                //getFragmentManager().popBackStack();
+//                close();
 //            }
-        };
-
-        mWebView.setOnTouchListener(swipeTouchListener);
+//
+////            public void onSwipeLeft() {
+////                //Toast.makeText(VideoOfHallOfMainActivity.this, "left", Toast.LENGTH_SHORT).show();
+////            }
+//        };
+//
+//        mWebView.setOnTouchListener(swipeTouchListener);
+////////////////////////////////////////////////////////////////
 
         // for using action bar back button
         //getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -146,15 +151,15 @@ public class VideoOfHallOfMainActivity extends Activity {
             Log.e(MainActivity.LOGTAG, iae.getMessage());
             iae.printStackTrace();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
     }
-    @Override
-    public boolean dispatchTouchEvent(@NonNull MotionEvent ev){
-        //onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(@NonNull MotionEvent ev){
+//        //onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
+//        return super.dispatchTouchEvent(ev);
+//    }
 
     @Override
     public void onBackPressed(){

@@ -17,6 +17,7 @@ import com.kectech.android.kectechapp.util.KecUtilities;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.Socket;
@@ -97,12 +98,16 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
                             outputStream.flush();
                             outputStream.close();
 
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                            bitmap = KecUtilities.ReadFileFromLocal(localPath);
 
-                            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                            BitmapFactory.Options options = new BitmapFactory.Options();
+//                            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//
+//                            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                         } catch (SocketTimeoutException ste) {
                             Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+                        } catch (IOException ioe) {
+                            Log.e(MainActivity.LOGTAG, "IO exception: " + ioe.getMessage());
                         }
                         //item.items.get(j).setThumbNail(bitmap);
                         // update UI to show thumbnail
@@ -117,7 +122,7 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
             }
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
 
         return 0;

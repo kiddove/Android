@@ -101,7 +101,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                         Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
                         if (thumbBitmap != null) {
                             imageView.setImageBitmap(thumbBitmap);
-                            thumbBitmap.recycle();
+                            //thumbBitmap.recycle();
                         }
                     }
                 }
@@ -115,7 +115,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 dots.add(dot);
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             return;
         }
 
@@ -278,7 +278,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         //Bitmap bitmap = null;
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
-            bitmap.recycle();
+            //bitmap.recycle();
         } else {
             preTask = new DownLoadImageTask(imageView, context, subFolder);
             preTask.execute(imageURL);

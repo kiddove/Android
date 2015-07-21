@@ -7,13 +7,14 @@
         android:id="@+id/hall_video_list_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textSize="24sp"
-        android:textColor="@color/simple_yellow"
+        android:textSize="18sp"
+        android:textColor="@color/black"
         android:text="@string/hello_world"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_toRightOf="@+id/hall_video_list_item_img" />
 
     <TextView
         android:id="@+id/hall_video_list_item_desc"
@@ -22,7 +23,7 @@
         android:textSize="14sp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/primary_blue"
+        android:textColor="@color/black"
         android:layout_below="@+id/hall_video_list_item_title"
         android:text="@string/action_settings"
         android:layout_alignLeft="@+id/hall_video_list_item_title" />
@@ -33,7 +34,5 @@
         android:layout_height="72dp"
         android:contentDescription="@string/video_list_item_img_description"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_below="@+id/hall_video_list_item_desc"
-        android:layout_alignLeft="@+id/hall_video_list_item_title"/>
+        android:paddingRight="10dp" />
 </RelativeLayout>

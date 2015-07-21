@@ -354,7 +354,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             finish();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
 
         }
     }

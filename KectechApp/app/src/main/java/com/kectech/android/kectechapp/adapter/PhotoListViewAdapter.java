@@ -110,7 +110,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
             holder.txtTile.setText(item.getTitle());
             holder.txtDesc.setText(item.getDescription());
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
         return convertView;

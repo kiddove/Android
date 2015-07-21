@@ -1,9 +1,12 @@
 package com.kectech.android.kectechapp.listeners;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.kectech.android.kectechapp.activity.MainActivity;
 
 /**
  * Created by Paul on 03/07/2015.
@@ -38,16 +41,18 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
                             onSwipeOutLeft();
+                            return false;
                         }
 //                        } else {
 //                            onSwipeLeft();
 //                        }
                     }
                 }
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (Exception e) {
+                Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+                e.printStackTrace();
             }
-            return result;
+            return true;
         }
     }
 

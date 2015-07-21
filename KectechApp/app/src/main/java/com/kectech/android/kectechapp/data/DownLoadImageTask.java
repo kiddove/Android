@@ -16,6 +16,7 @@ import com.kectech.android.kectechapp.util.KecUtilities;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.SocketTimeoutException;
@@ -64,12 +65,11 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
 
         try {
             String file_url = params[0];
-
             URL url = new URL(file_url);
 
-            URLConnection connection = url.openConnection();
-
             try {
+                URLConnection connection = url.openConnection();
+
                 connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
 
@@ -111,6 +111,8 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
 
                 outstream.close();
 
+                //bitmap = KecUtilities.ReadFileFromLocal(localPath);
+                // out of memory .. todo
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 File fileImage = new File(localPath);
@@ -120,10 +122,12 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
                 }
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+            } catch (IOException ioe) {
+                Log.e(MainActivity.LOGTAG, "IO exception: " + ioe.getMessage());
             }
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
         return bitmap;
     }
@@ -141,7 +145,7 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
         ImageView imageView = (ImageView) imageRef.get();
         if (imageView != null && bitmap != null) {
             imageView.setImageBitmap(bitmap);
-            bitmap.recycle();
+            //bitmap.recycle();
         } else
             Log.e(MainActivity.LOGTAG, "Error while downloading the image");
 

@@ -30,6 +30,7 @@ import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
@@ -164,7 +165,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
         return null;
     }
@@ -178,7 +179,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -219,7 +220,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             npe.printStackTrace();
         }
         catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -259,7 +260,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
@@ -302,7 +303,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
             new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
 
         mSwipyRefreshLayout.setRefreshing(false);
@@ -386,7 +387,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 return KecUtilities.readStringFromStream(inputStream);
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
@@ -426,7 +427,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;
@@ -469,7 +470,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             } catch (SocketTimeoutException ste) {
                 Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
             return null;

@@ -10,8 +10,8 @@
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textSize="24sp"
-        android:textColor="@color/simple_yellow"
+        android:textSize="18sp"
+        android:textColor="@color/black"
         android:text="@string/hello_world"
         android:textStyle="bold"/>
 
@@ -22,7 +22,7 @@
         android:textSize="14sp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textColor="@color/primary_blue"
+        android:textColor="@color/black"
         android:layout_below="@+id/hall_photo_list_item_title"
         android:text="@string/action_settings" />
 

@@ -37,7 +37,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             CustomViewPager pager;
             HallOfMainAdapter adapter;
             SlidingTabLayout tabs;
-            int NumOfTabs = 1;
+            int NumOfTabs = 2;
             int tabType = 0;
             int tabId = 0;
             String tabName = "";

@@ -42,6 +42,7 @@ public class KecUtilities {
             uee.printStackTrace();
             return null;
         } catch (Exception e) {
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -159,8 +160,11 @@ public class KecUtilities {
                 total.append(line);
             }
             strJson = total.toString();
+        } catch (IOException ioe) {
+            Log.e(MainActivity.LOGTAG, "readStringFromStream occurs exception: " + ioe.getMessage());
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "readStringFromStream occurs exception: " + e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            e.printStackTrace();
         }
         return strJson;
     }
@@ -234,7 +238,7 @@ public class KecUtilities {
 //                }
 //            }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -259,7 +263,7 @@ public class KecUtilities {
                 }
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, e.getMessage());
+            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
