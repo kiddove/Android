@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 
@@ -27,10 +28,12 @@ public class Tab_Main_Public extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser) {
-            Log.d(MainActivity.LOGTAG, "tab_main_public becomes visible.");
-        } else {
-            Log.d(MainActivity.LOGTAG, "tab_main_public becomes invisible.");
+        if (BuildConfig.DEBUG) {
+            if (isVisibleToUser) {
+                Log.d(MainActivity.LOGTAG, "tab_main_public becomes visible.");
+            } else {
+                Log.d(MainActivity.LOGTAG, "tab_main_public becomes invisible.");
+            }
         }
     }
 }

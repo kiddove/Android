@@ -103,7 +103,7 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
 //                        //item.items.get(j).setThumbNail(bitmap);
 //                        // update UI to show thumbnail
                     } catch (SocketTimeoutException e) {
-                        Log.d(MainActivity.LOGTAG, "time out: " + e.getMessage());
+                        Log.e(MainActivity.LOGTAG, "time out: " + e.getMessage());
                     } catch (IOException ioe) {
                         Log.e(MainActivity.LOGTAG, "IO exception: " + ioe.getMessage());
                     }
@@ -152,11 +152,9 @@ public class LoadHallListThumbsTask extends AsyncTask<Tab_Main_Hall_ListItem, Ta
                 ImageView imgView = (ImageView) v.findViewById(R.id.tab_main_hall_list_item_img);
                 if (imgView != null) {
                     imgView.setImageBitmap(bitmap);
-                } else {
-                    Log.d(MainActivity.LOGTAG, "not cool at all.");
                 }
             }
         } else
-            Log.e(MainActivity.LOGTAG, "result is null, download failed.");
+            Log.e(MainActivity.LOGTAG, "result is null, failed(Hall List).");
     }
 }

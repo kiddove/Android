@@ -1,10 +1,12 @@
 package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,9 +80,6 @@ public class MainActivity extends Activity {
             return;
         }
 
-        // get available memory size
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        Log.d(MainActivity.LOGTAG, "Max memory is " + maxMemory + "KB");
         try {
             //getActionBar().setDisplayShowHomeEnabled(false);
             // hide the tile text
@@ -149,6 +148,7 @@ public class MainActivity extends Activity {
             case R.id.menu_item_quit:
                 finish();
                 System.exit(0);
+                KecUtilities.closeCache();
                 return true;
             default:
                 break;
@@ -174,4 +174,5 @@ public class MainActivity extends Activity {
         // system behavior (probably exit the activity)
         return super.onKeyDown(keyCode, event);
     }
+
 }

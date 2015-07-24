@@ -105,9 +105,13 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
 //
 //                            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                         } catch (SocketTimeoutException ste) {
-                            Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+                            Log.e(MainActivity.LOGTAG, "time out: " + ste.getMessage());
                         } catch (IOException ioe) {
                             Log.e(MainActivity.LOGTAG, "IO exception: " + ioe.getMessage());
+                        } catch (RuntimeException rte) {
+                            Log.e(MainActivity.LOGTAG, "Runtime exception: " + rte.getMessage());
+                        } catch (OutOfMemoryError ome) {
+                            Log.e(MainActivity.LOGTAG, "OutOfMemoryError: ");
                         }
                         //item.items.get(j).setThumbNail(bitmap);
                         // update UI to show thumbnail
@@ -166,11 +170,11 @@ public class LoadHallPhotoListThumbsTask extends AsyncTask<PhotoListItem, PhotoP
                     imgView.setImageBitmap(bitmap);
                     imgView.setVisibility(View.VISIBLE);
                 } else {
-                    Log.d(MainActivity.LOGTAG, "not cool at all.");
+                    Log.e(MainActivity.LOGTAG, "not cool at all.");
                 }
             }
         } else
-            Log.e(MainActivity.LOGTAG, "result is null, download failed.");
+            Log.e(MainActivity.LOGTAG, "result is null, load failed(PhotoList).");
     }
 //    }
 }

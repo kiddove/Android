@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.listitem.Tab_Main_Hall_ListItem;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,11 +30,13 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
     public static final int ANIMATION_DURATION = 100;
     private  Context context;
     public boolean showCheckBox = false;
+    private final ImageFetcher mImageFetcher;
 
     private HashMap<Integer, Boolean> selection = new HashMap<>();
-    public HallListViewAdapter(Context context, int resourceId, ArrayList<Tab_Main_Hall_ListItem> items) {
+    public HallListViewAdapter(Context context, int resourceId, ArrayList<Tab_Main_Hall_ListItem> items, ImageFetcher imageFetcher) {
         super(context, resourceId, items);
         this.context = context;
+        this.mImageFetcher = imageFetcher;
     }
 
     // private view holder class
@@ -55,7 +60,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             if (convertView == null || ((ViewHolder)convertView.getTag()).needInflate) {
                 convertView = layoutInflater.inflate(R.layout.tab_main_hall_list_item, parent, false);
                 holder = new ViewHolder();
-                holder.imageView = (ImageView) convertView.findViewById(R.id.tab_main_hall_list_item_img);
+                holder.imageView = (RecyclingImageView) convertView.findViewById(R.id.tab_main_hall_list_item_img);
                 //holder.imageView = null;
                 holder.txtTitle = (TextView) convertView.findViewById(R.id.tab_main_hall_list_item_title);
                 holder.txtDesc = (TextView) convertView.findViewById(R.id.tab_main_hall_list_item_desc);
@@ -72,13 +77,15 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
 
         holder.txtDesc.setText(item.getDesc());
         holder.txtTitle.setText(item.getTitle());
-        holder.imageView.setImageBitmap(item.getImage());
+        //holder.imageView.setImageBitmap(item.getImage());
         holder.checkBox.setChecked(isChecked(position));
         holder.txtMemo.setText(item.getMemo());
         if (showCheckBox)
             holder.checkBox.setVisibility(View.VISIBLE);
         else holder.checkBox.setVisibility(View.GONE);
         //holder.imageView = null;
+
+        mImageFetcher.loadImage(item.getThumbURL(), holder.imageView);
 
         return convertView;
     }

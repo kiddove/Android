@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.util.KecUtilities;
@@ -111,19 +112,21 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
 
                 outstream.close();
 
-                //bitmap = KecUtilities.ReadFileFromLocal(localPath);
-                // out of memory .. todo
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                File fileImage = new File(localPath);
-
-                if (fileImage.exists()) {
-                    bitmap = BitmapFactory.decodeFile(fileImage.getAbsolutePath());
-                }
+                bitmap = KecUtilities.ReadFileFromLocal(localPath);
+//                // out of memory .. todo
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//                File fileImage = new File(localPath);
+//
+//                if (fileImage.exists()) {
+//                    bitmap = BitmapFactory.decodeFile(fileImage.getAbsolutePath());
+//                }
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out: " + ste.getMessage());
             } catch (IOException ioe) {
                 Log.e(MainActivity.LOGTAG, "IO exception: " + ioe.getMessage());
+            } catch (OutOfMemoryError ome) {
+                Log.e(MainActivity.LOGTAG, "Out of memory, DownloadImageTask");
             }
 
         } catch (Exception e) {
@@ -148,7 +151,6 @@ public class DownLoadImageTask extends AsyncTask<String, Integer, Bitmap> {
             //bitmap.recycle();
         } else
             Log.e(MainActivity.LOGTAG, "Error while downloading the image");
-
     }
 
     protected void onProgressUpdate(Integer... progress) {

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
 
 import java.util.ArrayList;
@@ -25,10 +26,12 @@ import java.util.ArrayList;
 public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
 
     private Context context;
+    private ImageFetcher mImageFetcher;
 
-    public PhotoListViewAdapter(Context context, int resourceId, ArrayList<PhotoListItem> items) {
+    public PhotoListViewAdapter(Context context, int resourceId, ArrayList<PhotoListItem> items, ImageFetcher imageFetcher) {
         super(context, resourceId, items);
         this.context = context;
+        this.mImageFetcher = imageFetcher;
     }
 
     // private holder class
@@ -87,25 +90,27 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
             } else {
                 /* We recycle a View that already exists */
                 holder = (ViewHolder) convertView.getTag();
-                for (int i = 0; i < 9; i++) {
-                    if (i < item.items.size()) {
-                        Bitmap bitmap = item.items.get(i).getThumbNail();
+            }
+            for (int i = 0; i < 9; i++) {
+                if (i < item.items.size()) {
+//                    Bitmap bitmap = item.items.get(i).getThumbNail();
+//
+//                    holder.imageViews.get(i).setImageBitmap(bitmap);
+//                    if (bitmap != null) {
+//                        holder.imageViews.get(i).setVisibility(View.VISIBLE);
+//                    } else
+//                        holder.imageViews.get(i).setVisibility(View.GONE);
 
-                        holder.imageViews.get(i).setImageBitmap(bitmap);
-                        if (bitmap != null) {
-                            holder.imageViews.get(i).setVisibility(View.VISIBLE);
-                        }
-                        else
-                            holder.imageViews.get(i).setVisibility(View.GONE);
-                    }
-                    else {
-                        holder.imageViews.get(i).setImageBitmap(null);
-                        holder.imageViews.get(i).setVisibility(View.GONE);
-                    }
+                    holder.imageViews.get(i).setVisibility(View.VISIBLE);
+                    mImageFetcher.loadImage(item.items.get(i).getThumbURL(), holder.imageViews.get(i));
+
+                } else {
+                    holder.imageViews.get(i).setImageBitmap(null);
+                    holder.imageViews.get(i).setVisibility(View.GONE);
                 }
+            }
                 //Log.d(MainActivity.LOGTAG, "old tag at position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
 
-            }
 
             holder.txtTile.setText(item.getTitle());
             holder.txtDesc.setText(item.getDescription());

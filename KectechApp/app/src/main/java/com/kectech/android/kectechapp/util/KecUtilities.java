@@ -1,12 +1,17 @@
 package com.kectech.android.kectechapp.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.DropBoxManager;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.kectech.android.kectechapp.activity.MainActivity;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Paul on 25/06/2015.
@@ -26,6 +33,70 @@ import java.io.UnsupportedEncodingException;
  */
 public class KecUtilities {
     public static Context context = null;
+    private static ImageFetcher thumb = null;
+    private static ImageFetcher image = null;
+
+    public static ImageFetcher getImageFetcher(Activity activity) {
+        if (image != null)
+            return image;
+
+        // Fetch screen height and width, to use as our max size when loading images as this
+        // activity runs full screen
+        final DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        final int height = displayMetrics.heightPixels;
+        final int width = displayMetrics.widthPixels;
+
+        // For this sample we'll use half of the longest width to resize our images. As the
+        // image scaling ensures the image is larger than this, we should be left with a
+        // resolution that is appropriate for both portrait and landscape. For best image quality
+        // we shouldn't divide by 2, but this will use more memory and require a larger memory
+        // cache.
+        final int longest = (height > width ? height : width) / 2;
+
+
+        ImageCache.ImageCacheParams cacheParams =
+                new ImageCache.ImageCacheParams(activity, "images");
+
+        cacheParams.setMemCacheSizePercent(0.1f); // Set memory cache to 5% of app memory
+
+            // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+        image = new ImageFetcher(activity, longest);
+            //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        image.addImageCache(activity.getFragmentManager(), cacheParams);
+
+        return image;
+    }
+
+    public static ImageFetcher getThumbFetcher(Activity activity) {
+        if (thumb != null)
+            return thumb;
+
+        ImageCache.ImageCacheParams cacheParams =
+                new ImageCache.ImageCacheParams(activity, "thumbs");
+
+        cacheParams.setMemCacheSizePercent(0.05f); // Set memory cache to 5% of app memory
+
+        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+        thumb = new ImageFetcher(activity, 100);
+        //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        thumb.addImageCache(activity.getFragmentManager(), cacheParams);
+
+        return thumb;
+    }
+
+    public static void clearCache() {
+        if (thumb != null)
+            thumb.clearCache();
+        if (image != null)
+            image.clearCache();
+    }
+    public static void closeCache() {
+        if (thumb != null)
+            thumb.closeCache();
+        if (image != null)
+            image.closeCache();
+    }
 
     public static String getLocalFilePathFromURL(String url, String subFolder) {
         // subfolder should be exist after calling createFolders
@@ -53,23 +124,25 @@ public class KecUtilities {
 
         if (filePath != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            //options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
             File file = new File(filePath);
 
             if (file.exists()) {
-//                try {
-//                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//                } catch (OutOfMemoryError ome) {
+                try {
+                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                } catch (OutOfMemoryError ome) {
                     // only load 100 * 100
                     try {
+                        // only read dimensions and type no real data.
                         BitmapFactory.Options o = new BitmapFactory.Options();
                         o.inJustDecodeBounds = true;
                         BitmapFactory.decodeStream(new FileInputStream(file), null, o);
 
-                        final int width = 100;
-                        final int height = 100;
+                        final int width = 80;
+                        final int height = 80;
                         int scale = 1;
-                        while (o.outWidth / scale / 2 >= 100 && o.outHeight / scale / 2 >= 100)
+                        while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
                             scale *= 2;
 
                         // Decode with inSampleSize
@@ -77,12 +150,15 @@ public class KecUtilities {
                         o2.inSampleSize = scale;
                         return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
 
+                    } catch (OutOfMemoryError ome_stream) {
+                        //
+                        Log.e(MainActivity.LOGTAG, "OutOfMemoryError second time.");
+
                     } catch (FileNotFoundException fnfe) {
                         Log.e(MainActivity.LOGTAG, "file not found when trying load scaled img: " + fnfe.getMessage());
                         fnfe.printStackTrace();
-                        return null;
                     }
-                //}
+                }
             }
         }
         return bitmap;
@@ -90,7 +166,7 @@ public class KecUtilities {
 
     // for save & load json file
     public static String getTabLocalData(String subFolder) {
-        BufferedReader br;
+        BufferedReader br = null;
         String strJson;
         try {
             if (context == null)
@@ -111,12 +187,20 @@ public class KecUtilities {
         } catch (FileNotFoundException fne) {
             Log.e(MainActivity.LOGTAG, "File not found: " + fne.getMessage());
             fne.printStackTrace();
+
         } catch (NullPointerException npe) {
             Log.e(MainActivity.LOGTAG, npe.getMessage());
             npe.printStackTrace();
         } catch (IOException ioe) {
             Log.e(MainActivity.LOGTAG, ioe.getMessage());
             ioe.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+            } catch (IOException ioe) {
+                Log.e(MainActivity.LOGTAG, ioe.getMessage());
+            }
         }
         return null;
     }
@@ -141,6 +225,7 @@ public class KecUtilities {
             bw.write(strJson);
             bw.flush();
             bw.close();
+            fw.close();
         } catch (NullPointerException npe) {
             Log.e(MainActivity.LOGTAG, npe.getMessage());
             npe.printStackTrace();

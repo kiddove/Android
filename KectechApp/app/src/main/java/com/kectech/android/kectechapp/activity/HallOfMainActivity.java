@@ -123,8 +123,8 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
                 return false;
 //            not working here
 //            case R.id.menu_item_quit:
-//                System.exit(0);
-//                return true;
+////                System.exit(0);
+//                return false;
             case android.R.id.home: {
 //                NavUtils.navigateUpFromSameTask(this);
 //                getFragmentManager().popBackStack();

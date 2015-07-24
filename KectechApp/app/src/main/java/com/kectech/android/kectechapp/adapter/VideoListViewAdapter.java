@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.listitem.VideoListItem;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView;
 
 import java.util.ArrayList;
 
@@ -20,10 +22,12 @@ import java.util.ArrayList;
  */
 public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
     private  Context context;
+    private ImageFetcher mImageFetcher;
 
-    public VideoListViewAdapter(Context context, int resourceId, ArrayList<VideoListItem> items) {
+    public VideoListViewAdapter(Context context, int resourceId, ArrayList<VideoListItem> items, ImageFetcher imageFetcher) {
         super(context, resourceId, items);
         this.context = context;
+        this.mImageFetcher = imageFetcher;
     }
 
     // private view holder class
@@ -42,7 +46,7 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.video_list_item, parent, false);
             holder = new ViewHolder();
-            holder.imageView = (ImageView)convertView.findViewById(R.id.hall_video_list_item_img);
+            holder.imageView = (RecyclingImageView)convertView.findViewById(R.id.hall_video_list_item_img);
             //holder.imageView = null;
             holder.txtTitle = (TextView)convertView.findViewById(R.id.hall_video_list_item_title);
             holder.txtDesc = (TextView)convertView.findViewById(R.id.hall_video_list_item_desc);
@@ -53,7 +57,8 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
 
         holder.txtDesc.setText(item.getDesc());
         holder.txtTitle.setText(item.getTitle());
-        holder.imageView.setImageBitmap(item.getImage());
+        //holder.imageView.setImageBitmap(item.getImage());
+        mImageFetcher.loadImage(item.getThumbURL(), holder.imageView);
         //holder.imageView = null;
 
         return convertView;

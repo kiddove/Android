@@ -21,6 +21,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import com.kectech.android.kectechapp.R;
+import com.kectech.android.kectechapp.activity.MainActivity;
 
 public class HTML5WebView extends WebView {
 	
@@ -153,11 +154,15 @@ public class HTML5WebView extends WebView {
 		
 		@Override
 		public Bitmap getDefaultVideoPoster() {
-			//Log.i(LOGTAG, "here in on getDefaultVideoPoster");	
-			if (mDefaultVideoPoster == null) {
-				mDefaultVideoPoster = BitmapFactory.decodeResource(
-						getResources(), R.drawable.default_video_poster);
-		    }
+			//Log.i(LOGTAG, "here in on getDefaultVideoPoster");
+            try {
+                if (mDefaultVideoPoster == null) {
+                    mDefaultVideoPoster = BitmapFactory.decodeResource(
+                            getResources(), R.drawable.default_video_poster);
+                }
+            } catch (OutOfMemoryError ome) {
+                Log.e(MainActivity.LOGTAG, "load poster failed.(out of memory)");
+            }
 			return mDefaultVideoPoster;
 		}
 		

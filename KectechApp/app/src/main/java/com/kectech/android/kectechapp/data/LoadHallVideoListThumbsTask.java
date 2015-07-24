@@ -101,7 +101,7 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
 //
 //                        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     } catch (SocketTimeoutException ste) {
-                        Log.d(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+                        Log.e(MainActivity.LOGTAG, "time out: " + ste.getMessage());
                     } catch (IOException ioe) {
                         Log.e(MainActivity.LOGTAG, "IO exception: " + ioe.getMessage());
                     }
@@ -156,12 +156,10 @@ public class LoadHallVideoListThumbsTask extends AsyncTask<VideoListItem, VideoL
                     ImageView imgView = (ImageView) v.findViewById(R.id.hall_video_list_item_img);
                     if (imgView != null) {
                         imgView.setImageBitmap(bitmap);
-                    } else {
-                        Log.d(MainActivity.LOGTAG, "not cool at all.");
                     }
                 }
             } else
-                Log.e(MainActivity.LOGTAG, "result is null, download failed.");
+                Log.e(MainActivity.LOGTAG, "result is null, load failed.");
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }

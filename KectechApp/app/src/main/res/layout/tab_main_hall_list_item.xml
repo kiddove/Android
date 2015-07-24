@@ -2,7 +2,11 @@
 <!--list item in tab hall of main activity-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -10,12 +14,11 @@
         android:id="@+id/tab_main_hall_list_item_check"
         android:gravity="center"
         android:focusable="false"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingRight="5dp"
         android:layout_centerVertical="true"
         android:button="@drawable/checkbox_selector"
         android:visibility="gone"
-        android:clickable="false"/>
+        android:clickable="false" />
 
     <!--<ImageView-->
         <!--android:layout_width="30dp"-->
@@ -28,40 +31,42 @@
         <!--android:clickable="true"-->
         <!--android:longClickable="true"/>-->
 
-    <ImageView
+    <com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView
         android:id="@+id/tab_main_hall_list_item_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:contentDescription="@string/video_list_item_img_description"
-        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/tab_main_hall_list_item_check"
-        android:layout_below="@+id/tab_main_hall_list_item_title"/>
+        android:layout_below="@+id/tab_main_hall_list_item_title"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:id="@+id/tab_main_hall_list_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/tab_main_hall_list_item_check"
         android:text="@string/hello_world"
         android:textStyle="bold"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="2dp" />
 
     <TextView
         android:id="@+id/tab_main_hall_list_item_desc"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:textSize="14sp"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/tab_main_hall_list_item_img"
         android:layout_below="@+id/tab_main_hall_list_item_title"
         android:text="@string/action_settings"
-        />
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp" />
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -83,6 +88,8 @@
         android:layout_alignBottom="@+id/tab_main_hall_list_item_img"
         android:gravity="center"
         android:textSize="14sp"
+        android:paddingLeft="10dp"
         android:layout_alignLeft="@+id/tab_main_hall_list_item_desc"
-        android:textColor="@android:color/darker_gray"/>
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="2dp" />
 </RelativeLayout>

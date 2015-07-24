@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,11 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.FadePageTransformer;
-import com.kectech.android.kectechapp.data.DownLoadImageTask;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
@@ -35,7 +39,9 @@ import java.util.ArrayList;
  * do some research on intent param
  */
 public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener {
+//, View.OnClickListener {
 
+    private static final String IMAGE_CACHE_DIR = "images";
     private int imageCount = 1;
     private ArrayList<View> viewList;
     private Activity context = null;
@@ -46,13 +52,26 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     private int previous = 0;
 
     public String subFolder = null;
-    private DownLoadImageTask preTask;
+
+    private ImageFetcher mImageFetcherImage;
+
+    private CustomViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (BuildConfig.DEBUG) {
+            Utils.enableStrictMode();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
         context = this;
+
+        mImageFetcherImage = KecUtilities.getImageFetcher(this);
+
+        // for load thumb
+        ImageFetcher mImageFetcherThumb = KecUtilities.getThumbFetcher(this);
 
         try {
             // for using action bar back button
@@ -97,12 +116,13 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 //                    });
                     if (URLs != null && subFolder != null) {
                         String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
-                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, subFolder);
-                        Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
-                        if (thumbBitmap != null) {
-                            imageView.setImageBitmap(thumbBitmap);
-                            //thumbBitmap.recycle();
-                        }
+                        mImageFetcherThumb.loadImage(strThumbURL, imageView);
+//                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, subFolder);
+//                        Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
+//                        if (thumbBitmap != null) {
+//                            imageView.setImageBitmap(thumbBitmap);
+//                            //thumbBitmap.recycle();
+//                        }
                     }
                 }
                 viewList.add(v);
@@ -124,7 +144,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         dots.get(0).setBackgroundResource(R.drawable.dot_selected);
 
         // pager
-        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
+        viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -147,6 +167,36 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         viewPager.setPageTransformer(false, new FadePageTransformer());
 
         viewPager.setAdapter(new MyPagerAdapter(viewList));
+
+//        // Set up activity to go full screen
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//
+//        // Enable some additional newer visibility and ActionBar features to create a more
+//        // immersive photo viewing experience
+//        if (Utils.hasHoneycomb()) {
+//            final ActionBar actionBar = getActionBar();
+//
+//            // Hide title text and set home as up
+//            actionBar.setDisplayShowTitleEnabled(false);
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//            // Hide and show the ActionBar as the visibility changes
+//            viewPager.setOnSystemUiVisibilityChangeListener(
+//                    new View.OnSystemUiVisibilityChangeListener() {
+//                        @Override
+//                        public void onSystemUiVisibilityChange(int vis) {
+//                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+//                                actionBar.hide();
+//                            } else {
+//                                actionBar.show();
+//                            }
+//                        }
+//                    });
+//
+//            // Start low profile mode and hide ActionBar
+//            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+//            actionBar.hide();
+//        }
 
         setCurrentPage(0);
     }
@@ -262,10 +312,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     public void setCurrentPage(int position) {
         if (subFolder == null)
             return;
-        if (preTask != null) {
-            preTask.cancel(true);
-            preTask = null;
-        }
+
         dots.get(previous).setBackgroundResource(R.drawable.dot_normal);
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);
         previous = position;
@@ -273,16 +320,22 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         ScaleImageView imageView = (ScaleImageView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_imageView);
         // download image async
         String imageURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY).get(position);
-        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, subFolder);
-        Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
-        //Bitmap bitmap = null;
-        if (imageView != null && bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-            //bitmap.recycle();
-        } else {
-            preTask = new DownLoadImageTask(imageView, context, subFolder);
-            preTask.execute(imageURL);
-        }
+
+        // todo
+//        //mImageFetcher.loadImage(imageURL, imageView);
+//        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, subFolder);
+//        Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
+//        //Bitmap bitmap = null;
+//        if (imageView != null && bitmap != null) {
+//            imageView.setImageBitmap(bitmap);
+////            recycleBitmap();
+////            current = bitmap;
+//        } else {
+//            preTask = new DownLoadImageTask(imageView, context, subFolder);
+//            preTask.execute(imageURL);
+//        }
+
+        mImageFetcherImage.loadImage(imageURL, imageView);
     }
 
     @Override
@@ -303,4 +356,34 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         finish();
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mImageFetcherImage.setExitTasksEarly(false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mImageFetcherImage.setExitTasksEarly(true);
+        mImageFetcherImage.flushCache();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //mImageFetcherImage.closeCache();
+    }
+
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    @Override
+//    public void onClick(View v) {
+//        final int vis = viewPager.getSystemUiVisibility();
+//        if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+//            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+//        } else {
+//            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+//        }
+//    }
 }

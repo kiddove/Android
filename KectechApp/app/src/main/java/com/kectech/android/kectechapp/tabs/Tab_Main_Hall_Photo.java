@@ -15,12 +15,15 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
+import com.kectech.android.kectechapp.adapter.VideoListViewAdapter;
 import com.kectech.android.kectechapp.data.LoadHallPhotoListThumbsTask;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout;
 import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
@@ -58,6 +61,10 @@ public class Tab_Main_Hall_Photo extends Fragment {
     private String subFolder = null;
 
     private Activity activity;
+
+    private ImageFetcher mImageFetcher;
+    private static final String IMAGE_CACHE_DIR = "thumbs_photo";
+
 
     public void setType(int tabType) {
         this.tabType = tabType;
@@ -136,8 +143,12 @@ public class Tab_Main_Hall_Photo extends Fragment {
             }
         });
 
-        mPhotoAdapter = new PhotoListViewAdapter(activity, R.layout.photo_list_item, new ArrayList<PhotoListItem>());
+        mImageFetcher = KecUtilities.getThumbFetcher(getActivity());
+
+        mPhotoAdapter = new PhotoListViewAdapter(activity, R.layout.photo_list_item, new ArrayList<PhotoListItem>(), mImageFetcher);
         mListView.setAdapter(mPhotoAdapter);
+
+
 
         initList();
 
@@ -161,13 +172,13 @@ public class Tab_Main_Hall_Photo extends Fragment {
     // used to get the list item json file init, top_refresh, bottom_refresh, maybe need param when sending http request
     // to be continued...
     // may need to write 3 task
-    private class UpdatePhotoListTask extends AsyncTask<String, Void, String> {
+    private class UpdatePhotoListTask extends AsyncTask<String, Void, ArrayList<PhotoListItem>> {
 
         public UpdatePhotoListTask() {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected ArrayList<PhotoListItem> doInBackground(String... params) {
             // step1 Read from loacl if has data
             // step2 if not send http request
             // if updated write to local... after refresh... a lot of work to do
@@ -185,9 +196,16 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
                 //int length = connection.getContentLength();
-                return KecUtilities.readStringFromStream(inputStream);
+                String strResult = KecUtilities.readStringFromStream(inputStream);
+
+                ArrayList<PhotoListItem> items = getListFromJson(strResult);
+
+                if (strResult != null && subFolder != null && !items.isEmpty()) {
+                    KecUtilities.writeTabLocalData(strResult, subFolder);
+                }
+                return items;
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -195,21 +213,17 @@ public class Tab_Main_Hall_Photo extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<PhotoListItem> result) {
+            // no disk operation here, will stuck UI
             super.onPostExecute(result);
-            ArrayList<PhotoListItem> items = getListFromJson(result);
-
-            if (result != null && subFolder != null && !items.isEmpty()) {
-                KecUtilities.writeTabLocalData(result, subFolder);
-                onRefreshComplete(items);
-            }
+            onRefreshComplete(result);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdatePhotoListTaskTop extends AsyncTask<String, Void, String> {
+    private class UpdatePhotoListTaskTop extends AsyncTask<String, Void, ArrayList<PhotoListItem>> {
         @Override
-        protected String doInBackground(String... params) {
+        protected ArrayList<PhotoListItem> doInBackground(String... params) {
             // for test
             String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php?type=top&count=5";
 
@@ -222,10 +236,32 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
 
-                return KecUtilities.readStringFromStream(inputStream);
+                String strResult = KecUtilities.readStringFromStream(inputStream);
 
+                ArrayList<PhotoListItem> items = getListFromJson(strResult);
+
+                // read insert write
+                if (items != null && !items.isEmpty()) {
+                    if (subFolder != null) {
+                        ArrayList<PhotoListItem> localData = null;
+                        String strJson = KecUtilities.getTabLocalData(subFolder);
+                        if (strJson != null && !strJson.isEmpty()) {
+                            localData = getListFromJson(strJson);
+                        }
+                        for (int position = items.size() - 1; position >= 0; position--) {
+
+                            PhotoListItem item = items.get(position);
+                            if (localData != null)
+                                localData.add(0, item);
+                        }
+                        // write to local not append, write
+                        KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
+                    }
+                    // UI
+                    return items;
+                }
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -233,22 +269,17 @@ public class Tab_Main_Hall_Photo extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<PhotoListItem> result) {
             super.onPostExecute(result);
 
-            if (isCancelled())
-                return;
-            ArrayList<PhotoListItem> items = getListFromJson(result);
-
-            if (items != null && !items.isEmpty())
-                onRefreshCompleteTop(items);
+            onRefreshCompleteTop(result);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdatePhotoListTaskBottom extends AsyncTask<String, Void, String> {
+    private class UpdatePhotoListTaskBottom extends AsyncTask<String, Void, ArrayList<PhotoListItem>> {
         @Override
-        protected String doInBackground(String... params) {
+        protected ArrayList<PhotoListItem> doInBackground(String... params) {
 
             // for test
             String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php?type=bottom&count=5";
@@ -263,10 +294,28 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
                 //int length = connection.getContentLength();
 
-                return KecUtilities.readStringFromStream(inputStream);
+                String strResult = KecUtilities.readStringFromStream(inputStream);
+                ArrayList<PhotoListItem> items = getListFromJson(strResult);
+
+                if (items != null && !items.isEmpty()) {
+                    if (subFolder != null) {
+                        ArrayList<PhotoListItem> localData = null;
+                        String strJson = KecUtilities.getTabLocalData(subFolder);
+                        if (strJson != null && !strJson.isEmpty()) {
+                            localData = getListFromJson(strJson);
+                        }
+                        for (PhotoListItem item : items) {
+                            if (localData != null)
+                                localData.add(item);
+                        }
+                        KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
+                    }
+                    // UI
+                    return items;
+                }
 
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -274,15 +323,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<PhotoListItem> result) {
             super.onPostExecute(result);
-            if (isCancelled())
-                return;
-            ArrayList<PhotoListItem> items = getListFromJson(result);
-
-            if (items != null && !items.isEmpty())
-                onRefreshCompleteBottom(items);
-
+            onRefreshCompleteBottom(result);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
@@ -302,104 +345,59 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
 
             // determine position
-            int position = 0;
+            //int position = 0;
             for (PhotoListItem item : result) {
-                item.setPosition(position);
-                position++;
+                //item.setPosition(position);
+                //position++;
                 mPhotoAdapter.add(item);
             }
-            PhotoListItem[] items = new PhotoListItem[result.size()];
-            result.toArray(items);
+//            PhotoListItem[] items = new PhotoListItem[result.size()];
+//            result.toArray(items);
 
-            new LoadHallPhotoListThumbsTask(mPhotoAdapter, mListView, subFolder).execute(items);
+            mListView.setAdapter(mPhotoAdapter);
+
+            //new LoadHallPhotoListThumbsTask(mPhotoAdapter, mListView, subFolder).execute(items);
 
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
-
-        mSwipyRefreshLayout.setRefreshing(false);
     }
 
     private void onRefreshCompleteTop(ArrayList<PhotoListItem> result) {
-        if (result == null || subFolder == null || result.isEmpty())
+        if (result == null || result.isEmpty())
             return;
-        ArrayList<PhotoListItem> localData = null;
+
         try {
-            // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(subFolder);
-
-            if (strJson != null && !strJson.isEmpty()) {
-                localData = getListFromJson(strJson);
-            }
-            // first add/insert into adapter/list
-            // suppose result is ordered.
-            // should insert into list from the last item...
-
-            PhotoListItem[] items = new PhotoListItem[result.size()];
             for (int position = result.size() - 1; position >= 0; position--) {
 
                 PhotoListItem item = result.get(position);
                 mPhotoAdapter.insert(item, 0);
-                if (localData != null)
-                    localData.add(0, item);
-                item.setPosition(position);
-                items[position] = item;
             }
-
-
-            // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
-
-            new LoadHallPhotoListThumbsTask(mPhotoAdapter, mListView, subFolder).execute(items);
-
+            mPhotoAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
-
-        mSwipyRefreshLayout.setRefreshing(false);
     }
 
     private void onRefreshCompleteBottom(ArrayList<PhotoListItem> result) {
-        if (result == null || subFolder == null || result.isEmpty())
+        if (result == null || result.isEmpty())
             return;
-        ArrayList<PhotoListItem> localData = null;
         try {
-            // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(subFolder);
-            if (strJson != null && !strJson.isEmpty()) {
-                localData = getListFromJson(strJson);
-            }
-            // 1. add/insert into adapter/list and set the correct position
-            int position = mPhotoAdapter.getCount();
             for (PhotoListItem item : result) {
-                item.setPosition(position);
                 mPhotoAdapter.add(item);
-                if (localData != null)
-                    localData.add(item);
-                position++;
             }
 
-            //if (result.size() > 0) {
-                final int currentPosition = mListView.getFirstVisiblePosition();
-                mListView.setSelection(currentPosition + 1);
-                mListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mListView.smoothScrollToPosition(currentPosition + 1);
-                    }
-                });
-            //}
-
-            PhotoListItem[] items = new PhotoListItem[result.size()];
-            result.toArray(items);
-            // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
-            new LoadHallPhotoListThumbsTask(mPhotoAdapter, mListView, subFolder).execute(items);
+            final int currentPosition = mListView.getFirstVisiblePosition();
+            mListView.setSelection(currentPosition + 1);
+            mListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListView.smoothScrollToPosition(currentPosition + 1);
+                }
+            });
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
-
-        mSwipyRefreshLayout.setRefreshing(false);
     }
 
     public ArrayList<PhotoListItem> getListFromJson(String strJson) {
@@ -434,18 +432,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void initList() {
         if (subFolder == null)
             return;
-        // read local file
-        String strJson = KecUtilities.getTabLocalData(subFolder);
-
-        ArrayList<PhotoListItem> items = null;
-        if (strJson != null && !strJson.isEmpty()) {
-            items = getListFromJson(strJson);
-        }
-        if (items != null && !items.isEmpty()) {
-            onRefreshComplete(items);
-        }else {
-            Refresh(SwipyRefreshLayoutDirection.BOTH);
-        }
+        new InitListTask().execute();
     }
 
 //    @Override
@@ -461,35 +448,27 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser) {
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes visible.");
-        } else {
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes invisible.");
+        if (BuildConfig.DEBUG) {
+            if (isVisibleToUser) {
+                Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes visible.");
+            } else {
+                Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes invisible.");
+            }
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onPause.");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onStop.");
+        if (BuildConfig.DEBUG)
+            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onStop.");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onStart.");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onResume.");
+        if (BuildConfig.DEBUG)
+            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onStart.");
     }
 
     @Override
@@ -502,5 +481,59 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.activity = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mImageFetcher != null)
+            mImageFetcher.setExitTasksEarly(false);
+        if (mPhotoAdapter != null)
+            mPhotoAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mImageFetcher != null) {
+            mImageFetcher.setPauseWork(false);
+            mImageFetcher.setExitTasksEarly(true);
+            mImageFetcher.flushCache();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //mImageFetcher.closeCache();
+    }
+
+    private class InitListTask extends AsyncTask<Void, Void, ArrayList<PhotoListItem>> {
+        @Override
+        protected ArrayList<PhotoListItem> doInBackground(Void... params) {
+            // read local file
+            String strJson = KecUtilities.getTabLocalData(subFolder);
+
+            ArrayList<PhotoListItem> items = null;
+            if (strJson != null && !strJson.isEmpty()) {
+                items = getListFromJson(strJson);
+            }
+            if (items != null && !items.isEmpty()) {
+                return items;
+            }else {
+                Refresh(SwipyRefreshLayoutDirection.BOTH);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<PhotoListItem> result) {
+            super.onPostExecute(result);
+            if (isCancelled())
+                return;
+
+            onRefreshComplete(result);
+        }
     }
 }

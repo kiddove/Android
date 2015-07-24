@@ -18,12 +18,15 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.activity.VideoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.VideoListViewAdapter;
 import com.kectech.android.kectechapp.data.LoadHallVideoListThumbsTask;
 import com.kectech.android.kectechapp.listitem.VideoListItem;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout;
 import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
@@ -58,6 +61,11 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     private String subFolder = null;
     private Activity activity;
+
+    private ImageFetcher mImageFetcher;
+
+    private static final String IMAGE_CACHE_DIR = "thumbs_video";
+    private final String TAG = "tab_main_hall_video";
 
     public void setType(int tabType) {
 
@@ -134,6 +142,17 @@ public class Tab_Main_Hall_Video extends Fragment {
                 R.color.swipe_color_1, R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
+//        ImageCache.ImageCacheParams cacheParams =
+//                new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
+//
+//        cacheParams.setMemCacheSizePercent(0.05f); // Set memory cache to 5% of app memory
+//
+//        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+//        mImageFetcher = new ImageFetcher(getActivity(), 100);
+//        //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+//        mImageFetcher.addImageCache(getActivity().getFragmentManager(), cacheParams);
+
+        mImageFetcher = KecUtilities.getThumbFetcher(getActivity());
         initList();
 
         return v;
@@ -143,17 +162,7 @@ public class Tab_Main_Hall_Video extends Fragment {
         // read from local first
         if (subFolder == null)
             return;
-        String strJson = KecUtilities.getTabLocalData(subFolder);
-
-        ArrayList<VideoListItem> items = null;
-        if (strJson != null && !strJson.isEmpty()) {
-            items = getListFromJson(strJson);
-        }
-        if (items != null && !items.isEmpty()) {
-            onRefreshComplete(items);
-        } else {
-            Refresh(SwipyRefreshLayoutDirection.BOTH);
-        }
+        new InitListTask().execute();
     }
 
     public ArrayList<VideoListItem> getListFromJson(String strJson) {
@@ -190,30 +199,31 @@ public class Tab_Main_Hall_Video extends Fragment {
         if (result == null || result.isEmpty())
             return;
         if (mVideoAdapter != null) {
-            Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
+            if (BuildConfig.DEBUG)
+                Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
             if (activity == null)
                 return;
             // first add to adapter and listView
-            mVideoAdapter = new VideoListViewAdapter(activity, R.layout.video_list_item, result);
+            mVideoAdapter = new VideoListViewAdapter(activity, R.layout.video_list_item, result, mImageFetcher);
             mListView.setAdapter(mVideoAdapter);
-
-            // now can start another task to load image async
-            // we need url and position, if we use one thread to do all the download, so we store position in listitem.
-            // be sure that the size of the array won't be too large, it's kind of waste the memory...
-
-
-            // determine position
-            int position = 0;
-            for (VideoListItem item : result) {
-                item.setPosition(position);
-                position++;
-            }
-            VideoListItem[] items = new VideoListItem[result.size()];
-            result.toArray(items);
-
-            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
+//
+//            // now can start another task to load image async
+//            // we need url and position, if we use one thread to do all the download, so we store position in listitem.
+//            // be sure that the size of the array won't be too large, it's kind of waste the memory...
+//
+//
+//            // determine position
+//            int position = 0;
+//            for (VideoListItem item : result) {
+//                item.setPosition(position);
+//                position++;
+//            }
+//            VideoListItem[] items = new VideoListItem[result.size()];
+//            result.toArray(items);
+//
+//            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
 
         } catch (NullPointerException npe) {
             Log.e(MainActivity.LOGTAG, npe.getMessage());
@@ -223,90 +233,43 @@ public class Tab_Main_Hall_Video extends Fragment {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
-
-        mSwipyRefreshLayout.setRefreshing(false);
     }
 
     private void onRefreshCompleteTop(ArrayList<VideoListItem> result) {
-        if (result == null || subFolder == null || result.isEmpty())
+        if (result == null || result.isEmpty())
             return;
-        ArrayList<VideoListItem> localData = null;
         try {
-            // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(subFolder);
 
-            if (strJson != null && !strJson.isEmpty()) {
-                localData = getListFromJson(strJson);
-            }
-            // first add/insert into adapter/list
-            // suppose result is ordered.
-            // should insert into list from the last item...
-
-            VideoListItem[] items = new VideoListItem[result.size()];
             for (int position = result.size() - 1; position >= 0; position--) {
-
                 VideoListItem item = result.get(position);
                 mVideoAdapter.insert(item, 0);
-                if (localData != null)
-                    localData.add(0, item);
-                item.setPosition(position);
-                items[position] = item;
+
             }
-
-
-            // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
-
-            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
-
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
-
-        mSwipyRefreshLayout.setRefreshing(false);
     }
 
     private void onRefreshCompleteBottom(ArrayList<VideoListItem> result) {
-        if (result == null || subFolder == null || result.isEmpty())
+        if (result == null || result.isEmpty())
             return;
-        ArrayList<VideoListItem> localData = null;
         try {
-            // read local data, must have some, because of init
-            String strJson = KecUtilities.getTabLocalData(subFolder);
-            if (strJson != null && !strJson.isEmpty()) {
-                localData = getListFromJson(strJson);
-            }
-            // 1. add/insert into adapter/list and set the correct position
-            int position = mVideoAdapter.getCount();
             for (VideoListItem item : result) {
-                item.setPosition(position);
+
                 mVideoAdapter.add(item);
-                if (localData != null)
-                    localData.add(item);
-                position++;
             }
 
-            //if (result.size() > 0) {
-                final int currentPosition = mListView.getFirstVisiblePosition();
-                mListView.setSelection(currentPosition + 1);
-                mListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mListView.smoothScrollToPosition(currentPosition + 1);
-                    }
-                });
-            //}
-
-            VideoListItem[] items = new VideoListItem[result.size()];
-            result.toArray(items);
-            // write to local not append, write
-            KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
-            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
+            final int currentPosition = mListView.getFirstVisiblePosition();
+            mListView.setSelection(currentPosition + 1);
+            mListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListView.smoothScrollToPosition(currentPosition + 1);
+                }
+            });
         } catch (Exception e) {
             Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
         }
-
-        mSwipyRefreshLayout.setRefreshing(false);
     }
 
     // detect when this fragment is visible
@@ -314,10 +277,12 @@ public class Tab_Main_Hall_Video extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser) {
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_video becomes visible.");
-        } else {
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_video becomes invisible.");
+        if (BuildConfig.DEBUG) {
+            if (isVisibleToUser) {
+                Log.d(MainActivity.LOGTAG, "tab_main_hall_video becomes visible.");
+            } else {
+                Log.d(MainActivity.LOGTAG, "tab_main_hall_video becomes invisible.");
+            }
         }
     }
 
@@ -340,9 +305,16 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // if want to handled in fragment
-        // must return false in activity
+        int id = item.getItemId();
 
+        switch (id) {
+             case R.id.menu_item_quit:
+                 // clear cache
+                 //mImageFetcher.clearCache();
+                 if (BuildConfig.DEBUG)
+                     KecUtilities.clearCache();
+                 return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -362,13 +334,13 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     // for download thumbs
     // may need to write 3 task
-    private class UpdateThumbListTask extends AsyncTask<Integer, Void, String> {
+    private class UpdateThumbListTask extends AsyncTask<Integer, Void, ArrayList<VideoListItem>> {
 
         public UpdateThumbListTask() {
         }
 
         @Override
-        protected String doInBackground(Integer... params) {
+        protected ArrayList<VideoListItem> doInBackground(Integer... params) {
             if (strType == null || strType.isEmpty())
                 return null;
             try {
@@ -384,9 +356,17 @@ public class Tab_Main_Hall_Video extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
                 //int length = connection.getContentLength();
-                return KecUtilities.readStringFromStream(inputStream);
+                String strResult = KecUtilities.readStringFromStream(inputStream);
+
+                ArrayList<VideoListItem> items = getListFromJson(strResult);
+                if (items != null && !items.isEmpty()) {
+                    if (subFolder != null)
+                        KecUtilities.writeTabLocalData(strResult, subFolder);
+                    return items;
+                }
+
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -394,21 +374,16 @@ public class Tab_Main_Hall_Video extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<VideoListItem> result) {
             super.onPostExecute(result);
-            ArrayList<VideoListItem> items = getListFromJson(result);
-
-            if (result != null && !items.isEmpty()) {
-                KecUtilities.writeTabLocalData(result, subFolder);
-                onRefreshComplete(items);
-            }
+            onRefreshComplete(result);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdateThumbListTaskTop extends AsyncTask<Integer, Void, String> {
+    private class UpdateThumbListTaskTop extends AsyncTask<Integer, Void, ArrayList<VideoListItem>> {
         @Override
-        protected String doInBackground(Integer... params) {
+        protected ArrayList<VideoListItem> doInBackground(Integer... params) {
             if (strType == null || strType.isEmpty())
                 return null;
             try {
@@ -423,10 +398,32 @@ public class Tab_Main_Hall_Video extends Fragment {
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
 
-                return KecUtilities.readStringFromStream(inputStream);
+                String strResult = KecUtilities.readStringFromStream(inputStream);
+
+                ArrayList<VideoListItem> items = getListFromJson(strResult);
+
+                if (items != null && !items.isEmpty()) {
+                    if (subFolder != null) {
+                        ArrayList<VideoListItem> localData = null;
+                        String strJson = KecUtilities.getTabLocalData(subFolder);
+
+                        if (strJson != null && !strJson.isEmpty()) {
+                            localData = getListFromJson(strJson);
+                        }
+
+                        for (int position = items.size() - 1; position >= 0; position--) {
+
+                            VideoListItem item = items.get(position);
+                            if (localData != null)
+                                localData.add(0, item);
+                        }
+                        KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
+                    }
+                    return items;
+                }
 
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -434,22 +431,19 @@ public class Tab_Main_Hall_Video extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<VideoListItem> result) {
             super.onPostExecute(result);
 
             if (isCancelled())
                 return;
-            ArrayList<VideoListItem> items = getListFromJson(result);
-
-            if (items != null && !items.isEmpty())
-                onRefreshCompleteTop(items);
+            onRefreshCompleteTop(result);
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
-    private class UpdateThumbListTaskBottom extends AsyncTask<Integer, Void, String> {
+    private class UpdateThumbListTaskBottom extends AsyncTask<Integer, Void, ArrayList<VideoListItem>> {
         @Override
-        protected String doInBackground(Integer... params) {
+        protected ArrayList<VideoListItem> doInBackground(Integer... params) {
 
             if (strType == null || strType.isEmpty())
                 return null;
@@ -466,10 +460,26 @@ public class Tab_Main_Hall_Video extends Fragment {
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
                 //int length = connection.getContentLength();
 
-                return KecUtilities.readStringFromStream(inputStream);
+                String strResult = KecUtilities.readStringFromStream(inputStream);
+                ArrayList<VideoListItem> items = getListFromJson(strResult);
+                if (items != null && !items.isEmpty()) {
+                    if (subFolder != null) {
+                        ArrayList<VideoListItem> localData = null;
+                        String strJson = KecUtilities.getTabLocalData(subFolder);
+                        if (strJson != null && !strJson.isEmpty()) {
+                            localData = getListFromJson(strJson);
+                        }
+                        for (VideoListItem item : items) {
+                            if (localData != null)
+                                localData.add(item);
+                        }
+                        KecUtilities.writeTabLocalData(getJsonFromObject(localData), subFolder);
+                    }
+                    return items;
+                }
 
             } catch (SocketTimeoutException ste) {
-                Log.d(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
                 Log.e(MainActivity.LOGTAG, e.getMessage());
             }
@@ -477,42 +487,28 @@ public class Tab_Main_Hall_Video extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<VideoListItem> result) {
             super.onPostExecute(result);
             if (isCancelled())
                 return;
-
-            ArrayList<VideoListItem> items = getListFromJson(result);
-
-            if (items != null && !items.isEmpty())
-                onRefreshCompleteBottom(items);
+            onRefreshCompleteBottom(result);
 
             mSwipyRefreshLayout.setRefreshing(false);
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onPause.");
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStop.");
+        if (BuildConfig.DEBUG)
+            Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStop.");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStart.");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(MainActivity.LOGTAG, "tab_main_hall_video onResume.");
+        if (BuildConfig.DEBUG)
+            Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStart.");
     }
 
     @Override
@@ -525,5 +521,58 @@ public class Tab_Main_Hall_Video extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.activity = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mImageFetcher != null)
+            mImageFetcher.setExitTasksEarly(false);
+        if (mVideoAdapter != null)
+            mVideoAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mImageFetcher != null) {
+            mImageFetcher.setPauseWork(false);
+            mImageFetcher.setExitTasksEarly(true);
+            mImageFetcher.flushCache();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //mImageFetcher.closeCache();
+    }
+    private class InitListTask extends AsyncTask<Void, Void, ArrayList<VideoListItem>> {
+        @Override
+        protected ArrayList<VideoListItem> doInBackground(Void... params) {
+            // read local file
+            String strJson = KecUtilities.getTabLocalData(subFolder);
+
+            ArrayList<VideoListItem> items = null;
+            if (strJson != null && !strJson.isEmpty()) {
+                items = getListFromJson(strJson);
+            }
+            if (items != null && !items.isEmpty()) {
+                return items;
+            }else {
+                Refresh(SwipyRefreshLayoutDirection.BOTH);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<VideoListItem> result) {
+            super.onPostExecute(result);
+            if (isCancelled())
+                return;
+
+            onRefreshComplete(result);
+        }
     }
 }
