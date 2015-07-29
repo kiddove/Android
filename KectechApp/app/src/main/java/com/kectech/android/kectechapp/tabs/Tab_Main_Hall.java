@@ -34,7 +34,6 @@ import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.adapter.HallListViewAdapter;
 import com.kectech.android.kectechapp.listitem.Tab_Main_Hall_ListItem;
 import com.kectech.android.kectechapp.thirdparty.*;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.util.KecUtilities;
@@ -52,16 +51,16 @@ import java.util.List;
 /**
  * Created by Paul on 16/06/2015.
  * video tab implements by a ListView
- * use a SwipyRefreshLayout to fulfil pull down and pull up refresh
+ * use a SwipeRefreshLayout to fulfil pull down and pull up refresh
  * tab an item to open an activity to tab_main_show video page in a WebView
  */
-public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefreshListener{
+public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private ListView mListView;
 
     private HallListViewAdapter mAdapter;
 
-    private SwipyRefreshLayout mSwipyRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ActionMode mMode;
 
@@ -70,18 +69,15 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
     private ImageFetcher mImageFetcher;
 
-    private static final String IMAGE_CACHE_DIR = "thumbs";
-    private final String TAG = "tab_main_hall";
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_main_hall, container, false);
 
         mListView = (ListView) v.findViewById(R.id.hall_tab_list);
 
-        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.hall_tab_swipy_refresh_layout);
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-        mSwipyRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.hall_tab_swipe_refresh_layout);
+        mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.BOTH);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
 //        // click listener
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,7 +108,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                         //getActivity().overridePendingTransition(0, 0);
                         activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                     } catch (Exception e) {
-                        Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -138,7 +134,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
             }
         });
 
-        mSwipyRefreshLayout.setColorScheme(
+        mSwipeRefreshLayout.setColorScheme(
                 R.color.swipe_color_1, R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
@@ -214,12 +210,12 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
         if (isVisibleToUser) {
             if (BuildConfig.DEBUG)
-                Log.d(MainActivity.LOGTAG, "tab_main_hall becomes visible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_hall becomes visible.");
             // todo if visible refresh data
         } else {
             //hide cab
             if (BuildConfig.DEBUG)
-                Log.d(MainActivity.LOGTAG, "tab_main_hall becomes invisible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_hall becomes invisible.");
             stopActionMode();
         }
     }
@@ -253,7 +249,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 //        Tab_Main_Hall_ListItem tabMainHallListItem = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, SCAN_TAG, url);
 //        mAdapter.insert(tabMainHallListItem, 0);
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, url);
+            Log.d(MainActivity.LOG_TAG, url);
     }
 
     @Override
@@ -288,7 +284,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
             if (scanContent != null) {
                 if (BuildConfig.DEBUG)
-                    Log.d(MainActivity.LOGTAG, "QR Scan Content: " + scanContent);
+                    Log.d(MainActivity.LOG_TAG, "QR Scan Content: " + scanContent);
 
                 if (!scanContent.isEmpty()) {
 //            // insert into ....
@@ -296,7 +292,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                         // todo scan result, to be continued...
                         //AddItemToList(scanContent);
                     } catch (Exception e) {
-                        Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -399,14 +395,14 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
     private boolean prepareActionMode() {
         // Here, you can checked selected items to adapt available actions
         // set NONE
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.NONE);
+        mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.NONE);
         mAdapter.showCheckBox = true;
         return false;
     }
 
     private void destroyActionMode() {
         // set NONE to BOTH
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+        mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.BOTH);
         mAdapter.showCheckBox = false;
         mAdapter.clear();
         num = 0;
@@ -456,7 +452,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                             localData.add(item);
                         }
                         // write to local
-                        KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), HallOfMainActivity.subFolder);
+                        KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), MainActivity.HALL_OF_MAIN_SUBFOLDER);
 
                         localData.clear();
                     }
@@ -519,7 +515,8 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -527,13 +524,13 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 String strResult = KecUtilities.readStringFromStream(inputStream);
                 ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(strResult);
                 if (items != null && !items.isEmpty()) {
-                    KecUtilities.writeTabLocalData(strResult, HallOfMainActivity.subFolder);
+                    KecUtilities.writeTabLocalData(strResult, MainActivity.HALL_OF_MAIN_SUBFOLDER);
                     return items;
                 }
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -543,7 +540,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
             super.onPostExecute(result);
 
             onRefreshComplete(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -559,7 +556,8 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -568,7 +566,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(strResult);
                 if (items != null && !items.isEmpty()) {
                     ArrayList<Tab_Main_Hall_ListItem> localData = null;
-                    String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder);
+                    String strJson = KecUtilities.getTabLocalData(MainActivity.HALL_OF_MAIN_SUBFOLDER);
 
                     if (strJson != null && !strJson.isEmpty()) {
                         localData = getListFromJson(strJson);
@@ -585,15 +583,15 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                             localData.add(0, item);
                     }
                     // write to local not append, write
-                    KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder);
+                    KecUtilities.writeTabLocalData(getJsonFromObject(localData), MainActivity.HALL_OF_MAIN_SUBFOLDER);
 
                     return items;
                 }
 
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out: " + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -606,7 +604,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 return;
 
             onRefreshCompleteTop(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -623,6 +621,8 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
 
                 connection.connect();
 
@@ -633,7 +633,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(strResult);
                 if (items != null && !items.isEmpty()) {
                     ArrayList<Tab_Main_Hall_ListItem> localData = null;
-                    String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder);
+                    String strJson = KecUtilities.getTabLocalData(MainActivity.HALL_OF_MAIN_SUBFOLDER);
                     if (strJson != null && !strJson.isEmpty()) {
                         localData = getListFromJson(strJson);
                     }
@@ -645,16 +645,16 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
                     }
 
-                    KecUtilities.writeTabLocalData(getJsonFromObject(localData), HallOfMainActivity.subFolder);
+                    KecUtilities.writeTabLocalData(getJsonFromObject(localData), MainActivity.HALL_OF_MAIN_SUBFOLDER);
 
                     // UI
                     return items;
                 }
 
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out: " + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out: " + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -666,16 +666,16 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 return;
 
             onRefreshCompleteBottom(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
     // refresh list
-    public void Refresh(SwipyRefreshLayoutDirection direction) {
+    public void Refresh(SwipeRefreshLayoutDirection direction) {
         // actually bottom and init can use same interface??
-        if (direction == SwipyRefreshLayoutDirection.TOP && mAdapter != null && mAdapter.getCount() > 0) {
+        if (direction == SwipeRefreshLayoutDirection.TOP && mAdapter != null && mAdapter.getCount() > 0) {
             new UpdateThumbListTaskTop().execute(mAdapter.getItem(0).getId());
-        } else if (direction == SwipyRefreshLayoutDirection.BOTTOM && mAdapter != null && mAdapter.getCount() > 0) {
+        } else if (direction == SwipeRefreshLayoutDirection.BOTTOM && mAdapter != null && mAdapter.getCount() > 0) {
             int i = mAdapter.getCount();
             new UpdateThumbListTaskBottom().execute(mAdapter.getItem(i - 1).getId());
         } else
@@ -696,7 +696,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
         return null;
     }
@@ -710,7 +710,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -722,7 +722,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
             return;
         if (mAdapter != null) {
             if (BuildConfig.DEBUG)
-                Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
+                Log.d(MainActivity.LOG_TAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
 
@@ -750,7 +750,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 ////            currentTask.add(task);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -765,7 +765,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
 
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -789,7 +789,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -797,7 +797,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
     public void onStop() {
         super.onStop();
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, "tab_main_hall onStop.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_hall onStop.");
 
 //        for (LoadHallListThumbsTask task : currentTask) {
 //            task.cancel(true);
@@ -809,7 +809,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
     public void onStart() {
         super.onStart();
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, "tab_main_hall onStart.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_hall onStart.");
     }
 
     private void stopActionMode() {
@@ -858,7 +858,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
     }
 
     @Override
-    public void onRefresh(SwipyRefreshLayoutDirection direction) {
+    public void onRefresh(SwipeRefreshLayoutDirection direction) {
         //if (in edit mode or others do not refresh or just set listener to null or set direction to NONE?) NONE works OK.
         Refresh(direction);
     }
@@ -867,7 +867,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
         @Override
         protected ArrayList<Tab_Main_Hall_ListItem> doInBackground(Void... params) {
 
-            String strJson = KecUtilities.getTabLocalData(HallOfMainActivity.subFolder);
+            String strJson = KecUtilities.getTabLocalData(MainActivity.HALL_OF_MAIN_SUBFOLDER);
 
             ArrayList<Tab_Main_Hall_ListItem> items = null;
 
@@ -878,7 +878,7 @@ public class Tab_Main_Hall extends Fragment implements SwipyRefreshLayout.OnRefr
             if (items != null && !items.isEmpty()) {
                 return items;
             } else {
-                Refresh(SwipyRefreshLayoutDirection.BOTH);
+                Refresh(SwipeRefreshLayoutDirection.BOTH);
             }
 
 

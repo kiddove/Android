@@ -26,7 +26,7 @@ import java.io.File;
  */
 public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
 
-    public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+    //public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             pager.setOnSwipeOutListener(this);
             pager.setAdapter(adapter);
 
-            // Assiging the Sliding Tab Layout View
+            // Assigning the Sliding Tab Layout View
             tabs = (SlidingTabLayout) findViewById(R.id.hall_activity_tabs);
             tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
@@ -96,7 +96,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             tabs.setViewPager(pager);
 
         } catch (NullPointerException npe) {
-            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
         }
     }
 

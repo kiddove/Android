@@ -23,12 +23,10 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.activity.VideoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.VideoListViewAdapter;
-import com.kectech.android.kectechapp.data.LoadHallVideoListThumbsTask;
 import com.kectech.android.kectechapp.listitem.VideoListItem;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
-import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout;
-import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayoutDirection;
+import com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout;
+import com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
@@ -52,7 +50,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     private VideoListViewAdapter mVideoAdapter;
 
-    private SwipyRefreshLayout mSwipyRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int tabId = 0;
     private String tabName;
@@ -110,12 +108,12 @@ public class Tab_Main_Hall_Video extends Fragment {
         View v = inflater.inflate(R.layout.tab_main_hall_video, container, false);
 
         mListView = (ListView) v.findViewById(R.id.video_tab_list);
-        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.video_tab_swipy_refresh_layout);
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.video_tab_swipe_refresh_layout);
+        mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.BOTH);
 
-        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+            public void onRefresh(SwipeRefreshLayoutDirection direction) {
                 Refresh(direction);
             }
         });
@@ -138,7 +136,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             }
         });
 
-        mSwipyRefreshLayout.setColorScheme(
+        mSwipeRefreshLayout.setColorScheme(
                 R.color.swipe_color_1, R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
@@ -174,7 +172,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
         return null;
     }
@@ -188,7 +186,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -200,7 +198,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             return;
         if (mVideoAdapter != null) {
             if (BuildConfig.DEBUG)
-                Log.d(MainActivity.LOGTAG, "ListView(mAdapter) already had data, and will be cleared...");
+                Log.d(MainActivity.LOG_TAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
             if (activity == null)
@@ -226,11 +224,11 @@ public class Tab_Main_Hall_Video extends Fragment {
 //            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
 
         } catch (NullPointerException npe) {
-            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
         }
         catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -246,7 +244,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -268,7 +266,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -279,9 +277,9 @@ public class Tab_Main_Hall_Video extends Fragment {
 
         if (BuildConfig.DEBUG) {
             if (isVisibleToUser) {
-                Log.d(MainActivity.LOGTAG, "tab_main_hall_video becomes visible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_hall_video becomes visible.");
             } else {
-                Log.d(MainActivity.LOGTAG, "tab_main_hall_video becomes invisible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_hall_video becomes invisible.");
             }
         }
     }
@@ -319,12 +317,12 @@ public class Tab_Main_Hall_Video extends Fragment {
     }
 
     // refresh list
-    public void Refresh(SwipyRefreshLayoutDirection direction) {
+    public void Refresh(SwipeRefreshLayoutDirection direction) {
 
         // actually bottom and init can use same interface??
-        if (direction == SwipyRefreshLayoutDirection.TOP) {
+        if (direction == SwipeRefreshLayoutDirection.TOP) {
             new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
-        } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+        } else if (direction == SwipeRefreshLayoutDirection.BOTTOM) {
             int i = mVideoAdapter.getCount();
             new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
         } else
@@ -351,7 +349,8 @@ public class Tab_Main_Hall_Video extends Fragment {
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -366,9 +365,9 @@ public class Tab_Main_Hall_Video extends Fragment {
                 }
 
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -377,7 +376,7 @@ public class Tab_Main_Hall_Video extends Fragment {
         protected void onPostExecute(ArrayList<VideoListItem> result) {
             super.onPostExecute(result);
             onRefreshComplete(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -393,7 +392,8 @@ public class Tab_Main_Hall_Video extends Fragment {
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -423,9 +423,9 @@ public class Tab_Main_Hall_Video extends Fragment {
                 }
 
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -437,7 +437,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             if (isCancelled())
                 return;
             onRefreshCompleteTop(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -454,7 +454,8 @@ public class Tab_Main_Hall_Video extends Fragment {
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -479,9 +480,9 @@ public class Tab_Main_Hall_Video extends Fragment {
                 }
 
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -493,7 +494,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 return;
             onRefreshCompleteBottom(result);
 
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -501,14 +502,14 @@ public class Tab_Main_Hall_Video extends Fragment {
     public void onStop() {
         super.onStop();
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStop.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_hall_video onStop.");
     }
 
     @Override
     public void onStart() {
         super.onStart();
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_video onStart.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_hall_video onStart.");
     }
 
     @Override
@@ -560,7 +561,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             if (items != null && !items.isEmpty()) {
                 return items;
             }else {
-                Refresh(SwipyRefreshLayoutDirection.BOTH);
+                Refresh(SwipeRefreshLayoutDirection.BOTH);
             }
 
             return null;

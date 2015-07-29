@@ -11,9 +11,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout
+    <com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout
 
-        android:id="@+id/hall_tab_swipy_refresh_layout"
+        android:id="@+id/hall_tab_swipe_refresh_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -26,5 +26,5 @@
             android:scrollingCache="false"
             android:animationCache="false" />
 
-    </com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout>
+    </com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout>
 </FrameLayout>

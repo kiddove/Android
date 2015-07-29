@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.DropBoxManager;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,8 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Paul on 25/06/2015.
@@ -62,7 +59,8 @@ public class KecUtilities {
 
             // The ImageFetcher takes care of loading images into our ImageView children asynchronously
         image = new ImageFetcher(activity, longest);
-            //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        //image.setLoadingImage(R.drawable.empty_photo);
+        image.setImageFadeIn(false);
         image.addImageCache(activity.getFragmentManager(), cacheParams);
 
         return image;
@@ -80,6 +78,7 @@ public class KecUtilities {
         // The ImageFetcher takes care of loading images into our ImageView children asynchronously
         thumb = new ImageFetcher(activity, 100);
         //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        thumb.setImageFadeIn(false);
         thumb.addImageCache(activity.getFragmentManager(), cacheParams);
 
         return thumb;
@@ -113,7 +112,7 @@ public class KecUtilities {
             uee.printStackTrace();
             return null;
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -152,10 +151,10 @@ public class KecUtilities {
 
                     } catch (OutOfMemoryError ome_stream) {
                         //
-                        Log.e(MainActivity.LOGTAG, "OutOfMemoryError second time.");
+                        Log.e(MainActivity.LOG_TAG, "OutOfMemoryError second time.");
 
                     } catch (FileNotFoundException fnfe) {
-                        Log.e(MainActivity.LOGTAG, "file not found when trying load scaled img: " + fnfe.getMessage());
+                        Log.e(MainActivity.LOG_TAG, "file not found when trying load scaled img: " + fnfe.getMessage());
                         fnfe.printStackTrace();
                     }
                 }
@@ -185,21 +184,21 @@ public class KecUtilities {
 
             return strJson;
         } catch (FileNotFoundException fne) {
-            Log.e(MainActivity.LOGTAG, "File not found: " + fne.getMessage());
+            Log.e(MainActivity.LOG_TAG, "File not found: " + fne.getMessage());
             fne.printStackTrace();
 
         } catch (NullPointerException npe) {
-            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
         } catch (IOException ioe) {
-            Log.e(MainActivity.LOGTAG, ioe.getMessage());
+            Log.e(MainActivity.LOG_TAG, ioe.getMessage());
             ioe.printStackTrace();
         } finally {
             try {
                 if (br != null)
                     br.close();
             } catch (IOException ioe) {
-                Log.e(MainActivity.LOGTAG, ioe.getMessage());
+                Log.e(MainActivity.LOG_TAG, ioe.getMessage());
             }
         }
         return null;
@@ -209,14 +208,14 @@ public class KecUtilities {
 
         try {
             if (context == null) {
-                Log.e(MainActivity.LOGTAG, "context is null.");
+                Log.e(MainActivity.LOG_TAG, "context is null.");
                 return;
             }
 
             File file = new File(context.getFilesDir() + File.separator + subFolder + File.separator + "list.txt");
             if (!file.exists()) {
                 if (!file.createNewFile()) {
-                    Log.e(MainActivity.LOGTAG, "create file failed.(" + subFolder + File.separator + "list.txt).");
+                    Log.e(MainActivity.LOG_TAG, "create file failed.(" + subFolder + File.separator + "list.txt).");
                 }
             }
 
@@ -227,10 +226,10 @@ public class KecUtilities {
             bw.close();
             fw.close();
         } catch (NullPointerException npe) {
-            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
         } catch (IOException ioe) {
-            Log.e(MainActivity.LOGTAG, ioe.getMessage());
+            Log.e(MainActivity.LOG_TAG, ioe.getMessage());
             ioe.printStackTrace();
         }
     }
@@ -246,9 +245,9 @@ public class KecUtilities {
             }
             strJson = total.toString();
         } catch (IOException ioe) {
-            Log.e(MainActivity.LOGTAG, "readStringFromStream occurs exception: " + ioe.getMessage());
+            Log.e(MainActivity.LOG_TAG, "readStringFromStream occurs exception: " + ioe.getMessage());
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
         return strJson;
@@ -267,7 +266,7 @@ public class KecUtilities {
             File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + ").");
                     return false;
                 }
             }
@@ -275,7 +274,7 @@ public class KecUtilities {
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + ").");
                     return false;
                 }
             }
@@ -284,7 +283,7 @@ public class KecUtilities {
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + ").");
                     return false;
                 }
             }
@@ -293,7 +292,7 @@ public class KecUtilities {
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER + ").");
                     return false;
                 }
             }
@@ -302,7 +301,7 @@ public class KecUtilities {
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER + ").");
                     return false;
                 }
             }
@@ -311,19 +310,19 @@ public class KecUtilities {
 //            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER);
 //            if (!folder.exists()) {
 //                if (!folder.mkdir()) {
-//                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER + ").");
+//                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER + ").");
 //                    return false;
 //                }
 //            }
 //            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER);
 //            if (!folder.exists()) {
 //                if (!folder.mkdir()) {
-//                    Log.e(MainActivity.LOGTAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER + ").");
+//                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER + ").");
 //                    return false;
 //                }
 //            }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -343,12 +342,12 @@ public class KecUtilities {
             File folder = new File(context.getFilesDir() + File.separator + subFolder);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOGTAG, "create folder failed(" + subFolder + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + subFolder + ").");
                     return false;
                 }
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

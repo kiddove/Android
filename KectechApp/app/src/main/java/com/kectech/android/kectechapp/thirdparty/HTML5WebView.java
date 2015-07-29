@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -117,7 +116,7 @@ public class HTML5WebView extends WebView {
     	@Override
 		public void onShowCustomView(View view, CustomViewCallback callback)
 		{
-			//Log.i(LOGTAG, "here in on ShowCustomView");
+			//Log.i(LOG_TAG, "here in on ShowCustomView");
 	        HTML5WebView.this.setVisibility(View.GONE);
 	        
 	        // if a view already exists then immediately terminate the new one
@@ -149,26 +148,26 @@ public class HTML5WebView extends WebView {
 			
 			HTML5WebView.this.setVisibility(View.VISIBLE);
 			
-	        //Log.i(LOGTAG, "set it to webVew");
+	        //Log.i(LOG_TAG, "set it to webVew");
 		}
 		
 		@Override
 		public Bitmap getDefaultVideoPoster() {
-			//Log.i(LOGTAG, "here in on getDefaultVideoPoster");
+			//Log.i(LOG_TAG, "here in on getDefaultVideoPoster");
             try {
                 if (mDefaultVideoPoster == null) {
                     mDefaultVideoPoster = BitmapFactory.decodeResource(
                             getResources(), R.drawable.default_video_poster);
                 }
             } catch (OutOfMemoryError ome) {
-                Log.e(MainActivity.LOGTAG, "load poster failed.(out of memory)");
+                Log.e(MainActivity.LOG_TAG, "load poster failed.(out of memory)");
             }
 			return mDefaultVideoPoster;
 		}
 		
 		@Override
 		public View getVideoLoadingProgressView() {
-			//Log.i(LOGTAG, "here in on getVideoLoadingProgressView");
+			//Log.i(LOG_TAG, "here in on getVideoLoadingProgressView");
 			
 	        if (mVideoProgressView == null) {
 	            LayoutInflater inflater = LayoutInflater.from(mContext);

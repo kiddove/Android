@@ -1,11 +1,8 @@
 package com.kectech.android.kectechapp.listitem;
 
-import android.graphics.Bitmap;
-
 import com.kectech.android.kectechapp.activity.MainActivity;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 
 /**
@@ -13,33 +10,22 @@ import java.net.URLEncoder;
  * define a class for custom listView item
  */
 public class Tab_Main_Hall_ListItem {
-    private Bitmap bitmap = null;
-    private String title;
-    private String desc;
+    private String title = null;
+    private String desc = null;
     private int type;
-    private int position;
     private String thumb = null;
     private int id;
-    private String keyid;
-    private String follow;
+    private String keyid = null;
+    private String follow = null;
 
     public Tab_Main_Hall_ListItem(Tab_Main_Hall_ListItem item) {
         this.title = item.title;
         this.desc = item.desc;
         this.type = item.type;
-        this.position = item.position;
         this.thumb = item.thumb;
         this.id = item.id;
         this.keyid = item.keyid;
         this.follow = item.follow;
-    }
-
-    public Bitmap getImage() {
-        return bitmap;
-    }
-
-    public void setImage(Bitmap bitmap) {
-        this.bitmap = bitmap;
     }
 
     public String getDesc() {
@@ -50,20 +36,8 @@ public class Tab_Main_Hall_ListItem {
         return title.replace("<br/>", "\n");
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getType() {
         return type;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public String getThumbURL() {

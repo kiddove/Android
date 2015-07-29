@@ -20,12 +20,10 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
-import com.kectech.android.kectechapp.adapter.VideoListViewAdapter;
-import com.kectech.android.kectechapp.data.LoadHallPhotoListThumbsTask;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
-import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayout;
-import com.kectech.android.kectechapp.thirdparty.SwipyRefreshLayoutDirection;
+import com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout;
+import com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.BufferedInputStream;
@@ -41,7 +39,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Paul on 16/06/2015.
- * use SwipyRefreshLayout to refresh (pull up and pull down)
+ * use SwipeRefreshLayout to refresh (pull up and pull down)
  * use ListView
  * async download thumbs then show in ListView's items(may be more than one thumb in one item, depend on the json...)
  * tab an item to open an activity to show image(s).
@@ -52,8 +50,8 @@ public class Tab_Main_Hall_Photo extends Fragment {
     private ListView mListView;
     // adapter
     private PhotoListViewAdapter mPhotoAdapter;
-    // swipyrefreshlayout
-    private SwipyRefreshLayout mSwipyRefreshLayout;
+    // swipe refresh layout
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int tabType = 0;
     private int tabId = 0;
@@ -63,8 +61,6 @@ public class Tab_Main_Hall_Photo extends Fragment {
     private Activity activity;
 
     private ImageFetcher mImageFetcher;
-    private static final String IMAGE_CACHE_DIR = "thumbs_photo";
-
 
     public void setType(int tabType) {
         this.tabType = tabType;
@@ -88,19 +84,19 @@ public class Tab_Main_Hall_Photo extends Fragment {
         View v = inflater.inflate(R.layout.tab_main_hall_photo, container, false);
 
         mListView = (ListView) v.findViewById(R.id.photo_tab_list);
-        mSwipyRefreshLayout = (SwipyRefreshLayout) v.findViewById(R.id.photo_tab_swipy_refresh_layout);
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.photo_tab_swipe_refresh_layout);
+        mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.BOTH);
 
         // color of refresh spinner
-        mSwipyRefreshLayout.setColorScheme(
+        mSwipeRefreshLayout.setColorScheme(
                 R.color.swipe_color_1,
                 R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
         // list refresh listener
-        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+            public void onRefresh(SwipeRefreshLayoutDirection direction) {
                 Refresh(direction);
             }
         });
@@ -137,7 +133,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                     startActivity(intent);
                     activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                 } catch (Exception e) {
-                    Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+                    Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
                 }
 
             }
@@ -157,12 +153,12 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
 
     // refresh list
-    public void Refresh(SwipyRefreshLayoutDirection direction) {
+    public void Refresh(SwipeRefreshLayoutDirection direction) {
 
         // actually bottom and init can use same interface??
-        if (direction == SwipyRefreshLayoutDirection.TOP) {
+        if (direction == SwipeRefreshLayoutDirection.TOP) {
             new UpdatePhotoListTaskTop().execute("todo");
-        } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+        } else if (direction == SwipeRefreshLayoutDirection.BOTTOM) {
             new UpdatePhotoListTaskBottom().execute("todo");
         } else
             // use as init
@@ -191,7 +187,8 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -205,9 +202,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 }
                 return items;
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -217,7 +214,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             // no disk operation here, will stuck UI
             super.onPostExecute(result);
             onRefreshComplete(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -231,7 +228,8 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -261,9 +259,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
                     return items;
                 }
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -273,7 +271,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             super.onPostExecute(result);
 
             onRefreshCompleteTop(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -288,7 +286,8 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
-
+                connection.setConnectTimeout(MainActivity.CONNECTION_TIMEOUT);
+                connection.setReadTimeout(MainActivity.CONNECTION_TIMEOUT);
                 connection.connect();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -315,9 +314,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 }
 
             } catch (SocketTimeoutException ste) {
-                Log.e(MainActivity.LOGTAG, "time out:" + ste.getMessage());
+                Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
-                Log.e(MainActivity.LOGTAG, e.getMessage());
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
             }
             return null;
         }
@@ -326,7 +325,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
         protected void onPostExecute(ArrayList<PhotoListItem> result) {
             super.onPostExecute(result);
             onRefreshCompleteBottom(result);
-            mSwipyRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -359,7 +358,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             //new LoadHallPhotoListThumbsTask(mPhotoAdapter, mListView, subFolder).execute(items);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -375,7 +374,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             }
             mPhotoAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -396,7 +395,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
     }
 
@@ -409,7 +408,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
         }
         return null;
     }
@@ -423,7 +422,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -450,9 +449,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
         if (BuildConfig.DEBUG) {
             if (isVisibleToUser) {
-                Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes visible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_hall_photo becomes visible.");
             } else {
-                Log.d(MainActivity.LOGTAG, "tab_main_hall_photo becomes invisible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_hall_photo becomes invisible.");
             }
         }
     }
@@ -461,14 +460,14 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void onStop() {
         super.onStop();
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onStop.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_hall_photo onStop.");
     }
 
     @Override
     public void onStart() {
         super.onStart();
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOGTAG, "tab_main_hall_photo onStart.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_hall_photo onStart.");
     }
 
     @Override
@@ -521,7 +520,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             if (items != null && !items.isEmpty()) {
                 return items;
             }else {
-                Refresh(SwipyRefreshLayoutDirection.BOTH);
+                Refresh(SwipeRefreshLayoutDirection.BOTH);
             }
 
             return null;

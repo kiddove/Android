@@ -1,12 +1,10 @@
 package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +13,8 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.MainAdapter;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
 import com.kectech.android.kectechapp.util.KecUtilities;
+
+import java.io.File;
 
 
 public class MainActivity extends Activity {
@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     public final static int DOWNLOAD_BUFFER = 1024 * 10;
 
     // use for log tag
-    public final static String LOGTAG = "kectech_log";
+    public final static String LOG_TAG = "kecTech_log";
 
     // default encoding for files
     public final static String ENCODING = "UTF-8";
@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
             R.id.hall_photo_list_item_img3, R.id.hall_photo_list_item_img4, R.id.hall_photo_list_item_img5,
             R.id.hall_photo_list_item_img6, R.id.hall_photo_list_item_img7, R.id.hall_photo_list_item_img8,};
 
+    public static final String HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
     // variables
     // declaring view and variables
     //Toolbar toolbar;
@@ -74,7 +75,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         KecUtilities.context = this;
         if (!KecUtilities.createFolders()) {
-            Log.e(MainActivity.LOGTAG, "create folders failed.");
+            Log.e(MainActivity.LOG_TAG, "create folders failed.");
             finish();
             System.exit(0);
             return;
@@ -118,7 +119,7 @@ public class MainActivity extends Activity {
             tabs.setViewPager(pager);
 
         } catch (NullPointerException npe) {
-            Log.e(MainActivity.LOGTAG, npe.getMessage());
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
         }
 
     }

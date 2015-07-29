@@ -10,11 +10,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.webkit.WebView;
 
 import com.kectech.android.kectechapp.R;
-import com.kectech.android.kectechapp.listeners.OnSwipeTouchListener;
 import com.kectech.android.kectechapp.thirdparty.HTML5WebView;
 
 import java.lang.reflect.InvocationTargetException;
@@ -58,7 +56,7 @@ public class VideoOfHallOfMainActivity extends Activity {
 
         // get url from where activate this activity (like in video tab click
         // receive the intent
-        String url = "http://192.168.9.40/demo/test.html";
+        String url = null;// = "http://192.168.9.40/demo/test.html";
         Intent intent = getIntent();
         if (intent != null)
             url = intent.getStringExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL);
@@ -139,19 +137,19 @@ public class VideoOfHallOfMainActivity extends Activity {
         try {
             Class.forName("android.webkit.WebView").getMethod("onPause", (Class[]) null).invoke(mWebView, (Object[]) null);
         } catch (ClassNotFoundException cnfe) {
-            Log.e(MainActivity.LOGTAG, cnfe.getMessage());
+            Log.e(MainActivity.LOG_TAG, cnfe.getMessage());
             cnfe.printStackTrace();
         } catch (NoSuchMethodException nsme) {
-            Log.e(MainActivity.LOGTAG, nsme.getMessage());
+            Log.e(MainActivity.LOG_TAG, nsme.getMessage());
             nsme.printStackTrace();
         } catch (InvocationTargetException ite) {
-            Log.e(MainActivity.LOGTAG, ite.getMessage());
+            Log.e(MainActivity.LOG_TAG, ite.getMessage());
             ite.printStackTrace();
         } catch (IllegalAccessException iae) {
-            Log.e(MainActivity.LOGTAG, iae.getMessage());
+            Log.e(MainActivity.LOG_TAG, iae.getMessage());
             iae.printStackTrace();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
     }

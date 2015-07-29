@@ -46,9 +46,9 @@ public class Tab_Main_Show extends Fragment {
 
         if (BuildConfig.DEBUG) {
             if (isVisibleToUser) {
-                Log.d(MainActivity.LOGTAG, "tab_main_show becomes visible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_show becomes visible.");
             } else {
-                Log.d(MainActivity.LOGTAG, "tab_main_show becomes invisible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_show becomes invisible.");
             }
         }
     }

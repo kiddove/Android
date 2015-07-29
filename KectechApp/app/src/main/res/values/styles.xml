@@ -23,7 +23,7 @@
         <!--droplist will be in DropDownListView listSelector-->
 
         <!--api 21 or above need to put here... for dropdown list, api 19 or below not working here-->
-        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>c
         <item name="android:itemTextAppearance">@style/MenuTextAppearance</item>
 
         <!--cab no done button-->
@@ -32,6 +32,10 @@
 
         <!--<item name="android:homeAsUpIndicator">@drawable/check</item>-->
         <!--<item name="android:buttonStyle">@style/login.button</item>-->
+
+        <!--for autocomplete textView and drop down item-->
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
+        <item name="android:dropDownItemStyle">@style/AutoCompleteTextView.DropDownItem</item>
     </style>
 
     <!--overflow menu drop down-->
@@ -121,7 +125,7 @@
     <!--button-->
     <style name="login.button" parent="@android:style/Widget.Holo.Light.Button">
         <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textColor">@color/bar_background</item>
         <item name="android:shadowColor">#FF000000</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">-1</item>
@@ -131,5 +135,19 @@
         <item name="android:background">@drawable/login_button</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="AutoCompleteTextView" parent="@android:style/Widget.Holo.Light.AutoCompleteTextView">
+        <item name="android:textColor">@color/bar_background</item>
+    </style>
+
+    <style name="AutoCompleteTextView.DropDownItem" parent="@android:style/Widget.Holo.Light.DropDownItem">
+        <item name="android:textColor">@color/bar_background</item>
+        <item name="android:background">@color/tab_background</item>
+    </style>
+
+    <style name="GeneralProgressBar" parent="@android:style/Widget.Holo.Light.ProgressBar">
+        <item name="android:endColor">@color/progress_loading</item>
+        <item name="android:startColor">@color/progress_loading</item>
     </style>
 </resources>

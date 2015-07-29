@@ -2,13 +2,11 @@ package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,7 +21,6 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.FadePageTransformer;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
@@ -41,10 +38,8 @@ import java.util.ArrayList;
 public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener {
 //, View.OnClickListener {
 
-    private static final String IMAGE_CACHE_DIR = "images";
     private int imageCount = 1;
     private ArrayList<View> viewList;
-    private Activity context = null;
     //private String[] URLs = null;
     Bundle URLs = null;
     // for dots
@@ -55,7 +50,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     private ImageFetcher mImageFetcherImage;
 
-    private CustomViewPager viewPager;
+    //private CustomViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +61,10 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        context = this;
-
         mImageFetcherImage = KecUtilities.getImageFetcher(this);
 
         // for load thumb
-        ImageFetcher mImageFetcherThumb = KecUtilities.getThumbFetcher(this);
+        //ImageFetcher mImageFetcherThumb = KecUtilities.getThumbFetcher(this);
 
         try {
             // for using action bar back button
@@ -106,25 +99,19 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             for (int i = 0; i < imageCount; i++) {
                 View v = layoutInflater.inflate(R.layout.photo_activity_image_fragment, null);
                 // here load thumb first if has..
-                ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);
-                if (imageView != null) {
-//                    imageView.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            close();
-//                        }
-//                    });
-                    if (URLs != null && subFolder != null) {
-                        String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
-                        mImageFetcherThumb.loadImage(strThumbURL, imageView);
-//                        String thumbLocalPath = KecUtilities.getLocalFilePathFromURL(strThumbURL, subFolder);
-//                        Bitmap thumbBitmap = KecUtilities.ReadFileFromLocal(thumbLocalPath);
-//                        if (thumbBitmap != null) {
-//                            imageView.setImageBitmap(thumbBitmap);
-//                            //thumbBitmap.recycle();
-//                        }
-                    }
-                }
+//                ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);
+//                if (imageView != null) {
+////                    imageView.setOnClickListener(new View.OnClickListener() {
+////                        @Override
+////                        public void onClick(View v) {
+////                            close();
+////                        }
+////                    });
+//                    if (URLs != null && subFolder != null) {
+//                        String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
+//                        mImageFetcherThumb.loadImage(strThumbURL, imageView);
+//                    }
+//                }
                 viewList.add(v);
 
                 // dots
@@ -135,7 +122,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 dots.add(dot);
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             return;
         }
 
@@ -144,7 +131,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         dots.get(0).setBackgroundResource(R.drawable.dot_selected);
 
         // pager
-        viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
+        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -167,6 +154,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         viewPager.setPageTransformer(false, new FadePageTransformer());
 
         viewPager.setAdapter(new MyPagerAdapter(viewList));
+
+        //viewPager.setOffscreenPageLimit(viewList.size());
 
 //        // Set up activity to go full screen
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);

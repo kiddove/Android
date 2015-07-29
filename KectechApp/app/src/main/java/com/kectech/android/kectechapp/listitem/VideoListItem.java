@@ -7,12 +7,11 @@ import android.graphics.Bitmap;
  * define a class for custom listView item
  */
 public class VideoListItem {
-    private Bitmap bitmap = null;
-    private String icon;
-    private String title;
-    private String description;
-    private int position;
-    private String url;
+    //private Bitmap bitmap = null;
+    private String icon = null;
+    private String title = null;
+    private String description = null;
+    private String url = null;
     private int id;
 
     public int getId() {
@@ -22,20 +21,9 @@ public class VideoListItem {
     public void setId(int id) {
         this.id = id;
     }
-    public Bitmap getImage() {
-        return bitmap;
-    }
-
-    public void setImage(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
 
     public String getDesc() {
         return description;
-    }
-
-    public void setDesc(String desc) {
-        this.description = desc;
     }
 
     public String getTitle() {
@@ -46,30 +34,14 @@ public class VideoListItem {
         this.title = title;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public String getThumbURL() {
         return icon.replaceAll(" ", "%20");
-    }
-
-    public void setThumbURL(String thumbURL) {
-        this.icon = thumbURL;
     }
 
     public String getVideoUrl() {
         //return "http://192.168.9.40/demo/test.html";
         //return "http://192.168.9.40/demo/webview.html";
         return url;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.url = videoUrl;
     }
     @Override
     public String toString() {

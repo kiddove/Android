@@ -71,7 +71,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             } else
                 holder = (ViewHolder) convertView.getTag();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             return convertView;
         }
 
@@ -115,7 +115,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
         Animation.AnimationListener al = new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                //Log.d(MainActivity.LOGTAG, "start delete animation at " + index);
+                //Log.d(MainActivity.LOG_TAG, "start delete animation at " + index);
             }
 
             @Override
@@ -124,7 +124,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
                 ViewHolder vh = (ViewHolder)v.getTag();
                 vh.needInflate = true;
                 notifyDataSetChanged();
-                //Log.d(MainActivity.LOGTAG, "finish delete animation at " + index);
+                //Log.d(MainActivity.LOG_TAG, "finish delete animation at " + index);
             }
 
             @Override

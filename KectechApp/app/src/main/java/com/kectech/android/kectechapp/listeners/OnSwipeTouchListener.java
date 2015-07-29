@@ -33,7 +33,6 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
@@ -49,7 +48,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                     }
                 }
             } catch (Exception e) {
-                Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+                Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
                 e.printStackTrace();
             }
             return true;
@@ -62,8 +61,8 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 //    public void onSwipeLeft() {
 //    }
 
-    public GestureDetector getGestureDetector(){
-        return  gestureDetector;
-    }
+//    public GestureDetector getGestureDetector(){
+//        return  gestureDetector;
+//    }
 }
 

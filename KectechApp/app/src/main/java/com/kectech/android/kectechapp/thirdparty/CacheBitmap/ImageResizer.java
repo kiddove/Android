@@ -22,9 +22,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.activity.MainActivity;
@@ -201,7 +199,7 @@ public class ImageResizer extends ImageWorker {
         try {
             return BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
         } catch (OutOfMemoryError ome) {
-            Log.e(MainActivity.LOGTAG, "no no no no no.***************************************************************************");
+            Log.e(MainActivity.LOG_TAG, "no no no no no.***************************************************************************");
             return null;
         }
     }

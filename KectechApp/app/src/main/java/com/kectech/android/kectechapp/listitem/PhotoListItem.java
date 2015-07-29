@@ -12,28 +12,14 @@ public class PhotoListItem {
 
     private String title = null;
     private String desc = null;
-    private int position = 0;
     public ArrayList<PhotoListItemDetail> items = null;
-
 
     public PhotoListItem() {
 
     }
-//    public PhotoListItem(PhotoListItem item) {
-//        this.thumbNail = item.thumbNail;
-//        this.title = item.title;
-//        this.description = item.description;
-//        this.imageURL = item.imageURL;
-//        this.thumbURL = item.thumbURL;
-//        this.position = item.position;
-//    }
 
     public String getDescription() {
         return desc;
-    }
-
-    public void setDescription(String description) {
-        this.desc = description;
     }
 
     public String getTitle() {
@@ -44,11 +30,4 @@ public class PhotoListItem {
         this.title = title;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
 }

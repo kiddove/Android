@@ -8,7 +8,6 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -62,7 +61,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
-//        Log.i(MainActivity.LOGTAG, "when start " + Boolean.toString(bLog));
+//        Log.i(MainActivity.LOG_TAG, "when start " + Boolean.toString(bLog));
 //        if (getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false)) {
 //            startMainActivity();
 //        }
@@ -112,7 +111,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
+        //getLoaderManager().initLoader(0, null, this);
+        List<String> emails = new ArrayList<>();
+        emails.add("kevin@kectech.com");
+        emails.add("mason@wyslink.com");
+        emails.add("kiddove@gmail.com");
+        emails.add("kiddove@kdlinx.com");
+
+        addEmailsToAutoComplete(emails);
     }
 
 
@@ -182,7 +188,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //            editor.commit();
 //
 //            boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
-//            Log.i(MainActivity.LOGTAG, "when save " + Boolean.toString(bLog));
+//            Log.i(MainActivity.LOG_TAG, "when save " + Boolean.toString(bLog));
 //        }
     }
 
@@ -247,16 +253,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
+        List<String> emails = new ArrayList<>();
+        emails.add("kevin@kectech.com");
+        emails.add("mason@wyslink.com");
+        emails.add("kiddove@gmail.com");
+//        cursor.moveToFirst();
+//        while (!cursor.isAfterLast()) {
+//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+//            cursor.moveToNext();
+//        }
 
         addEmailsToAutoComplete(emails);
     }
@@ -350,11 +360,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         try {
             startActivity(intent);
-
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             finish();
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
 
         }
     }

@@ -2,7 +2,6 @@ package com.kectech.android.kectechapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,12 +79,12 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
 //                    }
 
 
-                    //Log.d(MainActivity.LOGTAG, "init position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
+                    //Log.d(MainActivity.LOG_TAG, "init position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
                 } catch (IndexOutOfBoundsException iobe) {
-                    Log.e(MainActivity.LOGTAG, "position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size() + "\n" + iobe.getMessage());
+                    Log.e(MainActivity.LOG_TAG, "position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size() + "\n" + iobe.getMessage());
                     iobe.printStackTrace();
                 }
-                //Log.d(MainActivity.LOGTAG, "new tag at position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
+                //Log.d(MainActivity.LOG_TAG, "new tag at position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
 
             } else {
                 /* We recycle a View that already exists */
@@ -109,13 +108,13 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
                     holder.imageViews.get(i).setVisibility(View.GONE);
                 }
             }
-                //Log.d(MainActivity.LOGTAG, "old tag at position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
+                //Log.d(MainActivity.LOG_TAG, "old tag at position: " + position + ", items.size: " + item.items.size() + ", imageViews.size: " + holder.imageViews.size());
 
 
             holder.txtTile.setText(item.getTitle());
             holder.txtDesc.setText(item.getDescription());
         } catch (Exception e) {
-            Log.e(MainActivity.LOGTAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             e.printStackTrace();
         }
         return convertView;

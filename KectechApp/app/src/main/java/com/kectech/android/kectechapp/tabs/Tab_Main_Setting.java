@@ -30,9 +30,9 @@ public class Tab_Main_Setting extends Fragment {
 
         if (BuildConfig.DEBUG) {
             if (isVisibleToUser) {
-                Log.d(MainActivity.LOGTAG, "tab_main_setting becomes visible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_setting becomes visible.");
             } else {
-                Log.d(MainActivity.LOGTAG, "tab_main_setting becomes invisible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_setting becomes invisible.");
             }
         }
     }
