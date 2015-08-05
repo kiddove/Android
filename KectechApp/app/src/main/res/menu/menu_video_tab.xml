@@ -15,12 +15,11 @@
         android:title="@string/ui_menu_share">
     </item>
     <!--android:actionProviderClass="android.widget.ShareActionProvider"-->
-    <!--<item-->
-        <!--android:id="@+id/menu_item_refresh"-->
-        <!--android:icon="@drawable/ic_menu_refresh"-->
-        <!--android:showAsAction="never"-->
-        <!--android:title="@string/ui_menu_refresh">-->
-    <!--</item>-->
+    <item
+        android:id="@+id/menu_item_show_qr_code"
+        android:showAsAction="never"
+        android:title="@string/ui_menu_show_qr_code">
+    </item>
     <!--<item-->
         <!--android:id="@+id/menu_item_send"-->
         <!--android:showAsAction="never"-->
@@ -39,10 +38,10 @@
         <!--android:title="@string/ui_menu_about"-->
         <!--android:showAsAction="never">-->
     <!--</item>-->
-    <item
-        android:id="@+id/menu_item_quit"
-        android:icon="@android:drawable/ic_menu_close_clear_cancel"
-        android:showAsAction="never"
-        android:title="@string/ui_menu_quit">
-    </item>
+    <!--<item-->
+        <!--android:id="@+id/menu_item_quit"-->
+        <!--android:icon="@android:drawable/ic_menu_close_clear_cancel"-->
+        <!--android:showAsAction="never"-->
+        <!--android:title="@string/ui_menu_quit">-->
+    <!--</item>-->
 </menu>

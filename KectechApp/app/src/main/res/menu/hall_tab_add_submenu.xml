@@ -3,7 +3,7 @@
     <item
         android:title="Scan By a QR Code."
         android:id="@+id/hall_tab_add_sub_scan"/>
-    <item
-        android:title="Add By an Id."
-        android:id="@+id/hall_tab_add_sub_id"/>
+    <!--<item-->
+        <!--android:title="Add By an ID."-->
+        <!--android:id="@+id/hall_tab_add_sub_id"/>-->
 </menu>

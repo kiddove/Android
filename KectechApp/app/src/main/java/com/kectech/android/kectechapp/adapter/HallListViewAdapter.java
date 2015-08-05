@@ -30,7 +30,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
     public static final int ANIMATION_DURATION = 100;
     private  Context context;
     public boolean showCheckBox = false;
-    private final ImageFetcher mImageFetcher;
+    private ImageFetcher mImageFetcher;
 
     private HashMap<Integer, Boolean> selection = new HashMap<>();
     public HallListViewAdapter(Context context, int resourceId, ArrayList<Tab_Main_Hall_ListItem> items, ImageFetcher imageFetcher) {
@@ -103,7 +103,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
         selection.remove(position);
     }
 
-    public void clear() {
+    public void clearSelection() {
         selection.clear();
     }
 

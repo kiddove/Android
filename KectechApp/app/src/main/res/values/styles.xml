@@ -142,8 +142,8 @@
     </style>
 
     <style name="AutoCompleteTextView.DropDownItem" parent="@android:style/Widget.Holo.Light.DropDownItem">
-        <item name="android:textColor">@color/bar_background</item>
-        <item name="android:background">@color/tab_background</item>
+        <item name="android:textColor">@color/bar_tab_text</item>
+        <item name="android:background">@color/bar_background</item>
     </style>
 
     <style name="GeneralProgressBar" parent="@android:style/Widget.Holo.Light.ProgressBar">

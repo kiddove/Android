@@ -3,10 +3,13 @@ package com.kectech.android.kectechapp.tabs;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -42,10 +45,12 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -68,6 +73,8 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     private Activity activity;
 
     private ImageFetcher mImageFetcher;
+
+    private ArrayList<Integer> mDeleteList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -135,7 +142,8 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         });
 
         mSwipeRefreshLayout.setColorScheme(
-                R.color.swipe_color_1, R.color.swipe_color_3,
+                R.color.swipe_color_1,
+                R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
 //        ImageCache.ImageCacheParams cacheParams =
@@ -244,12 +252,17 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     // add an item to list from scanned result
     public void AddItemToList(String url) {
 
+// http://198.105.216.190/generateFollow.ashx?handle=insert&url=ix6XDhkqFOMZ5uQGNprYWH4Id9o35A8cGPoyg8FxyPI=&follow=xxx.xxx.com&type=3
+        // http://www.kdlinx.com/EventLogIn.aspx?id=wp7k/E13UFU/VFyVfWN1TbehBEpyFiwKmZVRD7Y3cRaN7W1YPyzcmpRcAN7GqG8G
 
-//        // todo get scan url or input id , or sth  to be continued...
-//        Tab_Main_Hall_ListItem tabMainHallListItem = new Tab_Main_Hall_ListItem(R.drawable.ic_launcher, SCAN_TAG, url);
-//        mAdapter.insert(tabMainHallListItem, 0);
-        if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOG_TAG, url);
+        // kdlinx@kdlinx.com kdlinx12345
+
+
+        // send http request then refresh top
+        int pos = url.indexOf("id=");
+        String eventId = url.substring(pos + 3);
+        String strURl = "http://198.105.216.190/generateFollow.ashx?handle=insert&url=" + eventId + "&username=" + MainActivity.USER + "&type=3";
+        new AddNewEventTask().execute(strURl);
     }
 
     @Override
@@ -266,12 +279,17 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 IntentIntegrator integrator = new IntentIntegrator(this);
                 integrator.initiateScan();
                 return true;
-            case R.id.menu_hall_tab_item_quit:
-                // clear cache
-                //mImageFetcher.clearCache();
-                if (BuildConfig.DEBUG)
-                    KecUtilities.clearCache();
+            case R.id.menu_hall_tab_item_logout:
+                // returen false in main activity, so deal with it in fragment
+                String s = "123";
                 return true;
+            // handle in mainactivity
+//            case R.id.menu_hall_tab_item_quit:
+//                // clear cache
+//                //mImageFetcher.clearCache();
+//                if (BuildConfig.DEBUG)
+//                    KecUtilities.clearCache();
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -283,14 +301,18 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             String scanContent = scanResult.getContents();
 
             if (scanContent != null) {
-                if (BuildConfig.DEBUG)
+                if (BuildConfig.DEBUG) {
                     Log.d(MainActivity.LOG_TAG, "QR Scan Content: " + scanContent);
+//                    IntentIntegrator integrator = new IntentIntegrator(this);
+//                    integrator.shareText(scanContent);
+//                    return;
+                }
 
                 if (!scanContent.isEmpty()) {
 //            // insert into ....
                     try {
                         // todo scan result, to be continued...
-                        //AddItemToList(scanContent);
+                        AddItemToList(scanContent);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
                         e.printStackTrace();
@@ -333,15 +355,18 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             boolean bRet = prepareActionMode();
-            mAdapter.notifyDataSetChanged();
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
             return bRet;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             destroyActionMode();
-            mAdapter.notifyDataSetChanged();
-            mMode = null;
+            if (mAdapter != null) {
+                mAdapter.notifyDataSetChanged();
+                mMode = null;
+            }
         }
 
         @Override
@@ -396,16 +421,19 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         // Here, you can checked selected items to adapt available actions
         // set NONE
         mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.NONE);
-        mAdapter.showCheckBox = true;
+        if (mAdapter != null)
+            mAdapter.showCheckBox = true;
         return false;
     }
 
     private void destroyActionMode() {
         // set NONE to BOTH
         mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.BOTH);
-        mAdapter.showCheckBox = false;
-        mAdapter.clear();
-        num = 0;
+        if (mAdapter != null) {
+            mAdapter.showCheckBox = false;
+            mAdapter.clearSelection();
+            num = 0;
+        }
     }
 
     private boolean actionItemClicked(MenuItem item) {
@@ -421,12 +449,11 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void deleteFromList() {
-        if (mAdapter.isSelectionEmpty()) {
+        if (mAdapter == null || mAdapter.isSelectionEmpty()) {
             stopActionMode();
             return;
         }
         // first start animation, when animation ends, delete and finish
-
         AnimationSet as = new AnimationSet(true);
         as.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -438,26 +465,38 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             public void onAnimationEnd(Animation animation) {
 
                 stopActionMode();
-                // do this in another thread
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        ArrayList<Tab_Main_Hall_ListItem> localData = new ArrayList<>();
-                        for (int i = 0; i < mAdapter.getCount(); i++)
-                        // remember to clear bitmap... other wise the json will be so huge...
-                        // if set null directly, seems image will be null in the list
-                        // so... new item..
-                        {
-                            Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(mAdapter.getItem(i));
-                            localData.add(item);
-                        }
-                        // write to local
-                        KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), MainActivity.HALL_OF_MAIN_SUBFOLDER);
+                // http://www.kdlinx.com/enerateFollow.ashx?handle=delete&id=21
 
-                        localData.clear();
-                    }
-                };
-                thread.start();
+                String strIdList = "";
+                for (int id : mDeleteList) {
+                    strIdList += Integer.toString(id);
+                    strIdList += ";";
+                }
+                if (!strIdList.isEmpty()) {
+                    //strIdList = strIdList.substring(0, strIdList.length() - 1);
+                    String strURL = "http://198.105.216.190/generateFollow.ashx?handle=delete&id=" + strIdList;
+                    new DeleteEventTask().execute(strURL);
+                    // do this in another thread
+//                    Thread thread = new Thread() {
+//                        @Override
+//                        public void run() {
+//                            ArrayList<Tab_Main_Hall_ListItem> localData = new ArrayList<>();
+//                            for (int i = 0; i < mAdapter.getCount(); i++)
+//                            // remember to clear bitmap... other wise the json will be so huge...
+//                            // if set null directly, seems image will be null in the list
+//                            // so... new item..
+//                            {
+//                                Tab_Main_Hall_ListItem item = new Tab_Main_Hall_ListItem(mAdapter.getItem(i));
+//                                localData.add(item);
+//                            }
+//                            // write to local
+//                            KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), MainActivity.HALL_OF_MAIN_SUBFOLDER);
+//
+//                            localData.clear();
+//                        }
+//                    };
+//                    thread.start();
+                }
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -466,6 +505,8 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 
             }
         });
+
+        mDeleteList.clear();
         //for (int i = 0; i < mAdapter.getCount(); i++) {
         for (int i = mAdapter.getCount() - 1; i >= 0; i--) {
             if (!mAdapter.isChecked(i))
@@ -481,6 +522,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             //animation.setStartOffset(j * HallListViewAdapter.ANIMATION_DURATION);
             as.addAnimation(animation);
 
+            mDeleteList.add(mAdapter.getItem(i).getId());
 //            mAdapter.remove(mAdapter.getItem(i));
 //            mAdapter.notifyDataSetChanged();
 
@@ -491,7 +533,6 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             la.get(i).setStartOffset(i * HallListViewAdapter.ANIMATION_DURATION);
         }
         mListView.startAnimation(as);
-
     }
 
     // for download thumbs
@@ -523,10 +564,14 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 //int length = connection.getContentLength();
                 String strResult = KecUtilities.readStringFromStream(inputStream);
                 ArrayList<Tab_Main_Hall_ListItem> items = getListFromJson(strResult);
-                if (items != null && !items.isEmpty()) {
+                if (items == null)
+                    return new ArrayList<>();
+                else if (!items.isEmpty()) {
                     KecUtilities.writeTabLocalData(strResult, MainActivity.HALL_OF_MAIN_SUBFOLDER);
                     return items;
-                }
+                } else
+                    return items;
+
             } catch (SocketTimeoutException ste) {
                 Log.e(MainActivity.LOG_TAG, "time out:" + ste.getMessage());
             } catch (IOException e) {
@@ -673,14 +718,23 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     // refresh list
     public void Refresh(SwipeRefreshLayoutDirection direction) {
         // actually bottom and init can use same interface??
-        if (direction == SwipeRefreshLayoutDirection.TOP && mAdapter != null && mAdapter.getCount() > 0) {
-            new UpdateThumbListTaskTop().execute(mAdapter.getItem(0).getId());
-        } else if (direction == SwipeRefreshLayoutDirection.BOTTOM && mAdapter != null && mAdapter.getCount() > 0) {
-            int i = mAdapter.getCount();
-            new UpdateThumbListTaskBottom().execute(mAdapter.getItem(i - 1).getId());
-        } else
+        if (direction == SwipeRefreshLayoutDirection.TOP && mAdapter != null) {
+            if (mAdapter.getCount() > 0)
+                new UpdateThumbListTaskTop().execute(mAdapter.getItem(0).getId());
+            else
+                new UpdateThumbListTaskTop().execute(0);
+        } else if (direction == SwipeRefreshLayoutDirection.BOTTOM && mAdapter != null) {
+            if (mAdapter.getCount() > 0) {
+                int i = mAdapter.getCount();
+                new UpdateThumbListTaskBottom().execute(mAdapter.getItem(i - 1).getId());
+            } else
+                new UpdateThumbListTaskBottom().execute(0);
+        } else {
+            if (mAdapter != null)
+                mAdapter.clear();
             // use as init
             new UpdateThumbListTask().execute(0);
+        }
     }
 
     public void initList() {
@@ -716,14 +770,27 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         }
     }
 
-    // for the first time when init using this
+    // for the first time when init using this, or update when sth wrong with list, need refresh again
     private void onRefreshComplete(ArrayList<Tab_Main_Hall_ListItem> result) {
-        if (result == null || result.isEmpty())
+        if (result == null)
+            // means error occurred when sending http request, other wise result should be empty but not null
             return;
         if (mAdapter != null) {
             if (BuildConfig.DEBUG)
                 Log.d(MainActivity.LOG_TAG, "ListView(mAdapter) already had data, and will be cleared...");
+
+            mAdapter.clear();
+            mAdapter.notifyDataSetChanged();
+            if (!result.isEmpty()) {
+                for(Tab_Main_Hall_ListItem item: result) {
+                    mAdapter.add(item);
+
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+            return;
         }
+
         try {
 
             // first add to adapter and listView
@@ -891,7 +958,144 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             if (isCancelled())
                 return;
 
-            onRefreshComplete(result);
+            if (result != null && !result.isEmpty())
+                onRefreshComplete(result);
+        }
+    }
+
+    public class AddNewEventTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            try {
+                ImageFetcher.disableConnectionReuseIfNecessary();
+                HttpURLConnection urlConnection = null;
+                BufferedInputStream in = null;
+                try {
+                    final String urlString = params[0];
+                    final URL url = new URL(urlString);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
+
+                    // byte array to store input
+                    byte[] contents = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = in.read(contents)) != -1) {
+                        String s = new String(contents, 0, bytesRead);
+                        if (s.compareToIgnoreCase("true") == 0)
+                            return true;
+                        else
+                            return false;
+                    }
+
+                    return true;
+                } catch (final IOException e) {
+                    Log.e(MainActivity.LOG_TAG, "Error in add item - " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (final IOException e) {}
+                }
+                return false;
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, "Exception: " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success)
+                Refresh(SwipeRefreshLayoutDirection.TOP);
+//            else
+//                Refresh(SwipeRefreshLayoutDirection.BOTH);
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    public class DeleteEventTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            try {
+                // write local data first, then send http request
+                ArrayList<Tab_Main_Hall_ListItem> localData = new ArrayList<>();
+                for (int i = 0; i < mAdapter.getCount(); i++)
+                // remember to clear bitmap... other wise the json will be so huge...
+                // if set null directly, seems image will be null in the list
+                // so... new item..
+                {
+                    localData.add(mAdapter.getItem(i));
+                }
+                // write to local
+                KecUtilities.writeTabLocalData(Tab_Main_Hall.getJsonFromObject(localData), MainActivity.HALL_OF_MAIN_SUBFOLDER);
+
+                localData.clear();
+
+                // send request
+                ImageFetcher.disableConnectionReuseIfNecessary();
+                HttpURLConnection urlConnection = null;
+                BufferedInputStream in = null;
+                try {
+                    final String urlString = params[0];
+                    final URL url = new URL(urlString);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
+
+                    // byte array to store input
+                    byte[] contents = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = in.read(contents)) != -1) {
+                        String s = new String(contents, 0, bytesRead);
+                        if (s.compareToIgnoreCase("true") == 0)
+                            return true;
+                        else
+                            return false;
+                    }
+
+                    return true;
+                } catch (final IOException e) {
+                    Log.e(MainActivity.LOG_TAG, "Error in delete item - " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (final IOException e) {}
+                }
+                return false;
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, "Exception: " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (!success) {
+                Refresh(SwipeRefreshLayoutDirection.BOTH);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
         }
     }
 }

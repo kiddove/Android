@@ -11,10 +11,12 @@
     <string name="ui_menu_edit">edit</string>
     <string name="ui_menu_delete">delete</string>
     <string name="ui_menu_quit">quit</string>
+    <string name="ui_menu_logout">log out</string>
     <string name="ui_menu_feedback">feedback</string>
     <string name="ui_menu_about">about</string>
     <string name="ui_menu_share">share</string>
     <string name="ui_menu_refresh">refresh</string>
+    <string name="ui_menu_show_qr_code">show QR code(*)</string>
     <string name="video_list_item_img_description">description for video tab item img</string>
     <string name="photo_list_item_img_description">description for photo tab item img</string>
     <string name="title_activity_main_hall">Shows</string>

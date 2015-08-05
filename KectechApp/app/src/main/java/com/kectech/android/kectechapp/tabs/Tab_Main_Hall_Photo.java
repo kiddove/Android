@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -58,7 +60,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
     private String subFolder = null;
 
-    private Activity activity;
+    //private Activity activity;
 
     private ImageFetcher mImageFetcher;
 
@@ -108,30 +110,30 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 PhotoListItem photoListItem = mPhotoAdapter.getItem(position);
 
                 // activate another activity to show full image
-                Intent intent = new Intent(activity, PhotoOfHallOfMainActivity.class);
+                final Intent intent = new Intent(getActivity(), PhotoOfHallOfMainActivity.class);
 
                 // create parameters
                 Bundle params = new Bundle();
 
-                ArrayList<String> thumbs = new ArrayList<>();
+                //ArrayList<String> thumbs = new ArrayList<>();
                 ArrayList<String> images = new ArrayList<>();
 
                 for (int i = 0; i < photoListItem.items.size(); i++) {
-                    thumbs.add(photoListItem.items.get(i).getThumbURL());
+                    //thumbs.add(photoListItem.items.get(i).getThumbURL());
                     images.add(photoListItem.items.get(i).getImageURL());
                 }
-                params.putStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY, thumbs);
+                //params.putStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY, thumbs);
                 params.putStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, images);
-                params.putString(MainActivity.MAIN_HALL_PHOTO_FOLDER, subFolder);
+                //params.putString(MainActivity.MAIN_HALL_PHOTO_FOLDER, subFolder);
 //                params.putString(MainActivity.PHOTO_TAB_THUMB_URL_KEY, photoListItem.getThumbURL());
 //                params.putString(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, photoListItem.getImageURL());
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 intent.putExtras(params);
                 try {
                     startActivity(intent);
-                    activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                    getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                 } catch (Exception e) {
                     Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
                 }
@@ -141,7 +143,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
         mImageFetcher = KecUtilities.getThumbFetcher(getActivity());
 
-        mPhotoAdapter = new PhotoListViewAdapter(activity, R.layout.photo_list_item, new ArrayList<PhotoListItem>(), mImageFetcher);
+        mPhotoAdapter = new PhotoListViewAdapter(getActivity(), R.layout.photo_list_item, new ArrayList<PhotoListItem>(), mImageFetcher);
         mListView.setAdapter(mPhotoAdapter);
 
 
@@ -434,13 +436,21 @@ public class Tab_Main_Hall_Photo extends Fragment {
         new InitListTask().execute();
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        // for using different menu
-//        setHasOptionsMenu(true);
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // for using different menu
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // clear the existing items, otherwise new item will be appended to it.
+        menu.clear();
+        inflater.inflate(R.menu.menu_photo_tab, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     // detect when this fragment is visible
     @Override
@@ -470,16 +480,15 @@ public class Tab_Main_Hall_Photo extends Fragment {
             Log.d(MainActivity.LOG_TAG, "tab_main_hall_photo onStart.");
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-    }
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        this.activity = activity;
+//    }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        this.activity = null;
     }
 
     @Override
@@ -505,6 +514,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         //mImageFetcher.closeCache();
+        //mImageFetcher = null;
     }
 
     private class InitListTask extends AsyncTask<Void, Void, ArrayList<PhotoListItem>> {

@@ -7,13 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
-import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
 
 import java.util.ArrayList;
 
@@ -35,8 +35,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
 
     // private holder class
     private class ViewHolder {
-        ArrayList<ScaleImageView> imageViews;
-        //ScaleImageView imageView;
+        ArrayList<ImageView> imageViews;
         TextView txtTile;
         TextView txtDesc;
         public ViewHolder () {
@@ -62,7 +61,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
                 try {
                     // according to item.items.count show or hide imageView, default is gone.
                     for (int i = 0; i < 9; i++) {
-                        ScaleImageView imageView = (ScaleImageView) convertView.findViewById(MainActivity.imageId[i]);
+                        ImageView imageView = (ImageView) convertView.findViewById(MainActivity.imageId[i]);
                         // change layout will cause get tag the wrong content.
                         // according to http://stackoverflow.com/questions/12018997/why-does-getview-return-wrong-convertview-objects-on-separatedlistadapter
                         //imageView.setVisibility(View.VISIBLE);

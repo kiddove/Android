@@ -62,9 +62,6 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     private ImageFetcher mImageFetcher;
 
-    private static final String IMAGE_CACHE_DIR = "thumbs_video";
-    private final String TAG = "tab_main_hall_video";
-
     public void setType(int tabType) {
 
         switch (tabType) {
@@ -75,7 +72,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 // showroom
                 break;
             case 3:
-                // eventhall
+                // event hall
                 strType = "&eh=";
                 break;
             default:
@@ -125,6 +122,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
                 // get another activity to run
+
                 Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -137,7 +135,8 @@ public class Tab_Main_Hall_Video extends Fragment {
         });
 
         mSwipeRefreshLayout.setColorScheme(
-                R.color.swipe_color_1, R.color.swipe_color_3,
+                R.color.swipe_color_1,
+                R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
 //        ImageCache.ImageCacheParams cacheParams =
@@ -297,24 +296,24 @@ public class Tab_Main_Hall_Video extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // clear the existing items, otherwise new item will be appended to it.
         menu.clear();
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_video_tab, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-             case R.id.menu_item_quit:
-                 // clear cache
-                 //mImageFetcher.clearCache();
-                 if (BuildConfig.DEBUG)
-                     KecUtilities.clearCache();
-                 return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        switch (id) {
+//             case R.id.menu_item_show_qr_code:
+//                 // clear cache
+//                 //mImageFetcher.clearCache();
+//                 if (BuildConfig.DEBUG)
+//                     KecUtilities.clearCache();
+//                 return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     // refresh list
     public void Refresh(SwipeRefreshLayoutDirection direction) {
@@ -344,7 +343,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             try {
 
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?tabtype=" + tabType;
-                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=&count=6&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);;
+                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=&count=6&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
 
                 URL url = new URL(strURL);
 
@@ -387,7 +386,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 return null;
             try {
                 int id = params[0];
-                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);;
+                String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + tabFollow + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=top&count=5&tabtype=" + tabType;
                 URL url = new URL(strURL);
 

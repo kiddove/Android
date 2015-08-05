@@ -17,5 +17,4 @@ public class PhotoListItemDetail {
         return thumb.replaceAll(" ", "%20");
     }
 
-
 }

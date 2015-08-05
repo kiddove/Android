@@ -3,17 +3,17 @@ package com.kectech.android.kectechapp.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.kectech.android.kectechapp.BuildConfig;
@@ -21,10 +21,9 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.FadePageTransformer;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
+import com.kectech.android.kectechapp.tabs.ImageDetailFragment;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
-import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
-import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.util.ArrayList;
 
@@ -39,14 +38,14 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 //, View.OnClickListener {
 
     private int imageCount = 1;
-    private ArrayList<View> viewList;
+    //private ArrayList<View> viewList;
     //private String[] URLs = null;
     Bundle URLs = null;
     // for dots
     private ArrayList<View> dots;
     private int previous = 0;
 
-    public String subFolder = null;
+    //public String subFolder = null;
 
     private ImageFetcher mImageFetcherImage;
 
@@ -54,17 +53,18 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (BuildConfig.DEBUG) {
-            Utils.enableStrictMode();
+
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        mImageFetcherImage = KecUtilities.getImageFetcher(this);
-
+        createFetcher();
         // for load thumb
-        //ImageFetcher mImageFetcherThumb = KecUtilities.getThumbFetcher(this);
+        //mImageFetcherImage = KecUtilities.getThumbFetcher(this);
 
         try {
             // for using action bar back button
@@ -78,16 +78,38 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             Intent intent = getIntent();
             if (intent != null) {
                 URLs = intent.getExtras();
-                ArrayList<String> thumbs = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY);
-                imageCount = thumbs.size();
-                subFolder = URLs.getString(MainActivity.MAIN_HALL_PHOTO_FOLDER, null);
+                ArrayList<String> images = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY);
+                imageCount = images.size();
+
+                // pager
+                CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
+                viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        setCurrentPage(position);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+
+                viewPager.setOnSwipeOutListener(this);
+                // fade away
+                viewPager.setPageTransformer(false, new FadePageTransformer());
+
+                viewPager.setAdapter(new MyPagerAdapter(getFragmentManager(), images));
             }
 
             // for now only one image
 
             // init
-            LayoutInflater layoutInflater = LayoutInflater.from(this);
-            viewList = new ArrayList<>();
             dots = new ArrayList<>();
 
             // dots
@@ -97,23 +119,6 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
 
             for (int i = 0; i < imageCount; i++) {
-                View v = layoutInflater.inflate(R.layout.photo_activity_image_fragment, null);
-                // here load thumb first if has..
-//                ScaleImageView imageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);
-//                if (imageView != null) {
-////                    imageView.setOnClickListener(new View.OnClickListener() {
-////                        @Override
-////                        public void onClick(View v) {
-////                            close();
-////                        }
-////                    });
-//                    if (URLs != null && subFolder != null) {
-//                        String strThumbURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_THUMB_URL_KEY).get(i);
-//                        mImageFetcherThumb.loadImage(strThumbURL, imageView);
-//                    }
-//                }
-                viewList.add(v);
-
                 // dots
                 View dot = new View(this);
                 dot.setLayoutParams(params);
@@ -125,67 +130,6 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
             return;
         }
-
-
-        // default select
-        dots.get(0).setBackgroundResource(R.drawable.dot_selected);
-
-        // pager
-        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                setCurrentPage(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        viewPager.setOnSwipeOutListener(this);
-        // fade away
-        viewPager.setPageTransformer(false, new FadePageTransformer());
-
-        viewPager.setAdapter(new MyPagerAdapter(viewList));
-
-        //viewPager.setOffscreenPageLimit(viewList.size());
-
-//        // Set up activity to go full screen
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//
-//        // Enable some additional newer visibility and ActionBar features to create a more
-//        // immersive photo viewing experience
-//        if (Utils.hasHoneycomb()) {
-//            final ActionBar actionBar = getActionBar();
-//
-//            // Hide title text and set home as up
-//            actionBar.setDisplayShowTitleEnabled(false);
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//
-//            // Hide and show the ActionBar as the visibility changes
-//            viewPager.setOnSystemUiVisibilityChangeListener(
-//                    new View.OnSystemUiVisibilityChangeListener() {
-//                        @Override
-//                        public void onSystemUiVisibilityChange(int vis) {
-//                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
-//                                actionBar.hide();
-//                            } else {
-//                                actionBar.show();
-//                            }
-//                        }
-//                    });
-//
-//            // Start low profile mode and hide ActionBar
-//            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-//            actionBar.hide();
-//        }
 
         setCurrentPage(0);
     }
@@ -214,6 +158,9 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 close();
                 return true;
             }
+//            case R.id.menu_item_quit:
+//                mImageFetcherImage.clearCache();
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -238,93 +185,33 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     }
 
     // page adapter
-    private class MyPagerAdapter extends PagerAdapter {
+    private class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private ArrayList<View> mListView;
+        private final ArrayList<String> mUrls;
 
-        public MyPagerAdapter(ArrayList<View> mListView) {
-            super();
-            this.mListView = mListView;
-        }
-
-
-        public void destroyItem(View arg0, int arg1, Object arg2) {
-            // TODO Auto-generated method stub
-            ((ViewGroup) arg0).removeView(mListView.get(arg1));
+        public MyPagerAdapter(FragmentManager fm, ArrayList<String> urls) {
+            super(fm);
+            this.mUrls = urls;
         }
 
         @Override
-        public void finishUpdate(View arg0) {
-            // TODO Auto-generated method stub
-
-        }
-
-
         public int getCount() {
-            // TODO Auto-generated method stub
-            return mListView.size();
+            return mUrls.size();
         }
 
         @Override
-        public Object instantiateItem(View arg0, int arg1) {
-            // TODO Auto-generated method stub
-            ((ViewGroup) arg0).addView(mListView.get(arg1), 0);
-            return mListView.get(arg1);
+        public Fragment getItem(int position) {
+            return ImageDetailFragment.newInstance(mUrls.get(position));
         }
 
-
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            // TODO Auto-generated method stub
-            return arg0 == (arg1);
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public Parcelable saveState() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public void startUpdate(View arg0) {
-            // TODO Auto-generated method stub
-
-        }
     }
 
     // set current
     public void setCurrentPage(int position) {
-        if (subFolder == null)
-            return;
 
         dots.get(previous).setBackgroundResource(R.drawable.dot_normal);
         dots.get(position).setBackgroundResource(R.drawable.dot_selected);
         previous = position;
-
-        ScaleImageView imageView = (ScaleImageView) viewList.get(position).findViewById(R.id.photo_activity_image_fragment_imageView);
-        // download image async
-        String imageURL = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY).get(position);
-
-        // todo
-//        //mImageFetcher.loadImage(imageURL, imageView);
-//        String localPath = KecUtilities.getLocalFilePathFromURL(imageURL, subFolder);
-//        Bitmap bitmap = KecUtilities.ReadFileFromLocal(localPath);
-//        //Bitmap bitmap = null;
-//        if (imageView != null && bitmap != null) {
-//            imageView.setImageBitmap(bitmap);
-////            recycleBitmap();
-////            current = bitmap;
-//        } else {
-//            preTask = new DownLoadImageTask(imageView, context, subFolder);
-//            preTask.execute(imageURL);
-//        }
-
-        mImageFetcherImage.loadImage(imageURL, imageView);
     }
 
     @Override
@@ -362,7 +249,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mImageFetcherImage.closeCache();
+        mImageFetcherImage.closeCache();
     }
 
 //    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -375,4 +262,34 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 //            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 //        }
 //    }
+    /**
+     * Called by the ViewPager child fragments to load images via the one ImageFetcher
+     */
+    public ImageFetcher getImageFetcher() {
+        return mImageFetcherImage;
+    }
+
+    private void createFetcher() {
+        // Fetch screen height and width, to use as our max size when loading images as this
+        // activity runs full screen
+        final DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        final int height = displayMetrics.heightPixels;
+        final int width = displayMetrics.widthPixels;
+
+        // For this sample we'll use half of the longest width to resize our images. As the
+        // image scaling ensures the image is larger than this, we should be left with a
+        // resolution that is appropriate for both portrait and landscape. For best image quality
+        // we shouldn't divide by 2, but this will use more memory and require a larger memory
+        // cache.
+        final int longest = (height > width ? height : width) / 2;
+
+        ImageCache.ImageCacheParams cacheParams =
+                new ImageCache.ImageCacheParams(this, "images");
+        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
+
+        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+        mImageFetcherImage = new ImageFetcher(this, longest);
+        mImageFetcherImage.addImageCache(getFragmentManager(), cacheParams);
+    }
 }

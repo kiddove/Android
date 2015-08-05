@@ -7,6 +7,6 @@
         android:drawable="@color/item_pressed">
     </item>
 
-    <!--backgournd is no tab_main_setting here-->
+    <!--background is no tab_main_setting here-->
     <!--<item android:drawable="@color/bar_background" />-->
 </selector>

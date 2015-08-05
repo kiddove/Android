@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.thirdparty.HTML5WebView;
 
@@ -20,15 +21,16 @@ import java.lang.reflect.InvocationTargetException;
 
 public class VideoOfHallOfMainActivity extends Activity {
 
-    //public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER;
-
     HTML5WebView mWebView;
 
     //private OnSwipeTouchListener onSwipeTouchListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_video);
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
         mWebView = new HTML5WebView(this);
         setContentView(mWebView.getLayout());
 ////////////////////////////////////////////////////////////////

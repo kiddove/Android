@@ -91,10 +91,14 @@ public class KecUtilities {
             image.clearCache();
     }
     public static void closeCache() {
-        if (thumb != null)
+        if (thumb != null) {
             thumb.closeCache();
-        if (image != null)
+            thumb = null;
+        }
+        if (image != null) {
             image.closeCache();
+            image = null;
+        }
     }
 
     public static String getLocalFilePathFromURL(String url, String subFolder) {

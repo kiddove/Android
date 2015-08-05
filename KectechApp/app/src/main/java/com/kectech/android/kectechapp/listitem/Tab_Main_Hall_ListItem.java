@@ -79,16 +79,19 @@ public class Tab_Main_Hall_ListItem {
     }
 
     public String getMemo() {
+
+        // todo follow@follow.com
+        int p = follow.indexOf("@");
         switch (type) {
             case 1:
                 // public
-                return "Publicshow " + "@kevin";
+                return "Publicshow " + "@" + follow.substring(0, p);
             case 2:
                 // show room
-                return "Showroom " + "@kevin";
+                return "Showroom " + "@" + follow.substring(0, p);
             case 3:
                 // event hall
-                return "Eventhall " + "@kevin";
+                return "EventHall " + "@" + follow.substring(0, p);
             default:
                 return null;
         }

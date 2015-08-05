@@ -1,0 +1,491 @@
+package com.kectech.android.kectechapp.activity;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.kectech.android.kectechapp.R;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+/**
+ * A Register screen that offers register via email/password/nickname.
+ * sing up
+ */
+public class RegisterActivity extends Activity {
+
+    /**
+     * Keep track of the register task to ensure we can cancel it if requested.
+     */
+    private UserActionTask mAuthTask = null;
+
+    private boolean bValidUserName = false;
+    // UI references.
+    private EditText mEmailView;
+    private EditText mPasswordView;
+    private EditText mConfirmPasswordView;
+    private EditText mNickNameView;
+    private View mProgressView;
+    private View mRegisterFormView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        // when click done on confirm
+        mConfirmPasswordView = (EditText) findViewById(R.id.confirm_password);
+        mConfirmPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.register || id == EditorInfo.IME_NULL || id == EditorInfo.IME_ACTION_DONE) {
+                    // the action key performs a "done" operation, typically meaning there is nothing more to input and the IME will be closed.
+                    // but seems OK. is for "done", done is for Enter...
+                    // IME_NULL for Enter...
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_NULL || id == EditorInfo.IME_ACTION_NEXT) {
+                    // the action key performs a "done" operation, typically meaning there is nothing more to input and the IME will be closed.
+                    // but seems OK. is for "done", done is for Enter...
+                    // IME_NULL for Enter...
+
+                    String password = mPasswordView.getText().toString();
+                    // Check for a valid password, if the user entered one.
+                    if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+                        mPasswordView.setError(getString(R.string.error_invalid_password));
+                        mPasswordView.requestFocus();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        mEmailView = (EditText) findViewById(R.id.email);
+        mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_NULL || id == EditorInfo.IME_ACTION_NEXT) {
+                    // the action key performs a "done" operation, typically meaning there is nothing more to input and the IME will be closed.
+                    // but seems OK. is for "done", done is for Enter...
+                    // IME_NULL for Enter...
+
+                    String email = mEmailView.getText().toString();
+                    // Check for a valid password, if the user entered one.
+                    if (TextUtils.isEmpty(email)) {
+//                        mEmailView.setError(getString(R.string.error_invalid_email));
+//                        mEmailView.requestFocus();
+                        return false;
+                    }
+                    else if (!isEmailValid(email)) {
+                        mEmailView.setError(getString(R.string.error_invalid_email));
+                        mEmailView.requestFocus();
+                        return true;
+                    }
+                    // check user...
+                    checkEmailAddress();
+                }
+                return false;
+            }
+        });
+
+
+        Button mEmailSignUpButton = (Button) findViewById(R.id.register_button);
+        mEmailSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+
+        mRegisterFormView = findViewById(R.id.register_form);
+        mProgressView = findViewById(R.id.login_progress);
+        mNickNameView = (EditText) findViewById(R.id.nick_name);
+//
+//        // hide soft keyboard when click non TextView area.
+//        mLoginFormView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//                imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                return false;
+//            }
+//        });
+    }
+
+    private void checkEmailAddress() {
+        if (mAuthTask != null || bValidUserName == true) {
+            return;
+        }
+
+        String email = mEmailView.getText().toString();
+
+        mAuthTask = new UserActionTask();
+        mAuthTask.execute(email);
+    }
+
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    public void attemptLogin() {
+        if (mAuthTask != null) {
+            return;
+        }
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        //hide keyboard
+        final InputMethodManager imm1 = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm1.hideSoftInputFromWindow(mRegisterFormView.getWindowToken(), 0);
+
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        String nickname = mNickNameView.getText().toString();
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            mEmailView.requestFocus();;
+            return;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            mEmailView.requestFocus();
+            return;
+        }
+
+        // Check for a valid password, if the user entered one.
+        if (TextUtils.isEmpty(password)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            mPasswordView.requestFocus();
+            return;
+        } else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            mPasswordView.requestFocus();
+            return;
+        }
+
+        // check nickname
+        if (TextUtils.isEmpty(nickname)) {
+            mNickNameView.setError(getString(R.string.error_field_required));
+            mNickNameView.requestFocus();
+            return;
+        }
+
+
+        // Check password match
+        if (!isPasswordMatch()) {
+            mConfirmPasswordView.setError(getString(R.string.error_different_password));
+            mConfirmPasswordView.requestFocus();
+            return;
+        }
+
+
+        // Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        showProgress(true);
+        mAuthTask = new UserActionTask();
+        mAuthTask.execute(email, password, nickname);
+
+
+//        // test
+//        if (!email.isEmpty()) {
+//            SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
+//            SharedPreferences.Editor editor = userDetails.edit();
+//            editor.putBoolean("LOGIN", true);
+//            editor.commit();
+//
+//            boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
+//            Log.i(MainActivity.LOG_TAG, "when save " + Boolean.toString(bLog));
+//        }
+    }
+
+    private boolean isEmailValid(String email) {
+        int length = email.length();
+        int i1 = email.lastIndexOf("@");
+        int i2 = email.lastIndexOf(".");
+        // has "." & "@"
+        // "." appear after "@"
+        // "." is not the last
+        // "." is not right behind "@"
+        if (i1 >= 0 && i2 - i1 > 1 && i2 != length - 1)
+            return true;
+        return false;
+    }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() > 4;
+    }
+
+    private boolean isPasswordMatch() {
+        if (mConfirmPasswordView.getText().toString().compareTo(mPasswordView.getText().toString()) == 0)
+            return true;
+        return false;
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class UserActionTask extends AsyncTask<String, Void, Boolean> {
+
+        private int type = 0;
+        @Override
+        protected Boolean doInBackground(String... params) {
+            // TODO: attempt authentication against a network service.
+            // param[0] -- email
+            // param[1] -- password
+            // param[2] -- nick name, if register
+            type = params.length;
+            try {
+                if (params.length == 3)
+                    return registerNewUser(params);
+                else if (params.length == 2)
+                    return userLogIn(params);
+                else if (params.length == 1) {
+                    bValidUserName = checkUser(params);
+                    return bValidUserName;
+                }
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, "Exception: " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
+
+            // TODO: register the new account here.
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (type == 3) {
+                if (success) {
+                    startMainActivity();
+                } else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+            }
+            else if (type == 1) {
+                if (!success) {
+                    mEmailView.setError(getString(R.string.error_existed_email));
+                    mEmailView.requestFocus();
+                }
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+    }
+
+    private void startMainActivity() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra(MainActivity.CURRENT_USER, "paul@wyslink.com");
+        try {
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            finish();
+        } catch (Exception e) {
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+
+        }
+    }
+
+
+    private boolean registerNewUser(String... params) {
+        // length should be 3
+        if (params.length != 3)
+            return false;
+        ImageFetcher.disableConnectionReuseIfNecessary();
+        HttpURLConnection urlConnection = null;
+        BufferedInputStream in = null;
+        try {
+            //final String urlString = "http://www.kdlinx.com/registor.ashx?handleType=4&email=xxx&pwd=xxx&nickname=xxx";
+            final String urlString = "http://198.105.216.190/registor.ashx?handleType=4&email=" + params[0] + "&pwd=" + params[1] + "&nickname=" + params[2];
+            final URL url = new URL(urlString);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
+
+            // byte array to store input
+            byte[] contents = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(contents)) != -1) {
+                String s = new String(contents, 0, bytesRead);
+                if (s.compareToIgnoreCase("true") == 0)
+                    return true;
+                else
+                    return false;
+            }
+
+            return true;
+        } catch (final IOException e) {
+            Log.e(MainActivity.LOG_TAG, "Error in register new user - " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (final IOException e) {}
+        }
+        return false;
+    }
+    private boolean userLogIn(String... params) {
+        // length should be 2
+        if (params.length != 2)
+            return false;
+        ImageFetcher.disableConnectionReuseIfNecessary();
+        HttpURLConnection urlConnection = null;
+        BufferedInputStream in = null;
+        try {
+            //final String urlString = "http://www.kdlinx.com/registor.ashx?handleType=4&email=xxx&pwd=xxx&nickname=xxx";
+            final String urlString = "http://198.105.216.190/registor.ashx?handleType=20&email=" + params[0] + "&pwd=" + params[1];
+            final URL url = new URL(urlString);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
+
+            // byte array to store input
+            byte[] contents = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(contents)) != -1) {
+                String s = new String(contents, 0, bytesRead);
+                if (s.compareToIgnoreCase("true") == 0)
+                    return true;
+                else
+                    return false;
+            }
+
+            return true;
+        } catch (final IOException e) {
+            Log.e(MainActivity.LOG_TAG, "Error in log in - " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (final IOException e) {}
+        }
+        return false;
+    }
+    private boolean checkUser(String... params) {
+        // length should be 1
+        if (params.length != 1)
+            return false;
+        ImageFetcher.disableConnectionReuseIfNecessary();
+        HttpURLConnection urlConnection = null;
+        BufferedInputStream in = null;
+        try {
+            //final String urlString = "http://www.kdlinx.com/registor.ashx?handleType=4&email=xxx&pwd=xxx&nickname=xxx";
+            final String urlString = "http://198.105.216.190/registor.ashx?handleType=1&email=" + params[0];
+            final URL url = new URL(urlString);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
+
+            // byte array to store input
+            byte[] contents = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(contents)) != -1) {
+                String s = new String(contents, 0, bytesRead);
+                if (s.compareToIgnoreCase("false") == 0)
+                    return true;
+                else
+                    return false;
+            }
+        } catch (final IOException e) {
+            Log.e(MainActivity.LOG_TAG, "Error in check user - " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (final IOException e) {}
+        }
+        return false;
+    }
+}
+

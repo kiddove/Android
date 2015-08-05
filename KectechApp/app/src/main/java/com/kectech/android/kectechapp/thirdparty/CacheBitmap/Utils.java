@@ -21,6 +21,9 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
+import com.kectech.android.kectechapp.activity.HallOfMainActivity;
+import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
+
 
 /**
  * Class containing some static utility methods.
@@ -44,8 +47,8 @@ public class Utils {
 //            if (Utils.hasHoneycomb()) {
 //                threadPolicyBuilder.penaltyFlashScreen();
 //                vmPolicyBuilder
-//                        .setClassInstanceLimit(M.class, 1)
-//                        .setClassInstanceLimit(ImageDetailActivity.class, 1);
+//                        .setClassInstanceLimit(HallOfMainActivity.class, 1)
+//                        .setClassInstanceLimit(PhotoOfHallOfMainActivity.class, 1);
 //            }
             StrictMode.setThreadPolicy(threadPolicyBuilder.build());
             StrictMode.setVmPolicy(vmPolicyBuilder.build());

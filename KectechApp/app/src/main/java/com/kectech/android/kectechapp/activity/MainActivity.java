@@ -1,6 +1,8 @@
 package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -9,8 +11,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.MainAdapter;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
@@ -27,11 +31,8 @@ public class MainActivity extends Activity {
     public final static String HALL_OF_MAIN_ID = "event_hall_id";   //  used as timestamp... no id
     public final static String HALL_OF_MAIN_NAME = "event_hall_name";
     public final static String HALL_OF_MAIN_FOLLOW = "event_hall_follow_name";
-
-    public final static String PHOTO_TAB_THUMB_URL_KEY = "thumbURL";
     // may have plenty
     public final static String PHOTO_TAB_IMAGE_URL_KEY = "imageURL";
-    public final static String MAIN_HALL_PHOTO_FOLDER = "tab_photo_hall_main_folder";
 
     public final static String PHOTO_SUB_FOLDER = "Photo";
     public final static String VIDEO_SUB_FOLDER = "Video";
@@ -51,13 +52,18 @@ public class MainActivity extends Activity {
     public final static String ENCODING = "UTF-8";
 
     // default user
-    public final static String USER = "kevin@kectech.com"; // kdlinx@kdlinx.com, kevin@kectech.com
+    public final static String CURRENT_USER = "current_user";
+    public final static String SHARED_PREFERENCE_KEY = "USER_INFO";
+    public final static String USER_NAME_SET_KEY = "USERNAME";
+    public final static String CURRENT_USER_KEY = "CURRENT";
+    public final static String CURRENT_LOGIN_STATUS_KEY = "LOGIN";
+    public static String USER = ""; // kdlinx@kdlinx.com, kevin@kectech.com
 
     public final static int imageId[] = {R.id.hall_photo_list_item_img0, R.id.hall_photo_list_item_img1, R.id.hall_photo_list_item_img2,
             R.id.hall_photo_list_item_img3, R.id.hall_photo_list_item_img4, R.id.hall_photo_list_item_img5,
             R.id.hall_photo_list_item_img6, R.id.hall_photo_list_item_img7, R.id.hall_photo_list_item_img8,};
 
-    public static final String HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+    public static String HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
     // variables
     // declaring view and variables
     //Toolbar toolbar;
@@ -73,6 +79,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            USER = intent.getStringExtra(MainActivity.CURRENT_USER);
+            HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+        }
+
         KecUtilities.context = this;
         if (!KecUtilities.createFolders()) {
             Log.e(MainActivity.LOG_TAG, "create folders failed.");
@@ -80,7 +93,6 @@ public class MainActivity extends Activity {
             System.exit(0);
             return;
         }
-
         try {
             //getActionBar().setDisplayShowHomeEnabled(false);
             // hide the tile text
@@ -146,10 +158,15 @@ public class MainActivity extends Activity {
                 // handle in fragment
                 // return false here
                 return false;
-            case R.id.menu_item_quit:
+            case R.id.menu_hall_tab_item_logout:
+                // return false to deal with it in fragment (Tab_Main_Hall)
+                Logout();
+                break;
+            case R.id.menu_item_quit:   // from main_menu
+            case R.id.menu_hall_tab_item_quit:  // from tab_hall_menu
+                KecUtilities.closeCache();
                 finish();
                 System.exit(0);
-                KecUtilities.closeCache();
                 return true;
             default:
                 break;
@@ -165,8 +182,9 @@ public class MainActivity extends Activity {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    //getFragmentManager().popBackStackImmediate();
-                    //finish();
+                    KecUtilities.closeCache();
+                    finish();
+                    System.exit(0);
                     return super.onKeyDown(keyCode, event);
             }
         }
@@ -175,5 +193,25 @@ public class MainActivity extends Activity {
         // system behavior (probably exit the activity)
         return super.onKeyDown(keyCode, event);
     }
+    public void Logout() {
+        SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+        SharedPreferences.Editor editor = userDetails.edit();
+        editor.putString(MainActivity.CURRENT_USER_KEY, null);
+        editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+        editor.commit();
 
+        KecUtilities.closeCache();
+
+        // start login activity
+        Intent intent = new Intent(this, LoginActivity.class);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        try {
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            finish();
+        } catch (Exception e) {
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+        }
+    }
 }

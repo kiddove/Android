@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.HallOfMainAdapter;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
@@ -32,6 +33,10 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_hall);
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
 
         try {
             CustomViewPager pager;
@@ -115,16 +120,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.menu_item_search:
-                return true;
-            case R.id.menu_hall_tab_item_add:
-                // handle in fragment
-                // return false here
-                return false;
-//            not working here
-//            case R.id.menu_item_quit:
-////                System.exit(0);
-//                return false;
+            //case R.id.menu_item_quit:
             case android.R.id.home: {
 //                NavUtils.navigateUpFromSameTask(this);
 //                getFragmentManager().popBackStack();
