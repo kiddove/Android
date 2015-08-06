@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 
@@ -49,7 +51,10 @@ public class RegisterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
         // when click done on confirm
         mConfirmPasswordView = (EditText) findViewById(R.id.confirm_password);
         mConfirmPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -140,7 +145,7 @@ public class RegisterActivity extends Activity {
     }
 
     private void checkEmailAddress() {
-        if (mAuthTask != null || bValidUserName == true) {
+        if (mAuthTask != null || bValidUserName) {
             return;
         }
 
@@ -174,7 +179,7 @@ public class RegisterActivity extends Activity {
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
-            mEmailView.requestFocus();;
+            mEmailView.requestFocus();
             return;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
@@ -214,18 +219,6 @@ public class RegisterActivity extends Activity {
         showProgress(true);
         mAuthTask = new UserActionTask();
         mAuthTask.execute(email, password, nickname);
-
-
-//        // test
-//        if (!email.isEmpty()) {
-//            SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
-//            SharedPreferences.Editor editor = userDetails.edit();
-//            editor.putBoolean("LOGIN", true);
-//            editor.commit();
-//
-//            boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
-//            Log.i(MainActivity.LOG_TAG, "when save " + Boolean.toString(bLog));
-//        }
     }
 
     private boolean isEmailValid(String email) {
@@ -236,20 +229,15 @@ public class RegisterActivity extends Activity {
         // "." appear after "@"
         // "." is not the last
         // "." is not right behind "@"
-        if (i1 >= 0 && i2 - i1 > 1 && i2 != length - 1)
-            return true;
-        return false;
+        return i1 >= 0 && i2 - i1 > 1 && i2 != length - 1;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
     private boolean isPasswordMatch() {
-        if (mConfirmPasswordView.getText().toString().compareTo(mPasswordView.getText().toString()) == 0)
-            return true;
-        return false;
+        return mConfirmPasswordView.getText().toString().compareTo(mPasswordView.getText().toString()) == 0;
     }
 
     /**
@@ -297,7 +285,6 @@ public class RegisterActivity extends Activity {
         private int type = 0;
         @Override
         protected Boolean doInBackground(String... params) {
-            // TODO: attempt authentication against a network service.
             // param[0] -- email
             // param[1] -- password
             // param[2] -- nick name, if register
@@ -316,8 +303,6 @@ public class RegisterActivity extends Activity {
                 e.printStackTrace();
                 return false;
             }
-
-            // TODO: register the new account here.
             return true;
         }
 
@@ -351,20 +336,18 @@ public class RegisterActivity extends Activity {
 
     private void startMainActivity() {
 
-        Intent intent = new Intent(this, MainActivity.class);
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(MainActivity.CURRENT_USER, "paul@wyslink.com");
+        // actually is go back to login activity and then go to main activity from login
+        Intent intent = new Intent();
+        intent.putExtra(MainActivity.CURRENT_USER,  mEmailView.getText().toString());
         try {
-            startActivity(intent);
-            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            setResult(RESULT_OK, intent);
             finish();
+            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
 
         }
     }
-
 
     private boolean registerNewUser(String... params) {
         // length should be 3
@@ -383,12 +366,9 @@ public class RegisterActivity extends Activity {
             // byte array to store input
             byte[] contents = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(contents)) != -1) {
+            if ((bytesRead = in.read(contents)) != -1) {
                 String s = new String(contents, 0, bytesRead);
-                if (s.compareToIgnoreCase("true") == 0)
-                    return true;
-                else
-                    return false;
+                return s.compareToIgnoreCase("true") == 0;
             }
 
             return true;
@@ -403,7 +383,10 @@ public class RegisterActivity extends Activity {
                 if (in != null) {
                     in.close();
                 }
-            } catch (final IOException e) {}
+            } catch (final IOException e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -424,12 +407,9 @@ public class RegisterActivity extends Activity {
             // byte array to store input
             byte[] contents = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(contents)) != -1) {
+            if ((bytesRead = in.read(contents)) != -1) {
                 String s = new String(contents, 0, bytesRead);
-                if (s.compareToIgnoreCase("true") == 0)
-                    return true;
-                else
-                    return false;
+                return s.compareToIgnoreCase("true") == 0;
             }
 
             return true;
@@ -444,7 +424,10 @@ public class RegisterActivity extends Activity {
                 if (in != null) {
                     in.close();
                 }
-            } catch (final IOException e) {}
+            } catch (final IOException e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -465,12 +448,9 @@ public class RegisterActivity extends Activity {
             // byte array to store input
             byte[] contents = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(contents)) != -1) {
+            if ((bytesRead = in.read(contents)) != -1) {
                 String s = new String(contents, 0, bytesRead);
-                if (s.compareToIgnoreCase("false") == 0)
-                    return true;
-                else
-                    return false;
+                return s.compareToIgnoreCase("false") == 0;
             }
         } catch (final IOException e) {
             Log.e(MainActivity.LOG_TAG, "Error in check user - " + e.getMessage());
@@ -483,9 +463,29 @@ public class RegisterActivity extends Activity {
                 if (in != null) {
                     in.close();
                 }
-            } catch (final IOException e) {}
+            } catch (final IOException e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
         }
         return false;
+    }
+    // use back button to navigate backward
+    @Override
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+        // check if the key event was the Back button and if there's history
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    finish();
+                    overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+                    return super.onKeyDown(keyCode, event);
+            }
+        }
+
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
     }
 }
 

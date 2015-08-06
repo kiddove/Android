@@ -3,13 +3,10 @@ package com.kectech.android.kectechapp.tabs;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -50,7 +47,6 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -282,6 +278,11 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             case R.id.menu_hall_tab_item_logout:
                 // returen false in main activity, so deal with it in fragment
                 String s = "123";
+                return true;
+            case R.id.menu_hall_tab_item_refresh:
+                // clear cache, json file
+                // and refresh
+                new ClearCacheTask().execute();
                 return true;
             // handle in mainactivity
 //            case R.id.menu_hall_tab_item_quit:
@@ -1092,6 +1093,33 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             if (!success) {
                 Refresh(SwipeRefreshLayoutDirection.BOTH);
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    public class ClearCacheTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                KecUtilities.deleteLocalFile();
+                KecUtilities.clearCache();
+
+                KecUtilities.createFolders();
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            Refresh(SwipeRefreshLayoutDirection.BOTH);
         }
 
         @Override

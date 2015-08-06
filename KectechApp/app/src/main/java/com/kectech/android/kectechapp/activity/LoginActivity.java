@@ -4,18 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,12 +38,13 @@ import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
+import com.kectech.android.kectechapp.util.KecUtilities;
 
 /**
  * A login screen that offers login via email/password.
  * log in
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends Activity {
 
     private UserLoginTask mAuthTask = null;
 
@@ -65,23 +61,23 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         if (BuildConfig.DEBUG) {
             Utils.enableStrictMode();
         }
-
         super.onCreate(savedInstanceState);
-        boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
-        current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
-        if (bAuto) {
-            startMainActivity();
-            return;
-        }
+        setContentView(R.layout.activity_login);
+        new checkAutoLogInTask().execute();
+
+//        boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+//        current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
+//        if (bAuto) {
+//            startMainActivity();
+//            return;
+//        }
 
         // for autocomplete
-        username = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getStringSet(MainActivity.USER_NAME_SET_KEY, null);
-
-        setContentView(R.layout.activity_login);
-
-        // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        new getAutoCompleteListTask().execute();
+        //username = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getStringSet(MainActivity.USER_NAME_SET_KEY, null);
+        // Set up the login form.
+        //populateAutoComplete();
 
         //mEmailView.setText("paul@wyslink.com");
         //mEmailView.setText("kevin@kectech.com");
@@ -134,7 +130,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private void populateAutoComplete() {
         //getLoaderManager().initLoader(0, null, this);
         if (username != null && username.size() > 0) {
-            List<String> emailAddressCollection = new ArrayList<String>(username);
+            List<String> emailAddressCollection = new ArrayList<>(username);
                     ArrayAdapter < String > adapter =
                             new ArrayAdapter<>(LoginActivity.this,
                                     android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
@@ -212,13 +208,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         // "." appear after "@"
         // "." is not the last
         // "." is not right behind "@"
-        if (i1 >= 0 && i2 - i1 > 1 && i2 != length - 1)
-            return true;
-        return false;
+        return i1 >= 0 && i2 - i1 > 1 && i2 != length - 1;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -258,64 +251,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        emails.add("kevin@kectech.com");
-        emails.add("mason@wyslink.com");
-        emails.add("kiddove@gmail.com");
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-//            cursor.moveToNext();
-//        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -324,7 +259,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            // TODO: attempt authentication against a network service.
             // param[0] -- email
             // param[1] -- password
             // param[2] -- nick name, if register
@@ -343,24 +277,26 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
-                current_user = mEmailView.getText().toString();
-                // test
-                if (!TextUtils.isEmpty(current_user)) {
-                    SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
-                    if (username == null)
-                        username = new HashSet<>();
-                    username.add(current_user);
-                    SharedPreferences.Editor editor = userDetails.edit();
-                    editor.putString(MainActivity.CURRENT_USER_KEY, current_user);
-                    editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, true);
-                    editor.putStringSet(MainActivity.USER_NAME_SET_KEY, username);
-                    editor.commit();
 
-//            boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
-//            Log.i(MainActivity.LOG_TAG, "when save " + Boolean.toString(bLog));
-                }
-
-                startMainActivity();
+                new saveStateTask().execute();
+//                current_user = mEmailView.getText().toString();
+//                // test
+//                if (!TextUtils.isEmpty(current_user)) {
+//                    SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+//                    if (username == null)
+//                        username = new HashSet<>();
+//                    username.add(current_user);
+//                    SharedPreferences.Editor editor = userDetails.edit();
+//                    editor.putString(MainActivity.CURRENT_USER_KEY, current_user);
+//                    editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, true);
+//                    editor.putStringSet(MainActivity.USER_NAME_SET_KEY, username);
+//                    editor.commit();
+//
+////            boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
+////            Log.i(MainActivity.LOG_TAG, "when save " + Boolean.toString(bLog));
+//                }
+//
+//                startMainActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -382,8 +318,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         intent.putExtra(MainActivity.CURRENT_USER, current_user);
         try {
             startActivity(intent);
-            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             finish();
+            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
 
@@ -407,12 +343,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // byte array to store input
             byte[] contents = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(contents)) != -1) {
+            if ((bytesRead = in.read(contents)) != -1) {
                 String s = new String(contents, 0, bytesRead);
-                if (s.compareToIgnoreCase("true") == 0)
-                    return true;
-                else
-                    return false;
+                return s.compareToIgnoreCase("true") == 0;
             }
 
             return true;
@@ -427,26 +360,50 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 if (in != null) {
                     in.close();
                 }
-            } catch (final IOException e) {}
+            } catch (final IOException e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
         }
         return false;
     }
 
     private void startRegisterActivity() {
         Intent intent = new Intent(this, RegisterActivity.class);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         try {
-            startActivity(intent);
-            //
+            // do not finish, instead call startActivityForResult
+            startActivityForResult(intent, MainActivity.REGISTER_REQUEST_CODE);
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-            finish();
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
 
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MainActivity.REGISTER_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra(MainActivity.CURRENT_USER, data.getStringExtra(MainActivity.CURRENT_USER));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    try {
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                    } catch (Exception e) {
+                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+
+                    }
+                }
+            }
+//            else if (resultCode == RESULT_CANCELED) {
+//                // do nothing
+//            }
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -481,6 +438,112 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     public void onRestart() {
         super.onRestart();
         Log.d("StrictMode", "LA restart.");
+    }
+
+
+    public class checkAutoLogInTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+                current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
+                return bAuto;
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean autoLogIn) {
+            if (autoLogIn)
+                startMainActivity();
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    public class saveStateTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                current_user = mEmailView.getText().toString();
+                // test
+                if (!TextUtils.isEmpty(current_user)) {
+                    SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+                    if (username == null)
+                        username = new HashSet<>();
+                    username.add(current_user);
+                    SharedPreferences.Editor editor = userDetails.edit();
+                    editor.putString(MainActivity.CURRENT_USER_KEY, current_user);
+                    editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, true);
+                    editor.putStringSet(MainActivity.USER_NAME_SET_KEY, username);
+                    editor.apply();
+                }
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            startMainActivity();
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    public class getAutoCompleteListTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                username = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getStringSet(MainActivity.USER_NAME_SET_KEY, null);
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            populateAutoComplete();
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    // use back button to navigate backward
+    @Override
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+        // check if the key event was the Back button and if there's history
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    KecUtilities.closeCache();
+                    finish();
+                    System.exit(0);
+                    return super.onKeyDown(keyCode, event);
+            }
+        }
+
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
     }
 }
 

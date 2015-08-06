@@ -3,6 +3,7 @@ package com.kectech.android.kectechapp.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -11,10 +12,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.MainAdapter;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
@@ -24,6 +23,8 @@ import java.io.File;
 public class MainActivity extends Activity {
 
     // strings
+    // for register activity result
+    public final static int REGISTER_REQUEST_CODE = 6008;
     // for communicate with other activities
     // hall activity of main
     public final static String VIDEO_OF_HALL_OF_MAIN_URL = "video_hall_of_main_url";
@@ -160,7 +161,7 @@ public class MainActivity extends Activity {
                 return false;
             case R.id.menu_hall_tab_item_logout:
                 // return false to deal with it in fragment (Tab_Main_Hall)
-                Logout();
+                new logOutTask().execute();
                 break;
             case R.id.menu_item_quit:   // from main_menu
             case R.id.menu_hall_tab_item_quit:  // from tab_hall_menu
@@ -193,25 +194,49 @@ public class MainActivity extends Activity {
         // system behavior (probably exit the activity)
         return super.onKeyDown(keyCode, event);
     }
-    public void Logout() {
-        SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
-        SharedPreferences.Editor editor = userDetails.edit();
-        editor.putString(MainActivity.CURRENT_USER_KEY, null);
-        editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
-        editor.commit();
 
-        KecUtilities.closeCache();
-
+    public void startLogInActivity() {
         // start login activity
         Intent intent = new Intent(this, LoginActivity.class);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         try {
             startActivity(intent);
-            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             finish();
+            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+        }
+    }
+
+    public class logOutTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+
+                SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+                SharedPreferences.Editor editor = userDetails.edit();
+                editor.putString(MainActivity.CURRENT_USER_KEY, null);
+                editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+                editor.apply();
+
+                KecUtilities.closeCache();
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            startLogInActivity();
+        }
+
+        @Override
+        protected void onCancelled() {
         }
     }
 }

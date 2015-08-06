@@ -257,6 +257,15 @@ public class KecUtilities {
         return strJson;
     }
 
+    public static void deleteLocalFile() {
+        // delete folder [user]
+        if (context == null)
+            return;
+        File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
+        if (folder.exists()) {
+            folder.delete();
+        }
+    }
     public static boolean createFolders() {
         // one for each tab
         // hall, show, public, setting
