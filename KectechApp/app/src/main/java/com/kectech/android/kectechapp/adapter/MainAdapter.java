@@ -2,6 +2,7 @@ package com.kectech.android.kectechapp.adapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+
 import com.kectech.android.kectechapp.tabs.*;
 
 import android.support.v13.app.FragmentPagerAdapter;
@@ -36,15 +37,6 @@ public class MainAdapter extends FragmentPagerAdapter {
             case 1: {
                 return new Tab_Main_Setting();
             }
-//            case 1: {
-//                return new Tab_Main_Show();
-//            }
-//            case 2: {
-//                return new Tab_Main_Public();
-//            }
-//            case 3: {
-//                return new Tab_Main_Setting();
-//            }
             default:
                 return null;
         }

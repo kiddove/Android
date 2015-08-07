@@ -19,8 +19,7 @@ import com.kectech.android.kectechapp.activity.MainActivity;
 public class Tab_Main_Setting extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab_main_setting, container, false);
-        return v;
+        return inflater.inflate(R.layout.tab_main_setting, container, false);
     }
 
     // detect when this fragment is visible

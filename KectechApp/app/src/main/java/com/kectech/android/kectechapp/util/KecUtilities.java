@@ -2,9 +2,6 @@ package com.kectech.android.kectechapp.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -15,14 +12,12 @@ import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Paul on 25/06/2015.
@@ -101,72 +96,6 @@ public class KecUtilities {
         }
     }
 
-    public static String getLocalFilePathFromURL(String url, String subFolder) {
-        // subfolder should be exist after calling createFolders
-        if (url == null || context == null)
-            return null;
-        // use base64 to encode the url then use as filename store on local dir
-        try {
-            byte[] data = url.getBytes(MainActivity.ENCODING);
-
-            String fileName = Base64.encodeToString(data, Base64.DEFAULT);
-            File file = new File(context.getFilesDir() + File.separator + subFolder + File.separator + fileName);
-            return file.getAbsolutePath();
-        } catch (UnsupportedEncodingException uee) {
-            uee.printStackTrace();
-            return null;
-        } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static Bitmap ReadFileFromLocal(String filePath) {
-        Bitmap bitmap = null;
-
-        if (filePath != null) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            //options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            options.inPreferredConfig = Bitmap.Config.RGB_565;
-            File file = new File(filePath);
-
-            if (file.exists()) {
-                try {
-                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                } catch (OutOfMemoryError ome) {
-                    // only load 100 * 100
-                    try {
-                        // only read dimensions and type no real data.
-                        BitmapFactory.Options o = new BitmapFactory.Options();
-                        o.inJustDecodeBounds = true;
-                        BitmapFactory.decodeStream(new FileInputStream(file), null, o);
-
-                        final int width = 80;
-                        final int height = 80;
-                        int scale = 1;
-                        while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
-                            scale *= 2;
-
-                        // Decode with inSampleSize
-                        BitmapFactory.Options o2 = new BitmapFactory.Options();
-                        o2.inSampleSize = scale;
-                        return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
-
-                    } catch (OutOfMemoryError ome_stream) {
-                        //
-                        Log.e(MainActivity.LOG_TAG, "OutOfMemoryError second time.");
-
-                    } catch (FileNotFoundException fnfe) {
-                        Log.e(MainActivity.LOG_TAG, "file not found when trying load scaled img: " + fnfe.getMessage());
-                        fnfe.printStackTrace();
-                    }
-                }
-            }
-        }
-        return bitmap;
-    }
-
     // for save & load json file
     public static String getTabLocalData(String subFolder) {
         BufferedReader br = null;
@@ -174,7 +103,7 @@ public class KecUtilities {
         try {
             if (context == null)
                 return null;
-            StringBuffer output = new StringBuffer();
+            StringBuilder output = new StringBuilder();
             String filePath = context.getFilesDir() + File.separator + subFolder + File.separator + "list.txt";
             File file = new File(filePath);
             if (!file.exists())
@@ -191,12 +120,9 @@ public class KecUtilities {
             Log.e(MainActivity.LOG_TAG, "File not found: " + fne.getMessage());
             fne.printStackTrace();
 
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException | IOException npe) {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
-        } catch (IOException ioe) {
-            Log.e(MainActivity.LOG_TAG, ioe.getMessage());
-            ioe.printStackTrace();
         } finally {
             try {
                 if (br != null)
@@ -229,12 +155,9 @@ public class KecUtilities {
             bw.flush();
             bw.close();
             fw.close();
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException | IOException npe) {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
-        } catch (IOException ioe) {
-            Log.e(MainActivity.LOG_TAG, ioe.getMessage());
-            ioe.printStackTrace();
         }
     }
 

@@ -10,7 +10,7 @@ import com.kectech.android.kectechapp.activity.MainActivity;
 
 /**
  * Created by Paul on 03/07/2015.
- * for WebView in video activity
+ * for WebView in video activity -- js click may have conflict, disable for now
  * for register activity (consider to use fragment (pager), put register, login in one activity,)
  */
 public class OnSwipeTouchListener implements View.OnTouchListener {

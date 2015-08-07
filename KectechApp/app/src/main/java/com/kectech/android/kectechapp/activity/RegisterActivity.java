@@ -138,16 +138,6 @@ public class RegisterActivity extends Activity implements OnSwipeOutListener {
         mProgressView = findViewById(R.id.login_progress);
         mNickNameView = (EditText) findViewById(R.id.nick_name);
 
-//        // hide soft keyboard when click non TextView area.
-//        mRegisterFormView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                return false;
-//            }
-//        });
-
         OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
             public void onSwipeOutLeft() {
                 //getFragmentManager().popBackStack();
@@ -155,13 +145,12 @@ public class RegisterActivity extends Activity implements OnSwipeOutListener {
             }
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                // hide soft keyboard when click non TextView area.
+                // then determine if need  swipe out
                 final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 return super.onTouch(v, event);
             }
-//            public void onSwipeLeft() {
-//                //Toast.makeText(VideoOfHallOfMainActivity.this, "left", Toast.LENGTH_SHORT).show();
-//            }
         };
 
         mRegisterFormView.setOnTouchListener(swipeTouchListener);
@@ -419,47 +408,7 @@ public class RegisterActivity extends Activity implements OnSwipeOutListener {
         }
         return false;
     }
-    private boolean userLogIn(String... params) {
-        // length should be 2
-        if (params.length != 2)
-            return false;
-        ImageFetcher.disableConnectionReuseIfNecessary();
-        HttpURLConnection urlConnection = null;
-        BufferedInputStream in = null;
-        try {
-            //final String urlString = "http://www.kdlinx.com/registor.ashx?handleType=4&email=xxx&pwd=xxx&nickname=xxx";
-            final String urlString = "http://198.105.216.190/registor.ashx?handleType=20&email=" + params[0] + "&pwd=" + params[1];
-            final URL url = new URL(urlString);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
 
-            // byte array to store input
-            byte[] contents = new byte[1024];
-            int bytesRead;
-            if ((bytesRead = in.read(contents)) != -1) {
-                String s = new String(contents, 0, bytesRead);
-                return s.compareToIgnoreCase("true") == 0;
-            }
-
-            return true;
-        } catch (final IOException e) {
-            Log.e(MainActivity.LOG_TAG, "Error in log in - " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (final IOException e) {
-                Log.e(MainActivity.LOG_TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
     private boolean checkUser(String... params) {
         // length should be 1
         if (params.length != 1)

@@ -276,15 +276,14 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 integrator.initiateScan();
                 return true;
             case R.id.menu_hall_tab_item_logout:
-                // returen false in main activity, so deal with it in fragment
-                String s = "123";
+                // return false in main activity, so deal with it in fragment
                 return true;
             case R.id.menu_hall_tab_item_refresh:
                 // clear cache, json file
                 // and refresh
                 new ClearCacheTask().execute();
                 return true;
-            // handle in mainactivity
+            // handle in main activity
 //            case R.id.menu_hall_tab_item_quit:
 //                // clear cache
 //                //mImageFetcher.clearCache();
