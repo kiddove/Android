@@ -7,7 +7,7 @@
     <!--tab-->
     <color name="tab_background">#FFF7F7F7</color>
     <!--<color name="tab_text">#ff78797A</color>-->
-    <color name="tab_text">@color/bar_background</color>
+    <color name="tab_text">#FF68696A</color>
     <!--bar-->
     <color name="bar_background">#FF303538</color>
     <color name="bar_title_text">#ffE1E1E1</color>

@@ -11,6 +11,7 @@ import com.kectech.android.kectechapp.activity.MainActivity;
 /**
  * Created by Paul on 03/07/2015.
  * for WebView in video activity
+ * for register activity (consider to use fragment (pager), put register, login in one activity,)
  */
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
@@ -23,8 +24,8 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     private final class GestureListener extends SimpleOnGestureListener {
 
-        private static final int SWIPE_THRESHOLD = 100;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+        private static final int SWIPE_THRESHOLD = 200;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 80;
 
         @Override
         public boolean onDown(MotionEvent e) {

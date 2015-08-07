@@ -95,9 +95,9 @@
                 android:text="@string/action_sign_up_short"
                 android:textColor="@color/bar_background"
                 android:textSize="18sp"
-                android:textStyle="bold" />
-
-
+                android:textStyle="bold"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"/>
         </LinearLayout>
     </ScrollView>
 

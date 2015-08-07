@@ -79,7 +79,9 @@
                     android:textColor="@color/bar_background"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="15dp"/>
 
                 <Button
                     android:id="@+id/email_sign_up_button"
@@ -93,7 +95,9 @@
                     android:textColor="@color/bar_background"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="1dp"/>
             </LinearLayout>
 
         </LinearLayout>

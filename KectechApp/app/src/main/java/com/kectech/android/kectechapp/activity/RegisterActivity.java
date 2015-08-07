@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
+import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
+import com.kectech.android.kectechapp.listeners.OnSwipeTouchListener;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 
 import java.io.BufferedInputStream;
@@ -33,7 +35,7 @@ import java.net.URL;
  * A Register screen that offers register via email/password/nickname.
  * sing up
  */
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements OnSwipeOutListener {
 
     /**
      * Keep track of the register task to ensure we can cancel it if requested.
@@ -111,8 +113,7 @@ public class RegisterActivity extends Activity {
 //                        mEmailView.setError(getString(R.string.error_invalid_email));
 //                        mEmailView.requestFocus();
                         return false;
-                    }
-                    else if (!isEmailValid(email)) {
+                    } else if (!isEmailValid(email)) {
                         mEmailView.setError(getString(R.string.error_invalid_email));
                         mEmailView.requestFocus();
                         return true;
@@ -137,15 +138,33 @@ public class RegisterActivity extends Activity {
         mProgressView = findViewById(R.id.login_progress);
         mNickNameView = (EditText) findViewById(R.id.nick_name);
 
-        // hide soft keyboard when click non TextView area.
-        mRegisterFormView.setOnTouchListener(new View.OnTouchListener() {
+//        // hide soft keyboard when click non TextView area.
+//        mRegisterFormView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//                imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                return false;
+//            }
+//        });
+
+        OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
+            public void onSwipeOutLeft() {
+                //getFragmentManager().popBackStack();
+                close(true);
+            }
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                return false;
+                return super.onTouch(v, event);
             }
-        });
+//            public void onSwipeLeft() {
+//                //Toast.makeText(VideoOfHallOfMainActivity.this, "left", Toast.LENGTH_SHORT).show();
+//            }
+        };
+
+        mRegisterFormView.setOnTouchListener(swipeTouchListener);
     }
 
     private void checkEmailAddress() {
@@ -345,8 +364,7 @@ public class RegisterActivity extends Activity {
         intent.putExtra(MainActivity.CURRENT_USER,  mEmailView.getText().toString());
         try {
             setResult(RESULT_OK, intent);
-            finish();
-            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+            close(false);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
 
@@ -488,8 +506,7 @@ public class RegisterActivity extends Activity {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    finish();
-                    overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+                    close(true);
                     return super.onKeyDown(keyCode, event);
             }
         }
@@ -508,13 +525,24 @@ public class RegisterActivity extends Activity {
 
         switch (id) {
             case android.R.id.home: {
-                finish();
-                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+                close(true);
                 return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    @Override
+    public void onSwipeOutAtLeft() {
+        close(true);
+    }
+
+    private void close(boolean bBackward) {
+        finish();
+        if (bBackward)
+            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+        else
+            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
     }
 }
 

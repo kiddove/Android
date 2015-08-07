@@ -28,7 +28,7 @@
         <item name="android:itemTextAppearance">@style/MenuTextAppearance</item>
 
         <!--cab no done button-->
-        <item name="android:actionModeCloseButtonStyle">@style/NoDoneButton</item>
+        <item name="android:actionModeCloseButtonStyle">@style/customDoneButton</item>
         <item name="android:actionModeStyle">@style/actionMode</item>
 
         <!--actionbar back icon-->
@@ -92,7 +92,7 @@
     </style>
 
     <!--cab no done button text-->
-    <style name="NoDoneButton" parent="@android:style/Widget.ActionButton.CloseMode">
+    <style name="customDoneButton" parent="@android:style/Widget.ActionButton.CloseMode">
         <!--<item name="android:visibility">gone</item>-->
         <!--<item name="android:background">@color/simple_yellow</item>-->
         <!--<item name="android:text">Done</item>-->
