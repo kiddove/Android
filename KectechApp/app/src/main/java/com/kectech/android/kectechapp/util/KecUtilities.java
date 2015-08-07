@@ -262,9 +262,15 @@ public class KecUtilities {
         if (context == null)
             return;
         File folder = new File(context.getFilesDir() + File.separator + MainActivity.USER);
-        if (folder.exists()) {
-            folder.delete();
-        }
+        deleteRecursive(folder);
+    }
+
+    private static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
     }
     public static boolean createFolders() {
         // one for each tab

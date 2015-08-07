@@ -12,6 +12,8 @@ public class VideoListItem {
     private String title = null;
     private String description = null;
     private String url = null;
+    // vod(duration  1:10 ) or live
+    private String streamType = "LIVE";
     private int id;
 
     public int getId() {
@@ -42,6 +44,9 @@ public class VideoListItem {
         //return "http://192.168.9.40/demo/test.html";
         //return "http://192.168.9.40/demo/webview.html";
         return url;
+    }
+    public String getStreamType() {
+        return streamType.toUpperCase();
     }
     @Override
     public String toString() {

@@ -19,6 +19,7 @@
         <item name="android:selectableItemBackground">@drawable/sliding_tab_item_selector</item>
 
         <!--action bar icon and overflow part-->
+        <item name="android:actionOverflowButtonStyle">@style/customoverflow</item>
         <item name="android:actionBarItemBackground">@drawable/actionbar_and_overflow_selector</item>
         <!--droplist will be in DropDownListView listSelector-->
 
@@ -30,12 +31,16 @@
         <item name="android:actionModeCloseButtonStyle">@style/NoDoneButton</item>
         <item name="android:actionModeStyle">@style/actionMode</item>
 
-        <!--<item name="android:homeAsUpIndicator">@drawable/check</item>-->
+        <!--actionbar back icon-->
+        <item name="android:homeAsUpIndicator">@drawable/ic_action_navigation_arrow_back</item>
         <!--<item name="android:buttonStyle">@style/login.button</item>-->
 
         <!--for autocomplete textView and drop down item-->
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
         <item name="android:dropDownItemStyle">@style/AutoCompleteTextView.DropDownItem</item>
+
+        <!--cab done button icon-->
+        <item name="android:actionModeCloseDrawable">@drawable/ic_action_action_done</item>
     </style>
 
     <!--overflow menu drop down-->
@@ -86,7 +91,7 @@
         <item name="android:textColor">@color/bar_menu_text</item>
     </style>
 
-    <!--cab no done button-->
+    <!--cab no done button text-->
     <style name="NoDoneButton" parent="@android:style/Widget.ActionButton.CloseMode">
         <!--<item name="android:visibility">gone</item>-->
         <!--<item name="android:background">@color/simple_yellow</item>-->
@@ -149,5 +154,10 @@
     <style name="GeneralProgressBar" parent="@android:style/Widget.Holo.Light.ProgressBar">
         <item name="android:endColor">@color/progress_loading</item>
         <item name="android:startColor">@color/progress_loading</item>
+    </style>
+
+    <!--overflow icon-->
+    <style name="customoverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_navigation_more_horiz</item>
     </style>
 </resources>

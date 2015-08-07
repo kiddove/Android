@@ -6,7 +6,8 @@
     <color name="tab_highlight">#ff9ecfbf</color>
     <!--tab-->
     <color name="tab_background">#FFF7F7F7</color>
-    <color name="tab_text">#ff78797A</color>
+    <!--<color name="tab_text">#ff78797A</color>-->
+    <color name="tab_text">@color/bar_background</color>
     <!--bar-->
     <color name="bar_background">#FF303538</color>
     <color name="bar_title_text">#ffE1E1E1</color>
@@ -37,6 +38,7 @@
     <color name="tab_layout_background">#FFE6E7E8</color>
     <color name="PhotoBackground">#24CCCCCC</color>
     <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
 
     <!--<color name="item_pressed">#84D3EF</color>-->
     <!--do not set transparent otherwise when in dark background... it's awful -->
@@ -49,7 +51,8 @@
 
     <color name="dot_normal">#ff78797A</color>
     <color name="dot_selected">@color/tab_selected</color>
-
+    030390
+    <color name="video_list_item_label_background">#FF030390</color>
     <integer-array name="gplus_colors">
         <item>@color/swipe_color_1</item>
         <item>@color/swipe_color_3</item>

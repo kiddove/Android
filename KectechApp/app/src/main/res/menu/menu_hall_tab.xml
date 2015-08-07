@@ -3,8 +3,8 @@
 
     <item
         android:id="@+id/menu_hall_tab_item_add"
-        android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_av_playlist_add"
+        android:showAsAction="ifRoom"
         android:title="@string/ui_menu_add">
         <menu>
             <!--empty submenu-->
@@ -12,16 +12,17 @@
     </item>
 
     <item
-        android:id="@+id/menu_hall_tab_item_edit"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/ui_menu_edit">
+        android:id="@+id/menu_hall_tab_item_delete"
+        android:icon="@drawable/ic_action_content_clear"
+        android:showAsAction="ifRoom"
+        android:title="@string/ui_menu_delete">
     </item>
     <item
         android:id="@+id/menu_hall_tab_item_refresh"
-        android:icon="@drawable/ic_menu_refresh"
+        android:icon="@drawable/ic_action_action_autorenew"
         android:showAsAction="never"
-        android:title="@string/ui_menu_refresh"></item>
+        android:title="@string/ui_menu_refresh">
+    </item>
 
     <item
         android:id="@+id/menu_hall_tab_item_logout"
@@ -30,9 +31,8 @@
     </item>
     <item
         android:id="@+id/menu_hall_tab_item_quit"
+        android:icon="@drawable/ic_action_action_exit_to_app"
         android:showAsAction="never"
         android:title="@string/ui_menu_quit">
     </item>
 </menu>
-    <!--android:icon="@android:drawable/ic_menu_add"-->
-    <!--android:icon="@android:drawable/ic_menu_edit"-->

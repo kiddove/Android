@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:textStyle="bold"
         android:textSize="12sp"
-        android:drawableTop="@drawable/ic_launcher"
+        android:drawableTop="@drawable/empty_photo"
         android:drawablePadding="5dp"
         android:gravity="center"
         android:background="@drawable/sliding_tab_item_selector"

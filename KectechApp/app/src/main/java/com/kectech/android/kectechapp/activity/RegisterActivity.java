@@ -12,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -47,6 +49,8 @@ public class RegisterActivity extends Activity {
     private View mProgressView;
     private View mRegisterFormView;
 
+    // 1 -- email existed
+    private int ERROR_CODE = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,16 +136,16 @@ public class RegisterActivity extends Activity {
         mRegisterFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.login_progress);
         mNickNameView = (EditText) findViewById(R.id.nick_name);
-//
-//        // hide soft keyboard when click non TextView area.
-//        mLoginFormView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                return false;
-//            }
-//        });
+
+        // hide soft keyboard when click non TextView area.
+        mRegisterFormView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return false;
+            }
+        });
     }
 
     private void checkEmailAddress() {
@@ -292,8 +296,6 @@ public class RegisterActivity extends Activity {
             try {
                 if (params.length == 3)
                     return registerNewUser(params);
-                else if (params.length == 2)
-                    return userLogIn(params);
                 else if (params.length == 1) {
                     bValidUserName = checkUser(params);
                     return bValidUserName;
@@ -315,8 +317,10 @@ public class RegisterActivity extends Activity {
                 if (success) {
                     startMainActivity();
                 } else {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    mPasswordView.requestFocus();
+                    if (ERROR_CODE == 1) {
+                        mEmailView.setError(getString(R.string.error_existed_email));
+                        mEmailView.requestFocus();
+                    }
                 }
             }
             else if (type == 1) {
@@ -353,6 +357,7 @@ public class RegisterActivity extends Activity {
         // length should be 3
         if (params.length != 3)
             return false;
+        ERROR_CODE = 0;
         ImageFetcher.disableConnectionReuseIfNecessary();
         HttpURLConnection urlConnection = null;
         BufferedInputStream in = null;
@@ -368,10 +373,16 @@ public class RegisterActivity extends Activity {
             int bytesRead;
             if ((bytesRead = in.read(contents)) != -1) {
                 String s = new String(contents, 0, bytesRead);
-                return s.compareToIgnoreCase("true") == 0;
+                if (s.compareToIgnoreCase("true") == 0) {
+                    ERROR_CODE = 0;
+                    return true;
+                } else if (s.compareToIgnoreCase("existed") == 0) {
+                    ERROR_CODE = 1;
+                    return false;
+                }
             }
 
-            return true;
+            return false;
         } catch (final IOException e) {
             Log.e(MainActivity.LOG_TAG, "Error in register new user - " + e.getMessage());
             e.printStackTrace();
@@ -486,6 +497,24 @@ public class RegisterActivity extends Activity {
         // If it wasn't the Back key or there's no web page history, bubble up to the default
         // system behavior (probably exit the activity)
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home: {
+                finish();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 

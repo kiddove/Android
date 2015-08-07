@@ -277,26 +277,7 @@ public class LoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-
                 new saveStateTask().execute();
-//                current_user = mEmailView.getText().toString();
-//                // test
-//                if (!TextUtils.isEmpty(current_user)) {
-//                    SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
-//                    if (username == null)
-//                        username = new HashSet<>();
-//                    username.add(current_user);
-//                    SharedPreferences.Editor editor = userDetails.edit();
-//                    editor.putString(MainActivity.CURRENT_USER_KEY, current_user);
-//                    editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, true);
-//                    editor.putStringSet(MainActivity.USER_NAME_SET_KEY, username);
-//                    editor.commit();
-//
-////            boolean bLog = getSharedPreferences("userdetails", MODE_PRIVATE).getBoolean("LOGIN", false);
-////            Log.i(MainActivity.LOG_TAG, "when save " + Boolean.toString(bLog));
-//                }
-//
-//                startMainActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -386,17 +367,21 @@ public class LoginActivity extends Activity {
         if (requestCode == MainActivity.REGISTER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.putExtra(MainActivity.CURRENT_USER, data.getStringExtra(MainActivity.CURRENT_USER));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    try {
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-                    } catch (Exception e) {
-                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
-
-                    }
+                    // set email then new task
+                    //current_user = data.getStringExtra(MainActivity.CURRENT_USER);
+                    mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER));
+                    new saveStateTask().execute();
+//                    Intent intent = new Intent(this, MainActivity.class);
+//                    intent.putExtra(MainActivity.CURRENT_USER, data.getStringExtra(MainActivity.CURRENT_USER));
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    try {
+//                        startActivity(intent);
+//                        finish();
+//                        overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+//                    } catch (Exception e) {
+//                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+//
+//                    }
                 }
             }
 //            else if (resultCode == RESULT_CANCELED) {

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -122,12 +121,10 @@ public class Tab_Main_Hall_Video extends Fragment {
 
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
                 // get another activity to run
-
                 Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                // todo set correct url of video page, now all items are test url.
                 intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
                 startActivity(intent);
                 activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);

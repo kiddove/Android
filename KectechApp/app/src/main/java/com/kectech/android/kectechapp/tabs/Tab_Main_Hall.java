@@ -268,7 +268,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.menu_hall_tab_item_edit:
+            case R.id.menu_hall_tab_item_delete:
                 mMode = activity.startActionMode(new ModeCallback());
                 return true;
             case R.id.hall_tab_add_sub_scan:
@@ -982,12 +982,9 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                     // byte array to store input
                     byte[] contents = new byte[1024];
                     int bytesRead;
-                    while ((bytesRead = in.read(contents)) != -1) {
+                    if ((bytesRead = in.read(contents)) != -1) {
                         String s = new String(contents, 0, bytesRead);
-                        if (s.compareToIgnoreCase("true") == 0)
-                            return true;
-                        else
-                            return false;
+                        return s.compareToIgnoreCase("true") == 0;
                     }
 
                     return true;
@@ -1002,7 +999,10 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                         if (in != null) {
                             in.close();
                         }
-                    } catch (final IOException e) {}
+                    } catch (final IOException e) {
+                        Log.e(MainActivity.LOG_TAG, e.getMessage());
+                        e.printStackTrace();
+                    }
                 }
                 return false;
             } catch (Exception e) {
@@ -1058,12 +1058,9 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                     // byte array to store input
                     byte[] contents = new byte[1024];
                     int bytesRead;
-                    while ((bytesRead = in.read(contents)) != -1) {
+                    if ((bytesRead = in.read(contents)) != -1) {
                         String s = new String(contents, 0, bytesRead);
-                        if (s.compareToIgnoreCase("true") == 0)
-                            return true;
-                        else
-                            return false;
+                        return s.compareToIgnoreCase("true") == 0;
                     }
 
                     return true;
@@ -1078,7 +1075,10 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                         if (in != null) {
                             in.close();
                         }
-                    } catch (final IOException e) {}
+                    } catch (final IOException e) {
+                        Log.e(MainActivity.LOG_TAG, e.getMessage());
+                        e.printStackTrace();
+                    }
                 }
                 return false;
             } catch (Exception e) {
@@ -1107,7 +1107,6 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             try {
                 KecUtilities.deleteLocalFile();
                 KecUtilities.clearCache();
-
                 KecUtilities.createFolders();
 
             } catch (Exception e) {

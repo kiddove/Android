@@ -59,8 +59,8 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:theme="@style/MainTheme"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:label="@string/title_activity_register">
         </activity>
     </application>
 
