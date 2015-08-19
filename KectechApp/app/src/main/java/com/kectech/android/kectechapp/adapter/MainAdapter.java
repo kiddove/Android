@@ -3,7 +3,7 @@ package com.kectech.android.kectechapp.adapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 
-import com.kectech.android.kectechapp.tabs.*;
+import com.kectech.android.kectechapp.fragments.*;
 
 import android.support.v13.app.FragmentPagerAdapter;
 

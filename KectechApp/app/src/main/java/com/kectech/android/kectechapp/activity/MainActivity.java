@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -160,11 +160,13 @@ public class MainActivity extends Activity {
                 // return false here
                 return false;
             case R.id.menu_hall_tab_item_logout:
+            case R.id.menu_setting_logout:
                 // return false to deal with it in fragment (Tab_Main_Hall)
                 new logOutTask().execute();
                 break;
-            case R.id.menu_item_quit:   // from main_menu
+            //case R.id.menu_item_quit:   // from main_menu
             case R.id.menu_hall_tab_item_quit:  // from tab_hall_menu
+            case R.id.menu_setting_quit:
                 KecUtilities.closeCache();
                 finish();
                 System.exit(0);

@@ -62,6 +62,13 @@
             android:windowSoftInputMode="adjustResize|stateVisible"
             android:label="@string/title_activity_register">
         </activity>
+
+        <activity
+            android:name=".activity.AccountPreferenceActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:label="@string/title_activity_account">
+        </activity>
     </application>
 
 </manifest>

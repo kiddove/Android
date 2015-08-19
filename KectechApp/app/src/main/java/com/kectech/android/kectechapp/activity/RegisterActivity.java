@@ -154,6 +154,14 @@ public class RegisterActivity extends Activity implements OnSwipeOutListener {
         };
 
         mRegisterFormView.setOnTouchListener(swipeTouchListener);
+
+        TextView goBackToLogIn = (TextView)findViewById(R.id.alreadyMember);
+        goBackToLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close(true);
+            }
+        });
     }
 
     private void checkEmailAddress() {

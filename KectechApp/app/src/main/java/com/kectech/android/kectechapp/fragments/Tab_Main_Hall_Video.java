@@ -1,4 +1,4 @@
-package com.kectech.android.kectechapp.tabs;
+package com.kectech.android.kectechapp.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;

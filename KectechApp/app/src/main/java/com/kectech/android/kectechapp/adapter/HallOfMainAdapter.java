@@ -2,11 +2,10 @@ package com.kectech.android.kectechapp.adapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.support.v13.app.FragmentPagerAdapter;
 
-import com.kectech.android.kectechapp.tabs.Tab_Main_Hall_Photo;
-import com.kectech.android.kectechapp.tabs.Tab_Main_Hall_Video;
+import com.kectech.android.kectechapp.fragments.Tab_Main_Hall_Photo;
+import com.kectech.android.kectechapp.fragments.Tab_Main_Hall_Video;
 
 /**
  * Created by Paul on 02/07/2015.

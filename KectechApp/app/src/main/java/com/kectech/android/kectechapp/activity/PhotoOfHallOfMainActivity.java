@@ -21,7 +21,7 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.FadePageTransformer;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
-import com.kectech.android.kectechapp.tabs.ImageDetailFragment;
+import com.kectech.android.kectechapp.fragments.ImageDetailFragment;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 
@@ -79,7 +79,10 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             if (intent != null) {
                 URLs = intent.getExtras();
                 ArrayList<String> images = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY);
-                imageCount = images.size();
+                if (images != null)
+                    imageCount = images.size();
+                else
+                    imageCount = 0;
 
                 // pager
                 CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
@@ -137,7 +140,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hall_activity, menu);
+        //getMenuInflater().inflate(R.menu.menu_hall_activity, menu);
         return true;
     }
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--// IMPORTANT MUST PUT CONDITIONS FIRST, THEN DEFAULT ONE -->
+    <!--// OTHERWISE IT WON'T WORK-->
+    <item android:drawable="@drawable/login_text_view_pressed" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/login_text_view_normal"></item>
+</selector>

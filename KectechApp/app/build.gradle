@@ -7,7 +7,7 @@ android {
         applicationId "com.kectech.android.kectechapp"
         minSdkVersion 15
         targetSdkVersion 22
-        versionName 'demo'
+        versionName '0.9.17'
     }
     buildTypes {
         release {

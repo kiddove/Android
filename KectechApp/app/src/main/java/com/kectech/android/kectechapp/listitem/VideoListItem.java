@@ -1,7 +1,5 @@
 package com.kectech.android.kectechapp.listitem;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by Paul on 16/06/2015.
  * define a class for custom listView item

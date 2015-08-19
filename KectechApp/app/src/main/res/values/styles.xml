@@ -41,6 +41,7 @@
 
         <!--cab done button icon-->
         <item name="android:actionModeCloseDrawable">@drawable/ic_action_action_done</item>
+
     </style>
 
     <!--overflow menu drop down-->
@@ -160,4 +161,5 @@
     <style name="customoverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_navigation_more_horiz</item>
     </style>
+
 </resources>

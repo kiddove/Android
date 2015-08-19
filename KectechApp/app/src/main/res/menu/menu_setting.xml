@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_setting_logout"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_action_exit_to_app"
+        android:title="@string/ui_menu_logout">
+    </item>
+    <item
+        android:id="@+id/menu_setting_quit"
+        android:showAsAction="never"
+        android:title="@string/ui_menu_quit">
+    </item>
+</menu>

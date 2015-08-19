@@ -23,7 +23,8 @@
         android:textSize="14sp"
         android:textColor="@color/black"
         android:layout_below="@+id/hall_photo_list_item_title"
-        android:text="@string/action_settings" />
+        android:text="@string/action_settings"
+        android:maxLines="4"/>
 
     <LinearLayout
         android:id="@+id/hall_photo_list_item_layout0"

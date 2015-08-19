@@ -105,7 +105,7 @@ public class LoginActivity extends Activity {
             }
         });
 
-        Button mSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
+        TextView mSignUpButton = (TextView) findViewById(R.id.email_sign_up);
         mSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -277,7 +277,7 @@ public class LoginActivity extends Activity {
             showProgress(false);
 
             if (success) {
-                new saveStateTask().execute();
+                new saveStateTask().execute(mEmailView.getText().toString());
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -370,7 +370,7 @@ public class LoginActivity extends Activity {
                     // set email then new task
                     //current_user = data.getStringExtra(MainActivity.CURRENT_USER);
                     mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER));
-                    new saveStateTask().execute();
+                    new saveStateTask().execute(mEmailView.getText().toString());
 //                    Intent intent = new Intent(this, MainActivity.class);
 //                    intent.putExtra(MainActivity.CURRENT_USER, data.getStringExtra(MainActivity.CURRENT_USER));
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -453,12 +453,13 @@ public class LoginActivity extends Activity {
         }
     }
 
-    public class saveStateTask extends AsyncTask<Void, Void, Void> {
+    public class saveStateTask extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
             try {
-                current_user = mEmailView.getText().toString();
+                //current_user = mEmailView.getText().toString();
+                current_user = params[0];
                 // test
                 if (!TextUtils.isEmpty(current_user)) {
                     SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);

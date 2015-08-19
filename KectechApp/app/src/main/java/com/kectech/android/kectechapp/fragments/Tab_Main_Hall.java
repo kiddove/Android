@@ -1,4 +1,4 @@
-package com.kectech.android.kectechapp.tabs;
+package com.kectech.android.kectechapp.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -237,10 +237,10 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // clear the existing items, otherwise new item will be appended to it.
         menu.clear();
-        inflater.inflate(R.menu.menu_hall_tab, menu);
+        inflater.inflate(R.menu.menu_hall, menu);
         MenuItem menuItem = menu.findItem(R.id.menu_hall_tab_item_add);
         if (menuItem != null) {
-            inflater.inflate(R.menu.hall_tab_add_submenu, menuItem.getSubMenu());
+            inflater.inflate(R.menu.menu_hall_add_submenu, menuItem.getSubMenu());
         }
         //super.onCreateOptionsMenu(menu, inflater);
     }
@@ -414,7 +414,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     private void initActionMode(ActionMode mode, Menu menu) {
         num = 0;
         MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.menu_hall_tab_cab, menu);
+        inflater.inflate(R.menu.menu_hall_cab, menu);
     }
 
     private boolean prepareActionMode() {

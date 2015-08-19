@@ -30,7 +30,8 @@
         android:textColor="@color/black"
         android:layout_below="@+id/hall_video_list_item_title"
         android:text="@string/action_settings"
-        android:layout_alignLeft="@+id/hall_video_list_item_title" />
+        android:layout_alignLeft="@+id/hall_video_list_item_title"
+        android:maxLines="4"/>
 
     <com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView
         android:id="@+id/hall_video_list_item_img"

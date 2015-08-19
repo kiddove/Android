@@ -5,7 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="label_live">LIVE</string>
 
-    <!-- Menu Strings -->
     <string name="ui_menu_search">search</string>
     <string name="ui_menu_send">send</string>
     <string name="ui_menu_add">add</string>
@@ -23,7 +22,8 @@
     <string name="title_activity_main_hall">Shows</string>
     <string name="title_activity_main_hall_photo">POST</string>
     <string name="title_activity_main_hall_Video">Video</string>
-    <string name="title_activity_register">Sign Up</string>
+    <string name="title_activity_register">Sign In</string>
+    <string name="title_activity_account">Account</string>
     <string name="loading_video">Loading video</string>
     <string name="tab_default_string">To be continued...</string>
     <string name="title_activity_test_button">testButtonActivity</string>
@@ -31,4 +31,6 @@
     <string name="clear_cache_complete_toast">Caches have been cleared</string>
     <string name="imageview_description">Image Thumbnail</string>
     <string name="no_network_connection_toast">No network connection found</string>
+    <string name="already_a_member">Already a member?</string>
+    <string name="new_user">New user?</string>
 </resources>

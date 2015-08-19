@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kectech.android.kectechapp.tabs;
+package com.kectech.android.kectechapp.fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;
