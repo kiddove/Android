@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/photo_menu_item_add"
-        android:icon="@drawable/ic_action_editor_mode_edit"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/ui_menu_write_post">
-    </item>
-    <item
         android:id="@+id/photo_menu_item_search"
         android:icon="@drawable/ic_action_search"
         android:showAsAction="ifRoom|withText"

@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kectech.android.kectechapp.activity.NewPostActivity">
+    <item
+        android:id="@+id/menu_new_post_choose_photo"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_image_photo_library"
+        android:title="@string/prompt_new_post_menu_choose_from_photo">
+    </item>
+    <item
+        android:id="@+id/menu_new_post_take_photo"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_image_photo_camera"
+        android:title="@string/prompt_new_post_menu_take_a_photo">
+    </item>
+</menu>

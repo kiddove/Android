@@ -7,7 +7,7 @@ android {
         applicationId "com.kectech.android.kectechapp"
         minSdkVersion 15
         targetSdkVersion 22
-        versionName '0.9.17'
+        versionName '0.9.18'
     }
     buildTypes {
         release {
@@ -20,9 +20,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/gson-2.3.1.jar')
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:support-v13:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.google.code.gson:gson:2.3.1'
 }

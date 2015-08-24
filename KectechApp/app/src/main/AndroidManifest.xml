@@ -10,7 +10,9 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+    <!--https://developer.android.com/training/camera/photobasics.html-->
     <application
         android:allowBackup="true"
         android:icon="@drawable/kdlinx"
@@ -25,7 +27,7 @@
         <activity
             android:name=".activity.HallOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall">
+            android:label="@string/title_activity_main_hall" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.kectechapp.activity.MainActivity" />
@@ -33,7 +35,7 @@
         <activity
             android:name=".activity.PhotoOfHallOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall_photo">
+            android:label="@string/title_activity_main_hall_photo" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.kectechapp.activity.HallOfMainActivity" />
@@ -41,7 +43,7 @@
         <activity
             android:name=".activity.VideoOfHallOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall_Video">
+            android:label="@string/title_activity_main_hall_Video" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.kectechapp.activity.HallOfMainActivity" />
@@ -50,24 +52,35 @@
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:theme="@style/MainTheme"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:label="@string/title_activity_register">
+            android:label="@string/title_activity_register"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
-
         <activity
             android:name=".activity.AccountPreferenceActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:label="@string/title_activity_account">
+            android:label="@string/title_activity_account"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".activity.NewPostActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main_hall_photo"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".activity.ChooseImageActivity"
+            android:label="@string/prompt_navigation_back"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize">
         </activity>
     </application>
 

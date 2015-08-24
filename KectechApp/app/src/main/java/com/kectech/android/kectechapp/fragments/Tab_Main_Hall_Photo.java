@@ -1,5 +1,6 @@
 package com.kectech.android.kectechapp.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,7 +21,9 @@ import com.google.gson.reflect.TypeToken;
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
+import com.kectech.android.kectechapp.activity.NewPostActivity;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
+import com.kectech.android.kectechapp.activity.RegisterActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
@@ -447,7 +451,11 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // clear the existing items, otherwise new item will be appended to it.
         menu.clear();
-        inflater.inflate(R.menu.menu_photo_tab, menu);
+        boolean bAllowNewPost = true;
+        if (bAllowNewPost)
+            inflater.inflate(R.menu.menu_photo_tab, menu);
+        else
+            inflater.inflate(R.menu.menu_photo_tab_no_write_new_post, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -542,6 +550,56 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 return;
 
             onRefreshComplete(result);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+//            case R.id.menu_item_search:
+//                return true;
+            case R.id.photo_menu_item_add:
+                // open a new activity, and get result here
+                startNewPostActivity();
+                return true;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void startNewPostActivity() {
+        Intent intent = new Intent(getActivity(), NewPostActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        try {
+            // do not finish, instead call startActivityForResult
+            startActivityForResult(intent, MainActivity.NEW_POST_CODE);
+            getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MainActivity.NEW_POST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+
+                    // TODO: 20/08/2015
+                }
+            }
+//            else if (resultCode == RESULT_CANCELED) {
+//                // do nothing
+//            }
         }
     }
 }

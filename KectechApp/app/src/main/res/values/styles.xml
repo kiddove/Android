@@ -19,7 +19,7 @@
         <item name="android:selectableItemBackground">@drawable/sliding_tab_item_selector</item>
 
         <!--action bar icon and overflow part-->
-        <item name="android:actionOverflowButtonStyle">@style/customoverflow</item>
+        <item name="android:actionOverflowButtonStyle">@style/custom_overflow</item>
         <item name="android:actionBarItemBackground">@drawable/actionbar_and_overflow_selector</item>
         <!--droplist will be in DropDownListView listSelector-->
 
@@ -40,7 +40,7 @@
         <item name="android:dropDownItemStyle">@style/AutoCompleteTextView.DropDownItem</item>
 
         <!--cab done button icon-->
-        <item name="android:actionModeCloseDrawable">@drawable/ic_action_action_done</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
 
     </style>
 
@@ -158,7 +158,7 @@
     </style>
 
     <!--overflow icon-->
-    <style name="customoverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
+    <style name="custom_overflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_navigation_more_horiz</item>
     </style>
 

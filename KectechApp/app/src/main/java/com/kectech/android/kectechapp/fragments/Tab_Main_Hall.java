@@ -21,7 +21,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -334,15 +333,15 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         }
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        int menuItemIndex = item.getItemId();
-        String[] option = {"YES", "NO"};
-
-        Toast.makeText(activity, option[menuItemIndex] + " selected.", Toast.LENGTH_SHORT).show();
-        return true;
-    }
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+//        int menuItemIndex = item.getItemId();
+//        String[] option = {"YES", "NO"};
+//
+//        Toast.makeText(activity, option[menuItemIndex] + " selected.", Toast.LENGTH_SHORT).show();
+//        return true;
+//    }
 
     private final class ModeCallback implements ActionMode.Callback {
 

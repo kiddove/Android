@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView
+        android:id="@+id/item_image"
+        android:layout_width="@dimen/image_thumbnail_size"
+        android:layout_height="@dimen/image_thumbnail_size"
+        android:src="@drawable/ic_post_default_img" />
+
+    <ImageView
+        android:id="@+id/item_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/choose_image_checkbox_selector"
+        android:layout_alignRight="@+id/item_image"
+        android:layout_alignTop="@+id/item_image"/>
+</RelativeLayout>

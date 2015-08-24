@@ -35,7 +35,7 @@ import java.net.URL;
  * A Register screen that offers register via email/password/nickname.
  * sing up
  */
-public class RegisterActivity extends Activity implements OnSwipeOutListener {
+public class RegisterActivity extends Activity {
 
     /**
      * Keep track of the register task to ensure we can cancel it if requested.
@@ -159,6 +159,8 @@ public class RegisterActivity extends Activity implements OnSwipeOutListener {
         goBackToLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm1.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 close(true);
             }
         });
@@ -488,10 +490,6 @@ public class RegisterActivity extends Activity implements OnSwipeOutListener {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    @Override
-    public void onSwipeOutAtLeft() {
-        close(true);
     }
 
     private void close(boolean bBackward) {

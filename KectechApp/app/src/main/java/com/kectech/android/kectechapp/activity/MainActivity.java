@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
     // strings
     // for register activity result
     public final static int REGISTER_REQUEST_CODE = 6008;
+    public final static int NEW_POST_CODE = 6009;
     // for communicate with other activities
     // hall activity of main
     public final static String VIDEO_OF_HALL_OF_MAIN_URL = "video_hall_of_main_url";
@@ -51,6 +52,9 @@ public class MainActivity extends Activity {
 
     // default encoding for files
     public final static String ENCODING = "UTF-8";
+
+    // use between activities
+    public final static String CHOOSE_IMAGE_RESULT = "choose_image_result";
 
     // default user
     public final static String CURRENT_USER = "current_user";
@@ -153,8 +157,8 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.menu_item_search:
-                return true;
+//            case R.id.menu_item_search:
+//                return true;
             case R.id.menu_hall_tab_item_add:
                 // handle in fragment
                 // return false here

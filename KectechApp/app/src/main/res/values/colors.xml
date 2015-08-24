@@ -3,7 +3,7 @@
     <color name="ColorPrimary">#e62117</color>
     <color name="ColorPrimaryDark">#c31c13</color>
     <color name="tabsScrollColor">#8a140e</color>
-    <color name="tab_highlight">#ff9ecfbf</color>
+    <color name="tab_highlight">#ff9ECFBF</color>
     <!--tab-->
     <color name="tab_background">#FFF7F7F7</color>
     <!--<color name="tab_text">#ff78797A</color>-->
@@ -13,6 +13,7 @@
     <color name="bar_title_text">#ffE1E1E1</color>
     <color name="bar_menu_text">#ffdcdcdc</color>
     <color name="bar_tab_text">#ffdcdcdc</color>
+    <color name="post_img_background">#ffbbbbbb</color>
     <color name="bar_divider">#33dcdcdc</color>
     <color name="simple_yellow">#ECD078</color>
     <color name="primary_blue">#53777A</color>
@@ -21,6 +22,7 @@
     <color name="stacked_green">#118504</color>
     <color name="accent_green">#97e08f</color>
     <color name="tab_selected">#31829C</color>
+    <color name="tab_selected_disable">#B1D5E1</color>
 
     <!--<color name="swipe_color_1">#B6DB49</color>-->
     <!--<color name="swipe_color_2">#99CC00</color>-->
