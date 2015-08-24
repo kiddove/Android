@@ -209,13 +209,21 @@ public class ImageFetcher extends ImageResizer {
                             Log.d(TAG, "processBitmap, not found in http cache, downloading...");
                         }
                         DiskLruCache.Editor editor = mHttpDiskCache.edit(key);
-                        if (editor != null) {
-                            if (downloadUrlToStream(data,
-                                    editor.newOutputStream(DISK_CACHE_INDEX))) {
-                                editor.commit();
-                            } else {
-                                editor.abort();
+                        // modified by paul
+                        if (data.contains("http://")) {
+                            if (editor != null) {
+                                if (downloadUrlToStream(data,
+                                        editor.newOutputStream(DISK_CACHE_INDEX))) {
+                                    editor.commit();
+                                } else {
+                                    editor.abort();
+                                }
                             }
+                        } else{
+                            // consider as local file
+                            //fileDescriptor = new FileInputStream(data).getFD(); // FileInputStream need to be closed explicitly
+                            fileInputStream = new FileInputStream(data);
+                            fileDescriptor = fileInputStream.getFD();
                         }
                         snapshot = mHttpDiskCache.get(key);
                     }
