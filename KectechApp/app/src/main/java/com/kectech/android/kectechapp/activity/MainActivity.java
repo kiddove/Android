@@ -55,6 +55,8 @@ public class MainActivity extends Activity {
 
     // use between activities
     public final static String CHOOSE_IMAGE_RESULT = "choose_image_result";
+    public final static String POST_DESC = "post_desc";
+    public final static String POST_IMAGES = "post_images";
 
     // default user
     public final static String CURRENT_USER = "current_user";

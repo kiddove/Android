@@ -21,7 +21,8 @@
     <color name="sa_green">#14a804</color>
     <color name="stacked_green">#118504</color>
     <color name="accent_green">#97e08f</color>
-    <color name="tab_selected">#31829C</color>
+    <!--<color name="tab_selected">#31829C</color>-->
+    <color name="tab_selected">#1976D2</color>
     <color name="tab_selected_disable">#B1D5E1</color>
 
     <!--<color name="swipe_color_1">#B6DB49</color>-->
@@ -60,4 +61,6 @@
         <item>@color/swipe_color_3</item>
         <item>@color/swipe_color_5</item>
     </integer-array>
+
+    <color name="light_blue">#FF007efd</color>
 </resources>

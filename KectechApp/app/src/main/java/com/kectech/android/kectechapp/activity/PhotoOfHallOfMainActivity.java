@@ -52,6 +52,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     //private CustomViewPager viewPager;
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
 
         if (BuildConfig.DEBUG)

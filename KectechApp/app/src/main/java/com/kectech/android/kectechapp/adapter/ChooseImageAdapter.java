@@ -98,9 +98,9 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
         selection.remove(position);
     }
 
-    public void clearSelection() {
-        selection.clear();
-    }
+//    public void clearSelection() {
+//        selection.clear();
+//    }
 
     public boolean isSelectionEmpty() {
         return selection.size() == 0;
@@ -122,7 +122,7 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
      * Sets the item height. Useful for when we know the column width so the height can be set
      * to match.
      *
-     * @param height
+     * @param height new height
      */
     public void setItemHeight(int height) {
         if (height == mItemHeight) {

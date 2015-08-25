@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,13 +24,22 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.activity.NewPostActivity;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
-import com.kectech.android.kectechapp.activity.RegisterActivity;
 import com.kectech.android.kectechapp.adapter.PhotoListViewAdapter;
 import com.kectech.android.kectechapp.listitem.PhotoListItem;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout;
 import com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayoutDirection;
 import com.kectech.android.kectechapp.util.KecUtilities;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -85,6 +95,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_main_hall_photo, container, false);
 
@@ -590,16 +601,66 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MainActivity.NEW_POST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
+                    // 1. show in list first ?? maybe not now
 
-                    // TODO: 20/08/2015
+                    // 2. send intent to async task
+                    new UploadPostTask().execute(data);
+
+                    // when task finish refresh top...
                 }
             }
-//            else if (resultCode == RESULT_CANCELED) {
-//                // do nothing
-//            }
+        }
+    }
+
+
+    // upload images and post to server
+    @SuppressWarnings("deprecation")
+    private class UploadPostTask extends AsyncTask<Intent, Void, Void> {
+        // http://stackoverflow.com/questions/24239923/android-upload-image-and-json-using-multipartentitybuilder
+        @Override
+        protected Void doInBackground(Intent... params) {
+            // 0 -- post can be null or empty
+            // 1- 9 images
+            Intent data = params[0];
+
+            String strDesc = data.getStringExtra(MainActivity.POST_DESC);
+            ArrayList<String> images = data.getStringArrayListExtra(MainActivity.POST_IMAGES);
+
+            HttpClient httpClient = new DefaultHttpClient();
+            //HttpPost httpPost = new HttpPost("http://192.168.9.23/testFingerPrint/recvjpg.php");
+            HttpPost httpPost = new HttpPost("http://192.168.9.23:49573/receivemulti.ashx");
+
+            try {
+                MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+                multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+                if (strDesc != null && !TextUtils.isEmpty(strDesc))
+                    //multipartEntityBuilder.addPart(MainActivity.POST_DESC, new StringBody(strDesc));
+                    multipartEntityBuilder.addTextBody(MainActivity.POST_DESC, strDesc);
+
+
+                for (String strImage : images) {
+                    File file = new File(strImage);
+                    multipartEntityBuilder.addPart(MainActivity.POST_IMAGES, new FileBody(file));
+                }
+
+                HttpEntity entity = multipartEntityBuilder.build();
+                httpPost.setEntity(entity);
+
+                HttpResponse response = httpClient.execute(httpPost);
+                Log.i(MainActivity.LOG_TAG, "[http return --- status code: " + response.getStatusLine().getStatusCode() + ", message: " + EntityUtils.toString(response.getEntity()) + "]");
+            } catch (NoSuchFieldError error) {
+             Log.e("shenmegui", error.getMessage());
+
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            }
+
+            return null;
         }
     }
 }

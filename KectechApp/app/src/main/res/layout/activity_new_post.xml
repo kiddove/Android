@@ -52,18 +52,21 @@
                 android:layout_below="@+id/post_desc"
                 android:layout_marginTop="15dp">
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:visibility="gone" />
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:visibility="gone" />
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
@@ -77,18 +80,21 @@
                 android:layout_below="@+id/post_img_layer1"
                 android:layout_marginTop="5dp">
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img4"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:visibility="gone"/>
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img5"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:visibility="gone" />
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img6"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
@@ -103,33 +109,61 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp">
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img7"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:visibility="gone"/>
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img8"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:visibility="gone" />
                 <ImageView
+                    android:contentDescription="@null"
                     android:id="@+id/post_img9"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:visibility="gone" />
             </LinearLayout>
-            <Button
-                android:id="@+id/post_submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <!--<Button-->
+                <!--android:id="@+id/post_submit"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
 
-                android:layout_below="@+id/post_img_layer3"
-                android:background="@drawable/login_button"
-                android:text="@string/prompt_new_post_button_submit"
+                <!--android:layout_below="@+id/post_img_layer3"-->
+                <!--android:background="@drawable/login_button"-->
+                <!--android:text="@string/prompt_new_post_button_submit"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginTop="20dp"/>-->
+
+            <View
+                android:id="@+id/post_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/post_img_background"
+                android:layout_above="@+id/choose_img_done"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_below="@+id/post_img_layer3"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/post_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/post_img_layer3"
+                android:layout_alignRight="@+id/post_desc"
+                android:padding="10dp"
+                android:text="@string/ui_menu_send"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
+                android:textColor="@color/tab_selected"
+                android:textSize="16sp"
+                android:textStyle="italic|bold"/>
 
         </RelativeLayout>
 

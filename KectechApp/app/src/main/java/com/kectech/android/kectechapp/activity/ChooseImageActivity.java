@@ -45,6 +45,7 @@ public class ChooseImageActivity extends Activity {
     private int num = 0;
     private TextView textDone;
     @Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_image);
@@ -112,10 +113,10 @@ public class ChooseImageActivity extends Activity {
                             final int numColumns = (int) Math.floor(
                                     mGridView.getWidth() / (mImageThumbSize + mImageThumbSpacing));
                             if (numColumns > 0) {
-                                final int columnWidth =
+                                final int actualImageSize =
                                         (mGridView.getWidth() / numColumns) - mImageThumbSpacing;
                                 mAdapter.setNumColumns(numColumns);
-                                mAdapter.setItemHeight(columnWidth);
+                                mAdapter.setItemHeight(actualImageSize);
                                 if (BuildConfig.DEBUG) {
                                     Log.d(MainActivity.LOG_TAG, "onCreateView - numColumns set to " + numColumns);
                                 }
@@ -179,20 +180,6 @@ public class ChooseImageActivity extends Activity {
         if (num > 9) {
             num--;
             mAdapter.removeSelect(position);
-            // TODO: 21/08/2015 alert user, change nothing.
-//            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-//            //builder1.setTitle("Title");
-//            builder1.setMessage("Select a maximum of 9 photos.");
-//            builder1.setCancelable(true);
-//            builder1.setNeutralButton(android.R.string.ok,
-//                    new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            dialog.cancel();
-//                        }
-//                    });
-//
-//            AlertDialog alert11 = builder1.create();
-//            alert11.show();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Select a maximum of 9 photos.")
                     .setCancelable(false)
@@ -207,11 +194,8 @@ public class ChooseImageActivity extends Activity {
         } else {
 
             mAdapter.changeSelection(v, isChecked);
-            // // TODO: 21/08/2015
-            //  change tile.... if num > 0
             if (num > 0) {
                 setTitle(num + " selected.");
-
                 // change textView color
                 //TextView textPreview = (TextView)findViewById(R.id.choose_img_preview);
 
@@ -249,24 +233,17 @@ public class ChooseImageActivity extends Activity {
     }
 
     public void initList() {
-        new InitListTask().execute();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new InitListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new InitListTask().execute();
     }
 
     private class InitListTask extends AsyncTask<Void, Void, ArrayList<ChooseImageListItem>> {
         @Override
         protected ArrayList<ChooseImageListItem> doInBackground(Void... params) {
-
-            // TODO: 21/08/2015  put the latest images at the first...
-//            ArrayList<ChooseImageListItem> items = new ArrayList<>();
-//            for (String s : Images.imageThumbUrls) {
-//                ChooseImageListItem item = new ChooseImageListItem();
-//                item.setImageURL(s);
-//                items.add(item);
-//            }
-//            return items;
-
             return getGalleryPhotos();
-            //return items;
         }
 
         @Override
@@ -329,6 +306,7 @@ public class ChooseImageActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @SuppressWarnings("deprecation")
     private ArrayList<ChooseImageListItem> getGalleryPhotos() {
         ArrayList<ChooseImageListItem> galleryList = new ArrayList<>();
         final String[] columns = { MediaStore.Images.Media.DATA,
@@ -354,7 +332,11 @@ public class ChooseImageActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            imageCursor.close();
+            try {
+                imageCursor.close();
+            } catch (NullPointerException npe) {
+                Log.e(MainActivity.LOG_TAG, "Exception caught: " + npe.getMessage());
+            }
         }
 
         // show newest photo at beginning of the list

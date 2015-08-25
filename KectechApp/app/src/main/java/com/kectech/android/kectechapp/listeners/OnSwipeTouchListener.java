@@ -15,6 +15,7 @@ import com.kectech.android.kectechapp.activity.MainActivity;
  */
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
+    @SuppressWarnings("deprecation")
     private final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
 
     public boolean onTouch(final View view, final MotionEvent motionEvent) {

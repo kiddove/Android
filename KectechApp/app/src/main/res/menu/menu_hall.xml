@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_hall_tab_item_add"
         android:icon="@drawable/ic_action_av_playlist_add"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom"
         android:title="@string/ui_menu_add">
         <menu>
             <!--empty submenu-->
@@ -14,7 +14,7 @@
     <item
         android:id="@+id/menu_hall_tab_item_delete"
         android:icon="@drawable/ic_action_content_edit"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom"
         android:title="@string/ui_menu_delete">
     </item>
     <item

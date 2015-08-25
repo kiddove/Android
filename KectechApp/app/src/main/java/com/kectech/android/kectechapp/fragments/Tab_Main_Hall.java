@@ -72,6 +72,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     private ArrayList<Integer> mDeleteList = new ArrayList<>();
 
     @Override
+    @SuppressWarnings("deprecation")
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_main_hall, container, false);
 

@@ -100,6 +100,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
     }
     @Override
+    @SuppressWarnings("deprecation")
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_main_hall_video, container, false);
 

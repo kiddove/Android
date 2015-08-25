@@ -188,12 +188,12 @@ public class KecUtilities {
         deleteRecursive(folder);
     }
 
-    private static void deleteRecursive(File fileOrDirectory) {
+    private static boolean deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())
                 deleteRecursive(child);
 
-        fileOrDirectory.delete();
+        return fileOrDirectory.delete();
     }
     public static boolean createFolders() {
         // one for each tab
