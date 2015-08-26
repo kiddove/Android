@@ -14,11 +14,11 @@
             android:id="@+id/photo_tab_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animationCache="false"
             android:dividerHeight="2dp"
             android:listSelector="@drawable/tab_list_selector"
-            android:smoothScrollbar="true"
             android:scrollingCache="false"
-            android:animationCache="false" />
+            android:smoothScrollbar="true" />
 
     </com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout>
 </FrameLayout>

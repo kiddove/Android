@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="Account/Profile">
+    <PreferenceCategory android:title="Account/Profile">
         <com.kectech.android.kectechapp.preferences.AccountPreference
             android:key="preference_account_name"
-            android:title="current"
+            android:layout="@layout/tab_main_setting_account_preference_layout"
             android:summary="read from sf"
-            android:layout="@layout/tab_main_setting_account_preference_layout"/>
+            android:title="current" />
     </PreferenceCategory>
 </PreferenceScreen>

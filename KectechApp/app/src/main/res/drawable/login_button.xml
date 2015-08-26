@@ -3,6 +3,6 @@
 
     <!--// IMPORTANT MUST PUT CONDITIONS FIRST, THEN DEFAULT ONE -->
     <!--// OTHERWISE IT WON'T WORK-->
-    <item android:drawable="@drawable/login_button_pressed" android:state_pressed="true"></item>
-    <item android:drawable="@drawable/login_button_normal"></item>
+    <item android:drawable="@drawable/login_button_pressed" android:state_pressed="true" />
+    <item android:drawable="@drawable/login_button_normal" />
 </selector>

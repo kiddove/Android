@@ -39,7 +39,6 @@ public class NewPostActivity extends Activity {
     private final int mImageIDs[] = {R.id.post_img1, R.id.post_img2, R.id.post_img3, R.id.post_img4, R.id.post_img5, R.id.post_img6, R.id.post_img7, R.id.post_img8, R.id.post_img9};
 //    private View.OnClickListener mListener;
     private ArrayList<String> mImages;
-    private View separator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +81,6 @@ public class NewPostActivity extends Activity {
                 uploadToServer();
             }
         });
-
-        separator = findViewById(R.id.post_separator);
 
         OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
             public void onSwipeOutLeft() {
@@ -184,7 +181,6 @@ public class NewPostActivity extends Activity {
                             imageView.setVisibility(View.VISIBLE);
                             mImages.add(result.get(i));
                         }
-                        separator.setVisibility(View.VISIBLE);
                     }
                 } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
                     new getCapturedImageTask().execute(data);
@@ -232,7 +228,6 @@ public class NewPostActivity extends Activity {
             imageView.setVisibility(View.GONE);
         }
         mImages.clear();
-        separator.setVisibility(View.GONE);
     }
 
     private void captureImage() {
@@ -270,7 +265,6 @@ public class NewPostActivity extends Activity {
             mImageFetcher.loadImage(strImage, imageView);
             imageView.setVisibility(View.VISIBLE);
             mImages.add(strImage);
-            separator.setVisibility(View.VISIBLE);
         }
     }
 

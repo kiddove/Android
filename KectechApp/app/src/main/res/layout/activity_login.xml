@@ -54,66 +54,66 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:layout_marginTop="8dp"
                 android:singleLine="true" />
 
             <!--<LinearLayout-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal">-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-                <Button
-                    android:id="@+id/email_sign_in_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/login_button"
-                    android:gravity="center"
-                    android:text="@string/action_sign_in_short"
-                    android:textColor="@color/bar_background"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"/>
+            <Button
+                android:id="@+id/email_sign_in_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/login_button"
+                android:gravity="center"
+                android:text="@string/action_sign_in_short"
+                android:textColor="@color/bar_background"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <!--<Button-->
-                    <!--android:id="@+id/email_sign_up_button"-->
-                    <!--style="?android:textAppearanceSmall"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="16dp"-->
-                    <!--android:background="@drawable/login_button"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="@string/action_sign_up_short"-->
-                    <!--android:textColor="@color/bar_background"-->
-                    <!--android:textSize="18sp"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_marginLeft="15dp"-->
-                    <!--android:layout_marginRight="1dp"/>-->
+            <!--<Button-->
+            <!--android:id="@+id/email_sign_up_button"-->
+            <!--style="?android:textAppearanceSmall"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:background="@drawable/login_button"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/action_sign_up_short"-->
+            <!--android:textColor="@color/bar_background"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginRight="1dp"/>-->
             <!--</LinearLayout>-->
 
             <TextView
+                android:id="@+id/email_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/new_user"
-                android:textSize="18sp"
-                android:id="@+id/email_sign_up"
-                android:gravity="center"
-                android:textColor="@color/bar_background"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/login_text_view"
+                android:gravity="center"
                 android:padding="10dp"
-                android:background="@drawable/login_text_view"/>
+                android:text="@string/new_user"
+                android:textColor="@color/bar_background"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 

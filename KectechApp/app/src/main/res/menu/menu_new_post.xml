@@ -3,20 +3,17 @@
     tools:context="com.kectech.android.kectechapp.activity.NewPostActivity">
     <item
         android:id="@+id/menu_new_post_choose_photo"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_image_photo_library"
-        android:title="@string/prompt_new_post_menu_choose_from_photo">
-    </item>
+        android:showAsAction="ifRoom"
+        android:title="@string/prompt_new_post_menu_choose_from_photo" />
     <item
         android:id="@+id/menu_new_post_take_photo"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_image_photo_camera"
-        android:title="@string/prompt_new_post_menu_take_a_photo">
-    </item>
+        android:showAsAction="ifRoom"
+        android:title="@string/prompt_new_post_menu_take_a_photo" />
     <item
         android:id="@+id/menu_new_post_send"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_content_send"
-        android:title="@string/ui_menu_send">
-    </item>
+        android:showAsAction="ifRoom"
+        android:title="@string/ui_menu_send" />
 </menu>

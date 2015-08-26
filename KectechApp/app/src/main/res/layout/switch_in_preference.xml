@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--id must be defined to make switch works fine-->
+<?xml version="1.0" encoding="utf-8"?><!--id must be defined to make switch works fine-->
 <Switch xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/switchWidget"
     android:layout_width="wrap_content"
@@ -7,4 +6,4 @@
     android:button="@drawable/preference_checkbox_selector"
     android:clickable="false"
     android:focusable="false"
-    android:focusableInTouchMode="false"/>
+    android:focusableInTouchMode="false" />

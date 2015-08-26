@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!-- icon if needed-->
     <!--<ImageView-->
-        <!--android:id="@+id/tab_title_icon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_launcher"-->
-        <!--android:layout_margin="2dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:contentDescription="@string/tab_icon_desc" />-->
+    <!--android:id="@+id/tab_title_icon"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/ic_launcher"-->
+    <!--android:layout_margin="2dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:contentDescription="@string/tab_icon_desc" />-->
 
     <!--text if needed-->
 
@@ -20,13 +20,13 @@
         android:id="@+id/tab_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        android:drawableTop="@drawable/empty_photo"
-        android:drawablePadding="5dp"
-        android:gravity="center"
+        android:layout_margin="8dp"
         android:background="@drawable/sliding_tab_item_selector"
-        android:clickable="false" />
+        android:clickable="false"
+        android:drawablePadding="5dp"
+        android:drawableTop="@drawable/empty_photo"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 </LinearLayout>

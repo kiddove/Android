@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
     tools:context="com.kectech.android.kectechapp.activity.NewPostActivity">
 
     <ScrollView
@@ -25,145 +25,166 @@
                 android:id="@+id/post_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:hint="@string/prompt_new_post_title"
                 android:maxLines="1"
-                android:layout_alignParentTop="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/post_desc"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/image_thumbnail_size"
+                android:layout_below="@+id/post_title"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
+                android:background="@drawable/edit_text_background_none"
                 android:gravity="start"
-                android:padding="2dp"
                 android:hint="@string/prompt_new_post_desc"
-                android:layout_below="@+id/post_title"
-                android:background="@drawable/round_edit_text_background"/>
+                android:padding="2dp" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:id="@+id/post_img_layer1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/post_desc"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
                 <ImageView
-                    android:contentDescription="@null"
                     android:id="@+id/post_img1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
-                    android:visibility="gone" />
-                <ImageView
                     android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/post_img2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
-                    android:visibility="gone" />
-                <ImageView
                     android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/post_img3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
                     android:visibility="gone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:id="@+id/post_img_layer2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/post_img_layer1"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
                 <ImageView
-                    android:contentDescription="@null"
                     android:id="@+id/post_img4"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
-                    android:visibility="gone"/>
-                <ImageView
                     android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/post_img5"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
-                    android:visibility="gone" />
-                <ImageView
                     android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/post_img6"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
                     android:visibility="gone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:id="@+id/post_img_layer3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/post_img_layer2"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp">
+                android:orientation="horizontal">
+
                 <ImageView
-                    android:contentDescription="@null"
                     android:id="@+id/post_img7"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
-                    android:visibility="gone"/>
-                <ImageView
                     android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/post_img8"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
-                    android:visibility="gone" />
-                <ImageView
                     android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/post_img9"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
                     android:visibility="gone" />
             </LinearLayout>
             <!--<Button-->
-                <!--android:id="@+id/post_submit"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/post_submit"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
 
-                <!--android:layout_below="@+id/post_img_layer3"-->
-                <!--android:background="@drawable/login_button"-->
-                <!--android:text="@string/prompt_new_post_button_submit"-->
-                <!--android:layout_marginBottom="5dp"-->
-                <!--android:layout_marginTop="20dp"/>-->
+            <!--android:layout_below="@+id/post_img_layer3"-->
+            <!--android:background="@drawable/login_button"-->
+            <!--android:text="@string/prompt_new_post_button_submit"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginTop="20dp"/>-->
 
             <View
                 android:id="@+id/post_separator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@color/post_img_background"
                 android:layout_above="@+id/choose_img_done"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:layout_below="@+id/post_img_layer3"
-                android:visibility="gone"/>
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/post_img_background"
+                android:visibility="visible" />
+
             <TextView
                 android:id="@+id/post_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/post_img_layer3"
                 android:layout_alignRight="@+id/post_desc"
-                android:padding="10dp"
-                android:text="@string/ui_menu_send"
+                android:layout_below="@+id/post_img_layer3"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="20dp"
                 android:gravity="right"
+                android:padding="10dp"
+                android:text="@string/ui_menu_send"
                 android:textColor="@color/tab_selected"
                 android:textSize="16sp"
-                android:textStyle="italic|bold"/>
+                android:textStyle="italic|bold" />
 
         </RelativeLayout>
 

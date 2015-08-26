@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
     <!-- Pressed -->
-    <item
-        android:state_pressed="true"
-        android:drawable="@color/item_pressed">
-    </item>
+    <item android:drawable="@color/item_pressed" android:state_pressed="true" />
 
     <!--because slidingtabstrip is a child of slidingtablayout-->
     <!--so if change slidingtablayout background will make-->

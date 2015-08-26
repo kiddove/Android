@@ -3,5 +3,5 @@
     <item android:color="@color/tab_selected" android:state_selected="true" />
     <!--<item android:color="@android:color/holo_red_light" android:state_focused="true"/>-->
     <!--<item android:color="@color/simple_yellow" android:state_pressed="true"/>-->
-    <item android:color="@color/tab_text"/>
+    <item android:color="@color/tab_text" />
 </selector>

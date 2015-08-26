@@ -13,14 +13,15 @@
         <!--<item name="android:listPreferredItemPaddingRight">5dp</item>-->
 
         <!--try to change background when pressed of menu item on bar, or tab when pressed-->
-         <!--tab, slidingtablayout, but indicator disappeared...-->
+        <!--tab, slidingtablayout, but indicator disappeared...-->
         <!--so only set pressed state here and make background transparent-->
         <!--set strip background to what you want-->
         <item name="android:selectableItemBackground">@drawable/sliding_tab_item_selector</item>
 
         <!--action bar icon and overflow part-->
         <item name="android:actionOverflowButtonStyle">@style/custom_overflow</item>
-        <item name="android:actionBarItemBackground">@drawable/actionbar_and_overflow_selector</item>
+        <item name="android:actionBarItemBackground">@drawable/actionbar_and_overflow_selector
+        </item>
         <!--droplist will be in DropDownListView listSelector-->
 
         <!--api 21 or above need to put here... for dropdown list, api 19 or below not working here-->
@@ -105,6 +106,7 @@
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/ActionBarMain</item>
     </style>
+
     <style name="ActionBarMain" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/bar_background</item>
         <!--<item name="android:backgroundStacked">@color/simple_yellow</item>-->
@@ -124,6 +126,7 @@
     <style name="actionMode.title" parent="@android:style/TextAppearance.Holo.Widget.ActionMode.Title">
         <item name="android:textColor">@color/bar_menu_text</item>
     </style>
+
     <style name="actionMode.subtitle" parent="@android:style/TextAppearance.Holo.Widget.ActionMode.Subtitle">
         <item name="android:textColor">@color/bar_menu_text</item>
     </style>

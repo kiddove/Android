@@ -1,12 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <!--old-->
-<!--<ListView xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:id="@+id/video_tab_list"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
-<!--</ListView>-->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--old--><!--<ListView xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:id="@+id/video_tab_list"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">--><!--</ListView>-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_video"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,10 +14,10 @@
             android:id="@+id/video_tab_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animationCache="false"
             android:listSelector="@drawable/tab_list_selector"
-            android:smoothScrollbar="true"
             android:scrollingCache="false"
-            android:animationCache="false" />
+            android:smoothScrollbar="true" />
 
     </com.kectech.android.kectechapp.thirdparty.SwipeRefreshLayout>
 </FrameLayout>

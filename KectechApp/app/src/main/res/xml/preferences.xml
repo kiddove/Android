@@ -3,86 +3,84 @@
 
     <PreferenceCategory android:title="General">
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="isDebug"
             android:summary="Connecting to a debug server instead of production server"
             android:title="Use debug server"
-            android:defaultValue="false"
-            android:widgetLayout="@layout/check_box_in_preference"/>
+            android:widgetLayout="@layout/check_box_in_preference" />
         <!--android:layout="@layout/preference_checkbox"-->
         <!--android:widgetLayout="@layout/check_box_in_preference"-->
 
         <!--<SwitchPreference-->
-            <!--android:key="logsVerbose"-->
-            <!--android:summary="Increase logging verbosity for LogCat output"-->
-            <!--android:title="Debug Logs"-->
-            <!--android:widgetLayout="@layout/switch_in_preference"/>-->
+        <!--android:key="logsVerbose"-->
+        <!--android:summary="Increase logging verbosity for LogCat output"-->
+        <!--android:title="Debug Logs"-->
+        <!--android:widgetLayout="@layout/switch_in_preference"/>-->
 
         <CheckBoxPreference
             android:key="logsVerbose"
             android:summary="Increase logging verbosity for LogCat output"
             android:title="Debug Logs"
-            android:widgetLayout="@layout/check_box_in_preference"/>
+            android:widgetLayout="@layout/check_box_in_preference" />
 
     </PreferenceCategory>
     <PreferenceCategory android:title="Notification">
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="notifications_new_message"
             android:title="@string/pref_title_new_message_notifications"
-            android:defaultValue="true"
-            android:widgetLayout="@layout/check_box_in_preference"/>
+            android:widgetLayout="@layout/check_box_in_preference" />
 
         <!-- Allows the user to choose a ringtone in the 'notification' category. -->
         <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
         <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
         <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
             android:dependency="notifications_new_message"
             android:key="notifications_new_message_ringtone"
-            android:title="@string/pref_title_ringtone"
             android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
+            android:title="@string/pref_title_ringtone" />
 
         <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
         <CheckBoxPreference
+            android:defaultValue="true"
             android:dependency="notifications_new_message"
             android:key="notifications_new_message_vibrate"
             android:title="@string/pref_title_vibrate"
-            android:defaultValue="true"
-            android:widgetLayout="@layout/check_box_in_preference"/>
+            android:widgetLayout="@layout/check_box_in_preference" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Profile">
         <Preference
+            android:defaultValue="Demo user"
             android:key="preference_account_name"
-            android:title="Account"
             android:summary="click to change"
-            android:defaultValue="Demo user">
-        </Preference>
-    <!--</PreferenceCategory>-->
+            android:title="Account" />
+        <!--</PreferenceCategory>-->
 
-    <!--<PreferenceCategory android:title="Notification">-->
+        <!--<PreferenceCategory android:title="Notification">-->
         <!--<Preference-->
-            <!--android:key="preference_account_name"-->
-            <!--android:title="Account"-->
-            <!--android:summary="click to change"-->
-            <!--android:defaultValue="Demo user">-->
-            <!--&lt;!&ndash;// so fussy...&ndash;&gt;-->
-            <!--<intent android:targetPackage="com.kectech.android.kectechapp"-->
-                <!--android:targetClass="com.kectech.android.kectechapp.activity.AccountPreferenceActivity"-->
-                <!--android:action="what ever send to activity?"/>-->
+        <!--android:key="preference_account_name"-->
+        <!--android:title="Account"-->
+        <!--android:summary="click to change"-->
+        <!--android:defaultValue="Demo user">-->
+        <!--&lt;!&ndash;// so fussy...&ndash;&gt;-->
+        <!--<intent android:targetPackage="com.kectech.android.kectechapp"-->
+        <!--android:targetClass="com.kectech.android.kectechapp.activity.AccountPreferenceActivity"-->
+        <!--android:action="what ever send to activity?"/>-->
         <!--</Preference>-->
     </PreferenceCategory>
 
     <PreferenceCategory android:title="About">
         <!--<com.kectech.android.kectechapp.preferences.VersionPreference-->
-            <!--android:key="key_app_version"-->
-            <!--android:title="Current Version"-->
-            <!--android:summary="0.9.15"-->
-            <!--android:defaultValue="0.9.15"-->
-            <!--android:layout="@layout/tab_main_setting_version_preference_layout"/>-->
+        <!--android:key="key_app_version"-->
+        <!--android:title="Current Version"-->
+        <!--android:summary="0.9.15"-->
+        <!--android:defaultValue="0.9.15"-->
+        <!--android:layout="@layout/tab_main_setting_version_preference_layout"/>-->
         <Preference
+            android:defaultValue="demo"
             android:key="preference_version"
-            android:title="Version"
             android:summary="current version"
-            android:defaultValue="demo">
-        </Preference>
+            android:title="Version" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -1,11 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/choose_img_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.kectech.android.kectechapp.activity.ChooseImageActivity"
-    android:id="@+id/choose_img_frame">
+    tools:context="com.kectech.android.kectechapp.activity.ChooseImageActivity">
 
     <LinearLayout
         android:id="@+id/choose_img_bottom"
@@ -13,33 +15,34 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
+
         <View
-            android:layout_gravity="top"
             android:id="@+id/choose_img_separator"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@color/post_img_background"
-            android:layout_marginTop="5dp"
+            android:layout_above="@+id/choose_img_done"
+            android:layout_gravity="top"
             android:layout_marginBottom="5dp"
-            android:layout_above="@+id/choose_img_done"/>
+            android:layout_marginTop="5dp"
+            android:background="@color/post_img_background" />
 
         <TextView
-            android:layout_gravity="right"
+            android:id="@+id/choose_img_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/choose_img_done"
-            android:text="@string/prompt_choose_image_done"
+            android:layout_gravity="right"
             android:padding="10dp"
-            android:textStyle="italic|bold"
+            android:text="@string/prompt_choose_image_done"
+            android:textColor="@color/tab_selected_disable"
             android:textSize="16sp"
-            android:textColor="@color/tab_selected_disable"/>
+            android:textStyle="italic|bold" />
     </LinearLayout>
 
     <GridView
         android:id="@+id/choose_img_gridView"
-        android:layout_above="@+id/choose_img_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/choose_img_bottom"
         android:columnWidth="@dimen/image_thumbnail_size"
         android:horizontalSpacing="@dimen/image_thumbnail_spacing"
         android:numColumns="auto_fit"
@@ -47,13 +50,13 @@
         android:verticalSpacing="@dimen/image_thumbnail_spacing" />
 
     <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/choose_img_preview"-->
-        <!--android:text="@string/prompt_choose_image_preview"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:padding="10dp"-->
-        <!--android:textColor="@color/post_img_background"/>-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/choose_img_preview"-->
+    <!--android:text="@string/prompt_choose_image_preview"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:padding="10dp"-->
+    <!--android:textColor="@color/post_img_background"/>-->
 
 </RelativeLayout>

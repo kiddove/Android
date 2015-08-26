@@ -20,8 +20,8 @@
     <!--android:width="200dp"-->
     <!--android:height="50dp" />-->
     <!--<stroke-->
-        <!--android:width="0.5dp"-->
-        <!--android:color="@color/bar_menu_text" />-->
+    <!--android:width="0.5dp"-->
+    <!--android:color="@color/bar_menu_text" />-->
     <padding
         android:bottom="10dp"
         android:left="10dp"
