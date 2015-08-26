@@ -34,7 +34,7 @@
     <string name="already_a_member">Already a member?</string>
     <string name="new_user">New user?</string>
     <string name="prompt_new_post_title">title</string>
-    <string name="prompt_new_post_desc">Say hello to everyone…</string>
+    <string name="prompt_new_post_desc">Say something…</string>
     <string name="prompt_new_post_menu_choose_from_photo">Choose photos</string>
     <string name="prompt_new_post_menu_take_a_photo">Take a photo</string>
     <string name="prompt_new_post_button_submit">Submit</string>

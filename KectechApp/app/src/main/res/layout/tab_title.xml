@@ -25,7 +25,7 @@
         android:background="@drawable/sliding_tab_item_selector"
         android:clickable="false"
         android:drawablePadding="5dp"
-        android:drawableTop="@drawable/empty_photo"
+        android:drawableTop="@drawable/ic_default_image"
         android:gravity="center"
         android:textSize="12sp"
         android:textStyle="bold" />

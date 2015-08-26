@@ -2,12 +2,20 @@ package com.kectech.android.kectechapp.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.DisplayImageOptions;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoaderConfiguration;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageScaleType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -68,11 +76,11 @@ public class KecUtilities {
         ImageCache.ImageCacheParams cacheParams =
                 new ImageCache.ImageCacheParams(activity, "thumbs");
 
-        cacheParams.setMemCacheSizePercent(0.05f); // Set memory cache to 5% of app memory
+        cacheParams.setMemCacheSizePercent(0.10f); // Set memory cache to 10% of app memory
 
         // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-        thumb = new ImageFetcher(activity, 100);
-        //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        thumb = new ImageFetcher(activity, context.getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size));
+        thumb.setLoadingImage(R.drawable.ic_default_image);
         thumb.setImageFadeIn(false);
         thumb.addImageCache(activity.getFragmentManager(), cacheParams);
 
@@ -84,6 +92,8 @@ public class KecUtilities {
             thumb.clearCache();
         if (image != null)
             image.clearCache();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
     }
     public static void closeCache() {
         if (thumb != null) {
@@ -195,6 +205,7 @@ public class KecUtilities {
 
         return fileOrDirectory.delete();
     }
+
     public static boolean createFolders() {
         // one for each tab
         // hall, show, public, setting
@@ -294,5 +305,18 @@ public class KecUtilities {
             return false;
         }
         return true;
+    }
+
+    public static void initImageLoader() {
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheOnDisc(true).imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
+                .bitmapConfig(Bitmap.Config.RGB_565).build();
+        ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
+                context).defaultDisplayImageOptions(defaultOptions).memoryCache(
+                new WeakMemoryCache());
+
+        ImageLoaderConfiguration config = builder.build();
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.init(config);
     }
 }

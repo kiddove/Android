@@ -39,15 +39,14 @@
         android:layout_centerInParent="true"
         android:scrollbarAlwaysDrawVerticalTrack="true">
 
-        <!--<com.kectech.android.cachebitmaps.ScaleImageView-->
-        <ImageView
+        <com.kectech.android.kectechapp.thirdparty.ScaleImageView
+
             android:id="@+id/photo_activity_image_fragment_imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/hello_world"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/hello_world" />
     </ScrollView>
 
 </RelativeLayout>

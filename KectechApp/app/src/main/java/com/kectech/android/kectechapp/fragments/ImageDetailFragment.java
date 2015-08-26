@@ -29,6 +29,10 @@ import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageWorker;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
+import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageViewAware;
 
 
 /**
@@ -37,8 +41,8 @@ import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 public class ImageDetailFragment extends Fragment {
     private static final String IMAGE_DATA_EXTRA = "extra_image_data";
     private String mImageUrl;
-    private ImageView mImageView;
-    private ImageFetcher mImageFetcher;
+    private ScaleImageView mImageView;
+    //private ImageFetcher mImageFetcher;
 
     /**
      * Factory method to generate a new instance of the fragment given an image number.
@@ -76,24 +80,22 @@ public class ImageDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         // Inflate and locate the main ImageView
         final View v = inflater.inflate(R.layout.photo_activity_image_fragment, container, false);
-        mImageView = (ImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);
+        mImageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);
         return v;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-//        // Use the parent activity to load the image asynchronously into the ImageView (so a single
-//        // cache can be used over all pages in the ViewPager
-//        mImageFetcher = KecUtilities.getImageFetcher(getActivity());
-//        mImageFetcher.loadImage(mImageUrl, mImageView);
-
-        // Use the parent activity to load the image asynchronously into the ImageView (so a single
-        // cache can be used over all pages in the ViewPager
         if (PhotoOfHallOfMainActivity.class.isInstance(getActivity())) {
-            mImageFetcher = ((PhotoOfHallOfMainActivity) getActivity()).getImageFetcher();
-            mImageFetcher.loadImage(mImageUrl, mImageView);
+//            mImageFetcher = ((PhotoOfHallOfMainActivity) getActivity()).getImageFetcher();
+//            mImageFetcher.loadImage(mImageUrl, mImageView);
+            ImageAware imageAware = new ImageViewAware(mImageView, false);
+
+            if (mImageUrl.contains("http://"))
+                ImageLoader.getInstance().displayImage(mImageUrl, imageAware);
+            else
+                ImageLoader.getInstance().displayImage("file://" + mImageUrl, imageAware);
         }
 
         // Pass clicks on the ImageView to the parent activity to handle
@@ -105,7 +107,7 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mImageFetcher = null;
+//        mImageFetcher = null;
         if (mImageView != null) {
             // Cancel any pending image work
             ImageWorker.cancelWork(mImageView);

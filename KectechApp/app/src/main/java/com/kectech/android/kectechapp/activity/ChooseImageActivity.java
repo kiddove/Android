@@ -44,6 +44,7 @@ public class ChooseImageActivity extends Activity {
     private ImageFetcher mImageFetcher;
     private int num = 0;
     private TextView textDone;
+    private TextView textPreview;
     @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +137,15 @@ public class ChooseImageActivity extends Activity {
         textDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                complete();
+                complete(false);
+            }
+        });
+
+        textPreview = (TextView)findViewById(R.id.choose_img_preview);
+        textPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preview();
             }
         });
     }
@@ -161,7 +170,7 @@ public class ChooseImageActivity extends Activity {
                 return true;
             }
             case R.id.choose_image_done:
-                complete();
+                complete(true);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -196,18 +205,14 @@ public class ChooseImageActivity extends Activity {
             mAdapter.changeSelection(v, isChecked);
             if (num > 0) {
                 setTitle(num + " selected.");
-                // change textView color
-                //TextView textPreview = (TextView)findViewById(R.id.choose_img_preview);
 
-                //textPreview.setTextColor(getResources().getColorStateList(R.color.bar_background));
+                textPreview.setTextColor(getResources().getColorStateList(R.color.bar_background));
                 textDone.setTextColor(getResources().getColorStateList(R.color.tab_selected));
             }
             else {
                 setTitle(R.string.prompt_navigation_back);
 
-                //TextView textPreview = (TextView)findViewById(R.id.choose_img_preview);
-
-                //textPreview.setTextColor(getResources().getColorStateList(R.color.post_img_background));
+                textPreview.setTextColor(getResources().getColorStateList(R.color.post_img_background));
                 textDone.setTextColor(getResources().getColorStateList(R.color.tab_selected_disable));
             }
         }
@@ -312,7 +317,7 @@ public class ChooseImageActivity extends Activity {
         final String[] columns = { MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media._ID;
-        Cursor imageCursor = managedQuery(
+        Cursor imageCursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
                 null, null, orderBy);
         try {
@@ -344,12 +349,36 @@ public class ChooseImageActivity extends Activity {
         return galleryList;
     }
 
-    private void complete() {
+    private void complete(boolean bFromActionBar) {
+
+        if (!bFromActionBar && mAdapter.isSelectionEmpty())
+            return;
         Intent intent = new Intent();
         try {
             intent.putStringArrayListExtra(MainActivity.CHOOSE_IMAGE_RESULT, mAdapter.getSelection());
             setResult(RESULT_OK, intent);
             close();
+        } catch (Exception e) {
+            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+
+        }
+    }
+
+    private void preview() {
+
+        // start photo activity, DO NOT finish current activity
+        if (mAdapter.isSelectionEmpty())
+            return;
+
+        Intent intent = new Intent(this, PhotoOfHallOfMainActivity.class);
+
+        Bundle params = new Bundle();
+        params.putStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, mAdapter.getSelection());
+
+        intent.putExtras(params);
+        try {
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
 

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.MainAdapter;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
+import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.File;
@@ -100,6 +101,9 @@ public class MainActivity extends Activity {
             System.exit(0);
             return;
         }
+
+        // init image loader
+        KecUtilities.initImageLoader();
         try {
             //getActionBar().setDisplayShowHomeEnabled(false);
             // hide the tile text

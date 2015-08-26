@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -272,7 +271,7 @@ public class NewPostActivity extends Activity {
         // actually is return to tab_main_photo, and let the fragment deal with upload
         TextView textView = (TextView)findViewById(R.id.post_desc);
         String strDesc = textView.getText().toString();
-        if (strDesc == null || TextUtils.isEmpty(strDesc)) {
+        if (TextUtils.isEmpty(strDesc)) {
             if (mImages == null || mImages.size() == 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("At least share a word or a photo.")
@@ -318,8 +317,12 @@ public class NewPostActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            try {
+                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            } catch (NullPointerException npe) {
+                Log.e(MainActivity.LOG_TAG, npe.getMessage());
+            }
         }
     }
 
@@ -341,8 +344,12 @@ public class NewPostActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            try {
+                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            } catch (NullPointerException npe) {
+                Log.e(MainActivity.LOG_TAG, npe.getMessage());
+            }
         }
     }
 }

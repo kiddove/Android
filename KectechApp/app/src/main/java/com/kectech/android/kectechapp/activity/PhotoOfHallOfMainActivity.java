@@ -47,7 +47,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     //public String subFolder = null;
 
-    private ImageFetcher mImageFetcherImage;
+    //private ImageFetcher mImageFetcherImage;
 
     //private CustomViewPager viewPager;
 
@@ -63,7 +63,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        createFetcher();
+        //createFetcher();
         // for load thumb
         //mImageFetcherImage = KecUtilities.getThumbFetcher(this);
 
@@ -240,20 +240,20 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     @Override
     public void onResume() {
         super.onResume();
-        mImageFetcherImage.setExitTasksEarly(false);
+        //mImageFetcherImage.setExitTasksEarly(false);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mImageFetcherImage.setExitTasksEarly(true);
-        mImageFetcherImage.flushCache();
+        //mImageFetcherImage.setExitTasksEarly(true);
+        //mImageFetcherImage.flushCache();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mImageFetcherImage.closeCache();
+        //mImageFetcherImage.closeCache();
     }
 
 //    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -266,34 +266,34 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 //            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 //        }
 //    }
-    /**
-     * Called by the ViewPager child fragments to load images via the one ImageFetcher
-     */
-    public ImageFetcher getImageFetcher() {
-        return mImageFetcherImage;
-    }
+//    /**
+//     * Called by the ViewPager child fragments to load images via the one ImageFetcher
+//     */
+//    public ImageFetcher getImageFetcher() {
+//        return mImageFetcherImage;
+//    }
 
-    private void createFetcher() {
-        // Fetch screen height and width, to use as our max size when loading images as this
-        // activity runs full screen
-        final DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        final int height = displayMetrics.heightPixels;
-        final int width = displayMetrics.widthPixels;
-
-        // For this sample we'll use half of the longest width to resize our images. As the
-        // image scaling ensures the image is larger than this, we should be left with a
-        // resolution that is appropriate for both portrait and landscape. For best image quality
-        // we shouldn't divide by 2, but this will use more memory and require a larger memory
-        // cache.
-        final int longest = (height > width ? height : width) / 2;
-
-        ImageCache.ImageCacheParams cacheParams =
-                new ImageCache.ImageCacheParams(this, "images");
-        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
-
-        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-        mImageFetcherImage = new ImageFetcher(this, longest);
-        mImageFetcherImage.addImageCache(getFragmentManager(), cacheParams);
-    }
+//    private void createFetcher() {
+//        // Fetch screen height and width, to use as our max size when loading images as this
+//        // activity runs full screen
+//        final DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        final int height = displayMetrics.heightPixels;
+//        final int width = displayMetrics.widthPixels;
+//
+//        // For this sample we'll use half of the longest width to resize our images. As the
+//        // image scaling ensures the image is larger than this, we should be left with a
+//        // resolution that is appropriate for both portrait and landscape. For best image quality
+//        // we shouldn't divide by 2, but this will use more memory and require a larger memory
+//        // cache.
+//        final int longest = (height > width ? height : width) / 2;
+//
+//        ImageCache.ImageCacheParams cacheParams =
+//                new ImageCache.ImageCacheParams(this, "images");
+//        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
+//
+//        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+//        mImageFetcherImage = new ImageFetcher(this, longest);
+//        mImageFetcherImage.addImageCache(getFragmentManager(), cacheParams);
+//    }
 }
