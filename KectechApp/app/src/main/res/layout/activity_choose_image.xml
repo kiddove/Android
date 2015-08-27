@@ -3,10 +3,10 @@
     android:id="@+id/choose_img_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/new_post_activity_vertical_margin"
+    android:paddingLeft="@dimen/new_post_activity_horizontal_margin"
+    android:paddingRight="@dimen/new_post_activity_horizontal_margin"
+    android:paddingTop="@dimen/new_post_activity_vertical_margin"
     tools:context="com.kectech.android.kectechapp.activity.ChooseImageActivity">
 
     <LinearLayout
@@ -57,12 +57,13 @@
     <GridView
         android:id="@+id/choose_img_gridView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_above="@+id/choose_img_bottom"
-        android:columnWidth="@dimen/image_thumbnail_size"
-        android:horizontalSpacing="@dimen/image_thumbnail_spacing"
+        android:columnWidth="@dimen/choose_image_grid_item_size"
+        android:horizontalSpacing="@dimen/choose_image_grid_item_space"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/image_thumbnail_spacing" />
+        android:verticalSpacing="@dimen/choose_image_grid_item_space"
+        tools:listitem="@layout/choose_image_list_item"/>
 
 </RelativeLayout>

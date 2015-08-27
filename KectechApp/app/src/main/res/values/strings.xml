@@ -8,7 +8,7 @@
     <string name="ui_menu_search">Search</string>
     <string name="ui_menu_send">Send</string>
     <string name="ui_menu_add">Add</string>
-    <string name="ui_menu_write_post">Write post</string>
+    <string name="ui_menu_write_post">Write Post</string>
     <string name="ui_menu_delete">Delete</string>
     <string name="ui_menu_quit">Quit</string>
     <string name="ui_menu_logout">Log Out</string>
@@ -29,13 +29,13 @@
     <string name="title_activity_test_button">testButtonActivity</string>
     <string name="clear_cache_menu">Clear Cache</string>
     <string name="clear_cache_complete_toast">Cache has been cleared</string>
-    <string name="imageview_description">Image Thumbnail</string>
+    <string name="imageView_description">Image Thumbnail</string>
     <string name="no_network_connection_toast">No network connection found</string>
     <string name="already_a_member">Already a member?</string>
     <string name="new_user">New user?</string>
     <string name="prompt_new_post_title">title</string>
-    <string name="prompt_new_post_desc">Say something…</string>
-    <string name="prompt_new_post_menu_choose_from_photo">Choose photos</string>
+    <string name="prompt_new_post_desc">Share something…</string>
+    <string name="prompt_new_post_menu_choose_from_photo">Share Photo</string>
     <string name="prompt_new_post_menu_take_a_photo">Take a photo</string>
     <string name="prompt_new_post_button_submit">Submit</string>
     <string name="title_activity_new_post">NewPostActivity</string>

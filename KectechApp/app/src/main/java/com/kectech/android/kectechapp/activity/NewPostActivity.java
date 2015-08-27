@@ -84,7 +84,9 @@ public class NewPostActivity extends Activity {
         OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
             public void onSwipeOutLeft() {
                 //getFragmentManager().popBackStack();
-                close(true);
+//                if (getCurrentFocus() == findViewById(R.id.post_desc))
+//                    return;
+//                close(true);
             }
             @Override
             public boolean onTouch(View v, MotionEvent event) {

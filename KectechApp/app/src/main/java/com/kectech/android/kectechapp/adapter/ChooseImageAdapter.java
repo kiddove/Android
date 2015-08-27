@@ -29,18 +29,12 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
 
     private ImageFetcher mImageFetcher;
     private Context mContext;
-    private int mItemHeight = 0;
-    private int mNumColumns = 0;
-    private RelativeLayout.LayoutParams mImageViewLayoutParams;
 
     private LinkedHashMap<Integer, Boolean> selection = new LinkedHashMap<>();
     public ChooseImageAdapter(Context context, int resourceId, ArrayList<ChooseImageListItem> items, ImageFetcher imageFetcher) {
         super(context, resourceId, items);
         this.mContext = context;
         this.mImageFetcher = imageFetcher;
-
-        mImageViewLayoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     // private view holder class
@@ -69,11 +63,6 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
             return convertView;
         }
 
-        // Check the height matches our calculated column width
-        if (holder.imageView.getLayoutParams().height != mItemHeight) {
-            holder.imageView.setLayoutParams(mImageViewLayoutParams);
-            //convertView.requestLayout();
-        }
         if(isChecked(position)) {
             holder.imageCheck.setSelected(true);
         } else {
@@ -118,30 +107,6 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
         return result;
     }
 
-    /**
-     * Sets the item height. Useful for when we know the column width so the height can be set
-     * to match.
-     *
-     * @param height new height
-     */
-    public void setItemHeight(int height) {
-        if (height == mItemHeight) {
-            return;
-        }
-        mItemHeight = height;
-        mImageViewLayoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mItemHeight);
-        //mImageFetcher.setImageSize(height);
-        notifyDataSetChanged();
-    }
-
-    public void setNumColumns(int numColumns) {
-        mNumColumns = numColumns;
-    }
-
-    public int getNumColumns() {
-        return mNumColumns;
-    }
 
     public void changeSelection(View v, boolean bCheck) {
         ((ViewHolder)v.getTag()).imageCheck.setSelected(bCheck);

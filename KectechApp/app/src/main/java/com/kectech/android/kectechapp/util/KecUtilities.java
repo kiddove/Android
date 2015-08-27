@@ -3,8 +3,6 @@ package com.kectech.android.kectechapp.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.kectech.android.kectechapp.R;
@@ -32,43 +30,12 @@ import java.io.InputStreamReader;
  * all subFolder format like user/hall/video, means MainActivity.USER + File.separator + ....., without separator at beginning nor end.
  */
 public class KecUtilities {
-    public static Context context = null;
+    private static Context context = null;
     private static ImageFetcher thumb = null;
-    private static ImageFetcher image = null;
 
-    public static ImageFetcher getImageFetcher(Activity activity) {
-        if (image != null)
-            return image;
-
-        // Fetch screen height and width, to use as our max size when loading images as this
-        // activity runs full screen
-        final DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        final int height = displayMetrics.heightPixels;
-        final int width = displayMetrics.widthPixels;
-
-        // For this sample we'll use half of the longest width to resize our images. As the
-        // image scaling ensures the image is larger than this, we should be left with a
-        // resolution that is appropriate for both portrait and landscape. For best image quality
-        // we shouldn't divide by 2, but this will use more memory and require a larger memory
-        // cache.
-        final int longest = (height > width ? height : width) / 2;
-
-
-        ImageCache.ImageCacheParams cacheParams =
-                new ImageCache.ImageCacheParams(activity, "images");
-
-        cacheParams.setMemCacheSizePercent(0.1f); // Set memory cache to 5% of app memory
-
-            // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-        image = new ImageFetcher(activity, longest);
-        //image.setLoadingImage(R.drawable.empty_photo);
-        image.setImageFadeIn(false);
-        image.addImageCache(activity.getFragmentManager(), cacheParams);
-
-        return image;
+    public static void init(Context context) {
+        KecUtilities.context = context;
     }
-
     public static ImageFetcher getThumbFetcher(Activity activity) {
         if (thumb != null)
             return thumb;
@@ -79,6 +46,7 @@ public class KecUtilities {
         cacheParams.setMemCacheSizePercent(0.10f); // Set memory cache to 10% of app memory
 
         // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+        //thumb = new ImageFetcher(activity, 100);
         thumb = new ImageFetcher(activity, context.getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size));
         thumb.setLoadingImage(R.drawable.ic_default_image);
         thumb.setImageFadeIn(false);
@@ -90,8 +58,6 @@ public class KecUtilities {
     public static void clearCache() {
         if (thumb != null)
             thumb.clearCache();
-        if (image != null)
-            image.clearCache();
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }
@@ -99,10 +65,6 @@ public class KecUtilities {
         if (thumb != null) {
             thumb.closeCache();
             thumb = null;
-        }
-        if (image != null) {
-            image.closeCache();
-            image = null;
         }
     }
 

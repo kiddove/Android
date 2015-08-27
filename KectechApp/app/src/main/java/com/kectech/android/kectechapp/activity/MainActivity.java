@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.MainAdapter;
 import com.kectech.android.kectechapp.thirdparty.SlidingTabLayout;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
 import com.kectech.android.kectechapp.util.KecUtilities;
 
 import java.io.File;
@@ -94,7 +93,7 @@ public class MainActivity extends Activity {
             HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
         }
 
-        KecUtilities.context = this;
+        KecUtilities.init(this);
         if (!KecUtilities.createFolders()) {
             Log.e(MainActivity.LOG_TAG, "create folders failed.");
             finish();

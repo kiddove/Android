@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/new_post_activity_vertical_margin"
+    android:paddingLeft="@dimen/new_post_activity_horizontal_margin"
+    android:paddingRight="@dimen/new_post_activity_horizontal_margin"
+    android:paddingTop="@dimen/new_post_activity_vertical_margin"
     tools:context="com.kectech.android.kectechapp.activity.NewPostActivity">
 
     <ScrollView
@@ -29,20 +29,20 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:hint="@string/prompt_new_post_title"
-                android:maxLines="1"
                 android:visibility="gone" />
 
             <EditText
                 android:id="@+id/post_desc"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/image_thumbnail_size"
+                android:layout_height="@dimen/new_post_text_height"
                 android:layout_below="@+id/post_title"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/edit_text_background_none"
                 android:gravity="start"
                 android:hint="@string/prompt_new_post_desc"
-                android:padding="2dp" />
+                android:padding="2dp"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:id="@+id/post_img_layer1"

@@ -1,6 +1,5 @@
 package com.kectech.android.kectechapp.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -98,40 +96,6 @@ public class ChooseImageActivity extends Activity {
         final View view = findViewById(R.id.choose_img_frame);
         view.setOnTouchListener(swipeTouchListener);
         mGridView.setOnTouchListener(swipeTouchListener);
-
-        final int mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size);
-        final int mImageThumbSpacing = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_spacing);
-        // This listener is used to get the final width of the GridView and then calculate the
-        // number of columns and the width of each column. The width of each column is variable
-        // as the GridView has stretchMode=columnWidth. The column width is used to set the height
-        // of each view so we get nice square thumbnails.
-        mGridView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-                    @Override
-                    public void onGlobalLayout() {
-                        if (mAdapter != null && mAdapter.getNumColumns() == 0) {
-                            final int numColumns = (int) Math.floor(
-                                    mGridView.getWidth() / (mImageThumbSize + mImageThumbSpacing));
-                            if (numColumns > 0) {
-                                final int actualImageSize =
-                                        (mGridView.getWidth() / numColumns) - mImageThumbSpacing;
-                                mAdapter.setNumColumns(numColumns);
-                                mAdapter.setItemHeight(actualImageSize);
-                                if (BuildConfig.DEBUG) {
-                                    Log.d(MainActivity.LOG_TAG, "onCreateView - numColumns set to " + numColumns);
-                                }
-                                if (Utils.hasJellyBean()) {
-                                    mGridView.getViewTreeObserver()
-                                            .removeOnGlobalLayoutListener(this);
-                                } else {
-                                    mGridView.getViewTreeObserver()
-                                            .removeGlobalOnLayoutListener(this);
-                                }
-                            }
-                        }
-                    }
-                });
 
         textDone = (TextView)findViewById(R.id.choose_img_done);
         textDone.setOnClickListener(new View.OnClickListener() {

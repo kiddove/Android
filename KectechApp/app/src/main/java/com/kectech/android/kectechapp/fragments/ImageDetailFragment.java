@@ -22,11 +22,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageWorker;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
@@ -92,6 +90,7 @@ public class ImageDetailFragment extends Fragment {
 //            mImageFetcher.loadImage(mImageUrl, mImageView);
             ImageAware imageAware = new ImageViewAware(mImageView, false);
 
+            // TODO: 26/08/2015 separate from different ways, web sd card, content provider, asset, resource, to be continued...
             if (mImageUrl.contains("http://"))
                 ImageLoader.getInstance().displayImage(mImageUrl, imageAware);
             else

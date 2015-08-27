@@ -5,8 +5,8 @@
 
     <com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView
         android:id="@+id/item_image"
-        android:layout_width="@dimen/image_thumbnail_size"
-        android:layout_height="@dimen/image_thumbnail_size"
+        android:layout_width="@dimen/choose_image_grid_item_size"
+        android:layout_height="@dimen/choose_image_grid_item_size"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_default_image" />
 
