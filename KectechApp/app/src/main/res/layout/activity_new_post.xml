@@ -185,9 +185,6 @@
                 android:textColor="@color/tab_selected"
                 android:textSize="16sp"
                 android:textStyle="italic|bold" />
-
         </RelativeLayout>
-
     </ScrollView>
-
 </LinearLayout>

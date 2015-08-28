@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -61,6 +62,7 @@ import java.util.ArrayList;
  */
 public class Tab_Main_Hall_Photo extends Fragment {
 
+    private boolean bAllowNewPost = true;
     // list
     private ListView mListView;
     // adapter
@@ -160,7 +162,16 @@ public class Tab_Main_Hall_Photo extends Fragment {
         mPhotoAdapter = new PhotoListViewAdapter(getActivity(), R.layout.photo_list_item, new ArrayList<PhotoListItem>(), mImageFetcher);
         mListView.setAdapter(mPhotoAdapter);
 
-
+        if (bAllowNewPost) {
+            ImageView floatButton = (ImageView) v.findViewById(R.id.photo_floating_button);
+            floatButton.setVisibility(View.VISIBLE);
+            floatButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startNewPostActivity();
+                }
+            });
+        }
 
         initList();
 
@@ -462,7 +473,6 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // clear the existing items, otherwise new item will be appended to it.
         menu.clear();
-        boolean bAllowNewPost = true;
         if (bAllowNewPost)
             inflater.inflate(R.menu.menu_photo_tab, menu);
         else
@@ -654,7 +664,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 HttpResponse response = httpClient.execute(httpPost);
                 Log.i(MainActivity.LOG_TAG, "[http return --- status code: " + response.getStatusLine().getStatusCode() + ", message: " + EntityUtils.toString(response.getEntity()) + "]");
             } catch (NoSuchFieldError error) {
-             Log.e("shenmegui", error.getMessage());
+             Log.e(MainActivity.LOG_TAG, error.getMessage());
 
             } catch (Exception e) {
                 Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());

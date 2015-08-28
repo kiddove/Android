@@ -43,27 +43,27 @@ public class ChooseImageActivity extends Activity {
     private int num = 0;
     private TextView textDone;
     private TextView textPreview;
+
     @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_image);
-        if (BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             System.gc();
         }
         // start get data first
         initList();
         mImageFetcher = KecUtilities.getThumbFetcher(this);
-        mGridView = (GridView)findViewById(R.id.choose_img_gridView);
+        mGridView = (GridView) findViewById(R.id.choose_img_gridView);
 
         // click listener
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                    boolean isChecked = mAdapter.isChecked(position);
-                    onItemChecked(position, !isChecked, view);
+                boolean isChecked = mAdapter.isChecked(position);
+                onItemChecked(position, !isChecked, view);
             }
         });
 
@@ -97,7 +97,7 @@ public class ChooseImageActivity extends Activity {
         view.setOnTouchListener(swipeTouchListener);
         mGridView.setOnTouchListener(swipeTouchListener);
 
-        textDone = (TextView)findViewById(R.id.choose_img_done);
+        textDone = (TextView) findViewById(R.id.choose_img_done);
         textDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +105,7 @@ public class ChooseImageActivity extends Activity {
             }
         });
 
-        textPreview = (TextView)findViewById(R.id.choose_img_preview);
+        textPreview = (TextView) findViewById(R.id.choose_img_preview);
         textPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,8 +172,7 @@ public class ChooseImageActivity extends Activity {
 
                 textPreview.setTextColor(getResources().getColorStateList(R.color.bar_background));
                 textDone.setTextColor(getResources().getColorStateList(R.color.tab_selected));
-            }
-            else {
+            } else {
                 setTitle(R.string.prompt_navigation_back);
 
                 textPreview.setTextColor(getResources().getColorStateList(R.color.post_img_background));
@@ -237,7 +236,7 @@ public class ChooseImageActivity extends Activity {
             mAdapter.clear();
             mAdapter.notifyDataSetChanged();
             if (!result.isEmpty()) {
-                for(ChooseImageListItem item: result) {
+                for (ChooseImageListItem item : result) {
                     mAdapter.add(item);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -258,6 +257,7 @@ public class ChooseImageActivity extends Activity {
         finish();
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
     }
+
     // use back button to navigate backward
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
@@ -278,8 +278,8 @@ public class ChooseImageActivity extends Activity {
     @SuppressWarnings("deprecation")
     private ArrayList<ChooseImageListItem> getGalleryPhotos() {
         ArrayList<ChooseImageListItem> galleryList = new ArrayList<>();
-        final String[] columns = { MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media._ID };
+        final String[] columns = {MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media._ID;
         Cursor imageCursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
@@ -314,7 +314,6 @@ public class ChooseImageActivity extends Activity {
     }
 
     private void complete(boolean bFromActionBar) {
-
         if (!bFromActionBar && mAdapter.isSelectionEmpty())
             return;
         Intent intent = new Intent();
@@ -329,7 +328,6 @@ public class ChooseImageActivity extends Activity {
     }
 
     private void preview() {
-
         // start photo activity, DO NOT finish current activity
         if (mAdapter.isSelectionEmpty())
             return;
@@ -345,7 +343,6 @@ public class ChooseImageActivity extends Activity {
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
-
         }
     }
 }

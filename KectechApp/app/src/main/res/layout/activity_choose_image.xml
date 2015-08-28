@@ -64,6 +64,6 @@
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="@dimen/choose_image_grid_item_space"
-        tools:listitem="@layout/choose_image_list_item"/>
+        tools:listitem="@layout/choose_image_list_item" />
 
 </RelativeLayout>
