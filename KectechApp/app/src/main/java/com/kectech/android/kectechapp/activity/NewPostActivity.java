@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -18,7 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.kectech.android.kectechapp.BuildConfig;
@@ -26,6 +27,7 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.listeners.OnSwipeTouchListener;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.util.KecUtilities;
+import com.kectech.android.kectechapp.views.NewPostImageView;
 
 import java.util.ArrayList;
 
@@ -36,29 +38,56 @@ public class NewPostActivity extends Activity {
     private final static int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private final static int CHOOSE_IMAGE_REQUEST_CODE = 200;
     private final int mImageIDs[] = {R.id.post_img1, R.id.post_img2, R.id.post_img3, R.id.post_img4, R.id.post_img5, R.id.post_img6, R.id.post_img7, R.id.post_img8, R.id.post_img9};
-//    private View.OnClickListener mListener;
+    private View.OnClickListener mListener;
     private ArrayList<String> mImages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        if (BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             System.gc();
         }
-//        mListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: 24/08/2015 if has img, do nothing or preview in the future, then start choose image activity.
-//                startChooseImageActivity();
-//            }
-//        };
-//        // set all imageView onClick listener when show default image.
-//        for (int i = 0; i < 9; i++) {
-//            ImageView imageView = (ImageView)findViewById(mImageIDs[i]);
-//            imageView.setOnClickListener(mListener);
-//        }
+        mListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                hideSoftKeyboard();
+                // popup menu, to delete/preview or to take photo/choose photo.
+
+                if (v instanceof NewPostImageView) {
+                    //Creating the instance of PopupMenu
+                    if (((NewPostImageView) v).bDefault) {
+                        PopupMenu popup = new PopupMenu(NewPostActivity.this, v);
+                        //Inflating the Popup using xml file
+                        //Inflating the Popup using xml file
+                        if (((NewPostImageView) v).bDefault)
+                            popup.getMenuInflater()
+                                    .inflate(R.menu.menu_new_post_popup_choose_or_take, popup.getMenu());
+//                    else
+//                        popup.getMenuInflater()
+//                                .inflate(R.menu.menu_new_post_popup_preview_or_delete, popup.getMenu());
+
+                        //registering popup with OnMenuItemClickListener
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                onOptionsItemSelected(item);
+                                return true;
+                            }
+                        });
+
+                        popup.show(); //showing popup menu
+                    }
+                }
+            }
+        };
+        // set all imageView onClick listener when show default image.
+        for (int i = 0; i < 9; i++) {
+            NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[i]);
+            imageView.setOnClickListener(mListener);
+            imageView.id = i;
+        }
 
         mImageFetcher = KecUtilities.getThumbFetcher(this);
         View mPostFrame = findViewById(R.id.post_frame);
@@ -73,7 +102,7 @@ public class NewPostActivity extends Activity {
         });
 
 //        Button submit = (Button)findViewById(R.id.post_submit);
-        TextView submit = (TextView)findViewById(R.id.post_submit);
+        TextView submit = (TextView) findViewById(R.id.post_submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +117,7 @@ public class NewPostActivity extends Activity {
 //                    return;
 //                close(true);
             }
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // hide soft keyboard when click non TextView area.
@@ -172,17 +202,12 @@ public class NewPostActivity extends Activity {
 
         if (resultCode == RESULT_OK) {
             try {
-                clearSelection();
                 if (requestCode == CHOOSE_IMAGE_REQUEST_CODE) {
                     ArrayList<String> result = data.getStringArrayListExtra(MainActivity.CHOOSE_IMAGE_RESULT);
-                    if (result != null) {
-                        for (int i = 0; i < result.size(); i++) {
-                            ImageView imageView = (ImageView) findViewById(mImageIDs[i]);
-                            mImageFetcher.loadImage(result.get(i), imageView);
-                            imageView.setVisibility(View.VISIBLE);
-                            mImages.add(result.get(i));
-                        }
+                    for (String s : result) {
+                        mImages.add(s);
                     }
+                    setImages();
                 } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
                     new getCapturedImageTask().execute(data);
                 }
@@ -191,6 +216,7 @@ public class NewPostActivity extends Activity {
             }
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -208,30 +234,43 @@ public class NewPostActivity extends Activity {
     private void startChooseImageActivityByTask() {
         // first hide keyboard...
         // then start
+        if (mImages.size() == 9) {
+            showMaxAlert();
+            return;
+        }
+
         new StartChoosePhotoActivityTask().execute();
     }
+
     private void startChooseImageActivity() {
         Intent intent = new Intent(this, ChooseImageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra(MainActivity.CHOOSE_IMAGE_PARAM, mImages.size());
         try {
             // do not finish, instead call startActivityForResult
             startActivityForResult(intent, CHOOSE_IMAGE_REQUEST_CODE);
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
-
         }
     }
 
     private void clearSelection() {
         for (int i = 0; i < 9; i++) {
-            ImageView imageView = (ImageView) findViewById(mImageIDs[i]);
+            NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[i]);
             imageView.setVisibility(View.GONE);
+            imageView.bDefault = true;
         }
-        mImages.clear();
+        //mImages.clear();
     }
 
     private void captureImage() {
+
+        if (mImages.size() == 9) {
+            showMaxAlert();
+            return;
+        }
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null)
             startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
@@ -239,11 +278,10 @@ public class NewPostActivity extends Activity {
 
     private String getPath(Uri uri) {
 
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
 
-        Cursor cursor = getContentResolver().query(uri, projection, null, null,null);
-        try
-        {
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        try {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
 
@@ -262,16 +300,23 @@ public class NewPostActivity extends Activity {
 
         @Override
         protected void onPostExecute(String strImage) {
-            ImageView imageView = (ImageView) findViewById(mImageIDs[0]);
-            mImageFetcher.loadImage(strImage, imageView);
-            imageView.setVisibility(View.VISIBLE);
-            mImages.add(strImage);
+            // always add to the rear if not full
+            if (mImages.size() < 9) {
+                int position = mImages.size();
+                NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[position]);
+                mImageFetcher.loadImage(strImage, imageView);
+                imageView.setVisibility(View.VISIBLE);
+                imageView.bDefault = false;
+                mImages.add(strImage);
+
+                setDefaultImageView(mImages.size());
+            }
         }
     }
 
     private void uploadToServer() {
         // actually is return to tab_main_photo, and let the fragment deal with upload
-        TextView textView = (TextView)findViewById(R.id.post_desc);
+        TextView textView = (TextView) findViewById(R.id.post_desc);
         String strDesc = textView.getText().toString();
         if (TextUtils.isEmpty(strDesc)) {
             if (mImages == null || mImages.size() == 0) {
@@ -319,12 +364,7 @@ public class NewPostActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            try {
-                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            } catch (NullPointerException npe) {
-                Log.e(MainActivity.LOG_TAG, npe.getMessage());
-            }
+            hideSoftKeyboard();
         }
     }
 
@@ -346,12 +386,63 @@ public class NewPostActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            try {
-                final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            } catch (NullPointerException npe) {
-                Log.e(MainActivity.LOG_TAG, npe.getMessage());
+            hideSoftKeyboard();
+        }
+    }
+
+    private void hideSoftKeyboard() {
+        try {
+            final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm1.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (NullPointerException npe) {
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
+        }
+    }
+
+    private void setDefaultImageView(int position) {
+        if (position >= 9)
+            return;
+        NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[position]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_post_default_img, getTheme()));
+            imageView.setBackground(getResources().getDrawable(R.drawable.new_post_image_background_frame, getTheme()));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_post_default_img));
+            imageView.setBackground(getResources().getDrawable(R.drawable.new_post_image_background_frame));
+        } else {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_post_default_img));
+            imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.new_post_image_background_frame));
+        }
+        imageView.bDefault = true;
+        imageView.setVisibility(View.VISIBLE);
+    }
+
+    private void setImages() {
+        if (mImages != null) {
+            clearSelection();
+            for (int i = 0; i < mImages.size(); i++) {
+                NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[i]);
+                mImageFetcher.loadImage(mImages.get(i), imageView);
+                imageView.setVisibility(View.VISIBLE);
+                imageView.bDefault = false;
+            }
+            // set next one to default
+            if (mImages.size() < 9) {
+                setDefaultImageView(mImages.size());
             }
         }
+    }
+
+    private void showMaxAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Share a maximum of 9 photos.")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

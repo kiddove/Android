@@ -36,7 +36,7 @@
     <string name="prompt_new_post_title">title</string>
     <string name="prompt_new_post_desc">Share something…</string>
     <string name="prompt_new_post_menu_choose_from_photo">Share Photo</string>
-    <string name="prompt_new_post_menu_take_a_photo">Take a photo</string>
+    <string name="prompt_new_post_menu_take_a_photo">Take a Photo</string>
     <string name="prompt_new_post_button_submit">Submit</string>
     <string name="title_activity_new_post">NewPostActivity</string>
     <string name="title_activity_choose_image">ChooseImageActivity</string>
@@ -44,4 +44,9 @@
     <string name="prompt_choose_image_done">Done</string>
     <string name="prompt_choose_image_cancel">Cancel</string>
     <string name="prompt_navigation_back">Back</string>
+    <string name="prompt_new_post_popup_preview">Preview</string>
+    <string name="prompt_new_post_popup_delete">Delete</string>
+    <string name="prompt_new_post_popup_choose">Choose from Photos</string>
+    <string name="prompt_new_post_popup_take">Take a Photo</string>
+    <string name="prompt_new_post_popup_cancel">Cancel</string>
 </resources>

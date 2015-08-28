@@ -43,6 +43,7 @@ public class ChooseImageActivity extends Activity {
     private int num = 0;
     private TextView textDone;
     private TextView textPreview;
+    private int limit = 9;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -54,6 +55,11 @@ public class ChooseImageActivity extends Activity {
         }
         // start get data first
         initList();
+        Intent intent = getIntent();
+        if (intent != null) {
+            int imageCount = intent.getIntExtra(MainActivity.CHOOSE_IMAGE_PARAM, 0);
+            limit = limit - imageCount;
+        }
         mImageFetcher = KecUtilities.getThumbFetcher(this);
         mGridView = (GridView) findViewById(R.id.choose_img_gridView);
 
@@ -150,11 +156,11 @@ public class ChooseImageActivity extends Activity {
             mAdapter.removeSelect(position);
         }
 
-        if (num > 9) {
+        if (num > limit) {
             num--;
             mAdapter.removeSelect(position);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Select a maximum of 9 photos.")
+            builder.setMessage("Select a maximum of " + limit + " photos.")
                     .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -281,31 +287,35 @@ public class ChooseImageActivity extends Activity {
         final String[] columns = {MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media._ID;
-        Cursor imageCursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
-                null, null, orderBy);
         try {
-            if (imageCursor != null && imageCursor.getCount() > 0) {
+            Cursor imageCursor = getContentResolver().query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
+                    null, null, orderBy);
+            try {
+                if (imageCursor != null && imageCursor.getCount() > 0) {
 
-                while (imageCursor.moveToNext()) {
-                    ChooseImageListItem item = new ChooseImageListItem();
+                    while (imageCursor.moveToNext()) {
+                        ChooseImageListItem item = new ChooseImageListItem();
 
-                    int dataColumnIndex = imageCursor
-                            .getColumnIndex(MediaStore.Images.Media.DATA);
+                        int dataColumnIndex = imageCursor
+                                .getColumnIndex(MediaStore.Images.Media.DATA);
 
-                    item.setImageURL(imageCursor.getString(dataColumnIndex));
+                        item.setImageURL(imageCursor.getString(dataColumnIndex));
 
-                    galleryList.add(item);
+                        galleryList.add(item);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    imageCursor.close();
+                } catch (NullPointerException npe) {
+                    Log.e(MainActivity.LOG_TAG, "Exception caught: " + npe.getMessage());
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                imageCursor.close();
-            } catch (NullPointerException npe) {
-                Log.e(MainActivity.LOG_TAG, "Exception caught: " + npe.getMessage());
-            }
+            Log.e(MainActivity.LOG_TAG, e.getMessage());
         }
 
         // show newest photo at beginning of the list
@@ -314,6 +324,10 @@ public class ChooseImageActivity extends Activity {
     }
 
     private void complete(boolean bFromActionBar) {
+        if (mAdapter == null) {
+            close();
+            return;
+        }
         if (!bFromActionBar && mAdapter.isSelectionEmpty())
             return;
         Intent intent = new Intent();
@@ -323,7 +337,7 @@ public class ChooseImageActivity extends Activity {
             close();
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
-
+            close();
         }
     }
 

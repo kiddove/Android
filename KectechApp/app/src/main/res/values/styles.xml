@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="android:actionBarWidgetTheme">@style/PopupMenuTheme</item>
+        <item name="android:actionBarWidgetTheme">@style/ActionBarPopupMenuTheme</item>
         <!--// menu item text color(in action bar)-->
         <item name="android:actionMenuTextColor">@color/bar_menu_text</item>
         <!--&lt;!&ndash; Change Overflow Menu ListView Item Height & Property &ndash;&gt;-->
@@ -25,7 +25,7 @@
         <!--droplist will be in DropDownListView listSelector-->
 
         <!--api 21 or above need to put here... for dropdown list, api 19 or below not working here-->
-        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>c
+        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
         <item name="android:itemTextAppearance">@style/MenuTextAppearance</item>
 
         <!--cab no done button-->
@@ -42,25 +42,25 @@
 
         <!--cab done button icon-->
         <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
-
     </style>
 
     <!--overflow menu drop down-->
-    <style name="PopupMenuTheme" parent="@android:style/Theme.Holo.Light">
+    <style name="ActionBarPopupMenuTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <!--api 19 or below need to put here, but api 21 or above not working-->
         <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
         <!--<item name="android:textSize">28dp</item>-->
     </style>
-    <!-- Change Overflow Menu Background -->
+    <!-- Change Overflow Menu Background, seems not working-->
     <style name="PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
-        <!--<item name="android:popupBackground">@color/bar_background</item>-->
-        <item name="android:popupBackground">@drawable/tab_list_selector</item>
+        <item name="android:popupBackground">@color/bar_background</item>
+        <!--<item name="android:popupBackground">@drawable/tab_list_selector</item>-->
     </style>
     <!-- Change Overflow Menu ListView Divider Property or selector-->
     <style name="DropDownListView" parent="@android:style/Widget.Holo.ListView.DropDown">
         <!--drip list item selector-->
         <item name="android:listSelector">@drawable/droplist_item_selector</item>
+        <!--this controls the color of overflow dropdown or normal popup menu background-->
         <item name="android:background">@color/bar_background</item>
         <item name="android:divider">@color/bar_divider</item>
         <item name="android:dividerHeight">1dp</item>
@@ -165,4 +165,19 @@
         <item name="android:src">@drawable/ic_action_navigation_more_horiz</item>
     </style>
 
+    <!--// for popup menu in new post activity;-->
+    <style name="PopupTheme" parent="@style/AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:dropDownListViewStyle">@style/NewPostDropDownListView</item>
+    </style>
+
+    <!-- Change Overflow Menu ListView Divider Property or selector-->
+    <style name="NewPostDropDownListView" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <!--drip list item selector-->
+        <item name="android:listSelector">@drawable/droplist_item_selector</item>
+        <!--this controls the color of overflow dropdown or normal popup menu background-->
+        <item name="android:background">@color/tab_selected</item>
+        <item name="android:divider">@color/bar_divider</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
 </resources>

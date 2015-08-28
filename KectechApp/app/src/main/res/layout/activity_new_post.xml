@@ -52,31 +52,39 @@
                 android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:background="@drawable/new_post_image_background_frame"
+                    android:visibility="visible" />
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,31 +95,40 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img4"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/choose_image_grid_item_size"
+                    android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img5"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/choose_image_grid_item_size"
+                    android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img6"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/choose_image_grid_item_size"
+                    android:layout_height="@dimen/choose_image_grid_item_size"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,31 +140,40 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img7"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/choose_image_grid_item_size"
+                    android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img8"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/choose_image_grid_item_size"
+                    android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
 
-                <ImageView
+                <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img9"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/choose_image_grid_item_size"
+                    android:layout_height="@dimen/choose_image_grid_item_size"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_post_default_img"
+                    android:visibility="gone"
+                    android:background="@drawable/new_post_image_background_frame"
+                    tools:visibility="visible" />
             </LinearLayout>
             <!--<Button-->
             <!--android:id="@+id/post_submit"-->
@@ -179,7 +205,7 @@
                 android:layout_below="@+id/post_img_layer3"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="20dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:padding="10dp"
                 android:text="@string/ui_menu_send"
                 android:textColor="@color/tab_selected"

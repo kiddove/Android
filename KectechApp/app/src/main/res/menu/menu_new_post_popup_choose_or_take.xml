@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_new_post_choose_photo"
+        android:title="@string/prompt_new_post_popup_choose" />
+
+    <item
+        android:id="@+id/menu_new_post_take_photo"
+        android:title="@string/prompt_new_post_popup_take" />
+
+    <item
+        android:id="@+id/menu_new_post_cancel"
+        android:title="@string/prompt_new_post_popup_cancel" />
+</menu>
