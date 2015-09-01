@@ -115,10 +115,7 @@ public class NewPostActivity extends Activity {
 
         OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
             public void onSwipeOutLeft() {
-                //getFragmentManager().popBackStack();
-//                if (getCurrentFocus() == findViewById(R.id.post_desc))
-//                    return;
-//                close(true);
+                //close(true);
             }
 
             @Override
@@ -142,20 +139,22 @@ public class NewPostActivity extends Activity {
                                           int after) {
                 //TODO
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 //TODO
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 int len = s.toString().length();
-                TextView showNumbers = (TextView)findViewById(R.id.post_numbers);
+                TextView showNumbers = (TextView) findViewById(R.id.post_numbers);
                 showNumbers.setText(len + "/140");
             }
         };
 
-        EditText editText = (EditText)findViewById(R.id.post_desc);
+        EditText editText = (EditText) findViewById(R.id.post_desc);
         editText.addTextChangedListener(textWatcher);
     }
 
@@ -461,7 +460,7 @@ public class NewPostActivity extends Activity {
 
     private void showMaxAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Share a maximum of " + IMAGE_COUNT_LIMIT +" photos.")
+        builder.setMessage("Share a maximum of " + IMAGE_COUNT_LIMIT + " photos.")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

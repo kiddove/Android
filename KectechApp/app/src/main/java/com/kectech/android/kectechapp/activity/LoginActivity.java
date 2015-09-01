@@ -131,9 +131,9 @@ public class LoginActivity extends Activity {
         //getLoaderManager().initLoader(0, null, this);
         if (username != null && username.size() > 0) {
             List<String> emailAddressCollection = new ArrayList<>(username);
-                    ArrayAdapter < String > adapter =
-                            new ArrayAdapter<>(LoginActivity.this,
-                                    android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+            ArrayAdapter<String> adapter =
+                    new ArrayAdapter<>(LoginActivity.this,
+                            android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
             mEmailView.setAdapter(adapter);
         }
@@ -149,54 +149,44 @@ public class LoginActivity extends Activity {
         if (mAuthTask != null) {
             return;
         }
-//        // Reset errors.
-//        mEmailView.setError(null);
-//        mPasswordView.setError(null);
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
 //
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            mEmailView.requestFocus();
+            return;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            mEmailView.requestFocus();
+            return;
+        }
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
+            mPasswordView.requestFocus();
+            return;
         } else if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
+            mPasswordView.requestFocus();
+            return;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask();
-            mAuthTask.execute(email, password);
-        }
-
+        // Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        showProgress(true);
+        mAuthTask = new UserLoginTask();
+        mAuthTask.execute(email, password);
 
         //hide keyboard
-        final InputMethodManager imm1 = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm1.hideSoftInputFromWindow(mLoginFormView.getWindowToken(), 0);
     }
 
@@ -371,24 +361,11 @@ public class LoginActivity extends Activity {
                     //current_user = data.getStringExtra(MainActivity.CURRENT_USER);
                     mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER));
                     new saveStateTask().execute(mEmailView.getText().toString());
-//                    Intent intent = new Intent(this, MainActivity.class);
-//                    intent.putExtra(MainActivity.CURRENT_USER, data.getStringExtra(MainActivity.CURRENT_USER));
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                    try {
-//                        startActivity(intent);
-//                        finish();
-//                        overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-//                    } catch (Exception e) {
-//                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
-//
-//                    }
                 }
             }
-//            else if (resultCode == RESULT_CANCELED) {
-//                // do nothing
-//            }
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -424,7 +401,6 @@ public class LoginActivity extends Activity {
         super.onRestart();
         Log.d("StrictMode", "LA restart.");
     }
-
 
     public class checkAutoLogInTask extends AsyncTask<Void, Void, Boolean> {
 

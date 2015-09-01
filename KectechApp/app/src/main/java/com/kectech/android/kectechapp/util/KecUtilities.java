@@ -91,7 +91,6 @@ public class KecUtilities {
         } catch (FileNotFoundException fne) {
             Log.e(MainActivity.LOG_TAG, "File not found: " + fne.getMessage());
             fne.printStackTrace();
-
         } catch (NullPointerException | IOException npe) {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
@@ -185,6 +184,7 @@ public class KecUtilities {
                     return false;
                 }
             }
+
             // hall
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER);
             if (!folder.exists()) {

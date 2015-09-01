@@ -45,9 +45,12 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edit_text_background_login"
                 android:hint="@string/prompt_email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
+                android:maxLength="32"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -55,9 +58,12 @@
                 android:id="@+id/nick_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edit_text_background_login"
                 android:hint="@string/prompt_nick_name"
                 android:imeOptions="actionNext"
                 android:inputType="text"
+                android:maxLength="32"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -65,9 +71,12 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edit_text_background_login"
                 android:hint="@string/prompt_password"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
+                android:maxLength="32"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -75,11 +84,14 @@
                 android:id="@+id/confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edit_text_background_login"
                 android:hint="@string/prompt_confirm_password"
                 android:imeActionId="@+id/register"
                 android:imeActionLabel="@string/action_sign_up_short"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
+                android:maxLength="32"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -91,13 +103,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 android:background="@drawable/login_button"
                 android:gravity="center"
                 android:text="@string/action_sign_up_short"
                 android:textColor="@color/bar_background"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/alreadyMember"
@@ -107,7 +118,7 @@
                 android:background="@drawable/login_text_view"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/already_a_member"
+                android:text="@string/already_have_an_account"
                 android:textColor="@color/bar_background" />
         </LinearLayout>
     </ScrollView>

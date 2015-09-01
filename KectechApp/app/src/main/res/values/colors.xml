@@ -63,4 +63,5 @@
     </integer-array>
 
     <color name="light_blue">#FF007efd</color>
+    <color name="log_button_background">#FF417FD3</color>
 </resources>

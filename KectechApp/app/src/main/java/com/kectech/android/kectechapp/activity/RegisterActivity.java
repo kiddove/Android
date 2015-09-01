@@ -53,12 +53,12 @@ public class RegisterActivity extends Activity {
 
     // 1 -- email existed
     private int ERROR_CODE = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        if (BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             System.gc();
         }
         // when click done on confirm
@@ -125,7 +125,6 @@ public class RegisterActivity extends Activity {
             }
         });
 
-
         Button mEmailSignUpButton = (Button) findViewById(R.id.register_button);
         mEmailSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +142,7 @@ public class RegisterActivity extends Activity {
                 //getFragmentManager().popBackStack();
                 close(true);
             }
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // hide soft keyboard when click non TextView area.
@@ -155,7 +155,7 @@ public class RegisterActivity extends Activity {
 
         mRegisterFormView.setOnTouchListener(swipeTouchListener);
 
-        TextView goBackToLogIn = (TextView)findViewById(R.id.alreadyMember);
+        TextView goBackToLogIn = (TextView) findViewById(R.id.alreadyMember);
         goBackToLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +191,7 @@ public class RegisterActivity extends Activity {
         mPasswordView.setError(null);
 
         //hide keyboard
-        final InputMethodManager imm1 = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm1.hideSoftInputFromWindow(mRegisterFormView.getWindowToken(), 0);
 
         String email = mEmailView.getText().toString();
@@ -211,7 +211,7 @@ public class RegisterActivity extends Activity {
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            mPasswordView.setError(getString(R.string.error_field_required));
             mPasswordView.requestFocus();
             return;
         } else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -227,14 +227,12 @@ public class RegisterActivity extends Activity {
             return;
         }
 
-
         // Check password match
         if (!isPasswordMatch()) {
             mConfirmPasswordView.setError(getString(R.string.error_different_password));
             mConfirmPasswordView.requestFocus();
             return;
         }
-
 
         // Show a progress spinner, and kick off a background task to
         // perform the user login attempt.
@@ -305,6 +303,7 @@ public class RegisterActivity extends Activity {
     public class UserActionTask extends AsyncTask<String, Void, Boolean> {
 
         private int type = 0;
+
         @Override
         protected Boolean doInBackground(String... params) {
             // param[0] -- email
@@ -340,8 +339,7 @@ public class RegisterActivity extends Activity {
                         mEmailView.requestFocus();
                     }
                 }
-            }
-            else if (type == 1) {
+            } else if (type == 1) {
                 if (!success) {
                     mEmailView.setError(getString(R.string.error_existed_email));
                     mEmailView.requestFocus();
@@ -360,7 +358,7 @@ public class RegisterActivity extends Activity {
 
         // actually is go back to login activity and then go to main activity from login
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.CURRENT_USER,  mEmailView.getText().toString());
+        intent.putExtra(MainActivity.CURRENT_USER, mEmailView.getText().toString());
         try {
             setResult(RESULT_OK, intent);
             close(false);
@@ -458,6 +456,7 @@ public class RegisterActivity extends Activity {
         }
         return false;
     }
+
     // use back button to navigate backward
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {

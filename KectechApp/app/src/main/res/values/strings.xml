@@ -31,7 +31,7 @@
     <string name="clear_cache_complete_toast">Cache has been cleared</string>
     <string name="imageView_description">Image Thumbnail</string>
     <string name="no_network_connection_toast">No network connection found</string>
-    <string name="already_a_member">Already a member?</string>
+    <string name="already_have_an_account">Already have an account?</string>
     <string name="new_user">New user?</string>
     <string name="prompt_new_post_title">title</string>
     <string name="prompt_new_post_desc">Share something…</string>

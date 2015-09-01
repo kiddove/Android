@@ -35,7 +35,7 @@ public class VideoOfHallOfMainActivity extends Activity {
         setContentView(mWebView.getLayout());
 ////////////////////////////////////////////////////////////////
 //        // important
-//        // this will cause webView "mInputDispatcher rejected the event", mean can not dispatch touch event..
+//        // this will cause webView "mInputDispatcher rejected the event", means can not dispatch touch event..
 //
 //        OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener() {
 //            public void onSwipeOutLeft() {
