@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="2dp">
+    android:paddingBottom="2dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="2dp">
 
     <TextView
         android:id="@+id/hall_video_list_item_title"
@@ -45,7 +48,8 @@
         android:layout_alignRight="@+id/hall_video_list_item_img"
         android:layout_margin="1dp"
         android:background="@color/ColorPrimaryDark"
-        android:padding="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
         android:text="@string/label_live"
         android:textColor="@android:color/white"
         android:textSize="10sp" />
