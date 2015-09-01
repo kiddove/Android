@@ -49,4 +49,5 @@
     <string name="prompt_new_post_popup_choose">Choose from Photos</string>
     <string name="prompt_new_post_popup_take">Take a Photo</string>
     <string name="prompt_new_post_popup_cancel">Cancel</string>
+    <string name="prompt_new_post_number">0/140</string>
 </resources>

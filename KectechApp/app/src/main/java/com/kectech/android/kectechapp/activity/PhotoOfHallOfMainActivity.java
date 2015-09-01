@@ -8,7 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -22,8 +22,6 @@ import com.kectech.android.kectechapp.adapter.FadePageTransformer;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.fragments.ImageDetailFragment;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 
 import java.util.ArrayList;
 

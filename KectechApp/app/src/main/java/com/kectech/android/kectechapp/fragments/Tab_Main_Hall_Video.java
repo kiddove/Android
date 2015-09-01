@@ -137,16 +137,6 @@ public class Tab_Main_Hall_Video extends Fragment {
                 R.color.swipe_color_3,
                 R.color.swipe_color_5);
 
-//        ImageCache.ImageCacheParams cacheParams =
-//                new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
-//
-//        cacheParams.setMemCacheSizePercent(0.05f); // Set memory cache to 5% of app memory
-//
-//        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-//        mImageFetcher = new ImageFetcher(getActivity(), 100);
-//        //mImageFetcher.setLoadingImage(R.drawable.empty_photo);
-//        mImageFetcher.addImageCache(getActivity().getFragmentManager(), cacheParams);
-
         mImageFetcher = KecUtilities.getThumbFetcher(getActivity());
         initList();
 
@@ -203,22 +193,6 @@ public class Tab_Main_Hall_Video extends Fragment {
             // first add to adapter and listView
             mVideoAdapter = new VideoListViewAdapter(activity, R.layout.video_list_item, result, mImageFetcher);
             mListView.setAdapter(mVideoAdapter);
-//
-//            // now can start another task to load image async
-//            // we need url and position, if we use one thread to do all the download, so we store position in listitem.
-//            // be sure that the size of the array won't be too large, it's kind of waste the memory...
-//
-//
-//            // determine position
-//            int position = 0;
-//            for (VideoListItem item : result) {
-//                item.setPosition(position);
-//                position++;
-//            }
-//            VideoListItem[] items = new VideoListItem[result.size()];
-//            result.toArray(items);
-//
-//            new LoadHallVideoListThumbsTask(mListView, subFolder).execute(items);
 
         } catch (NullPointerException npe) {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
