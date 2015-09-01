@@ -11,9 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -41,8 +38,8 @@ public class NewPostActivity extends Activity {
     private final static int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private final static int CHOOSE_IMAGE_REQUEST_CODE = 200;
     private final int mImageIDs[] = {R.id.post_img1, R.id.post_img2, R.id.post_img3, R.id.post_img4, R.id.post_img5, R.id.post_img6, R.id.post_img7, R.id.post_img8, R.id.post_img9};
+    private View.OnClickListener mListener;
     private ArrayList<String> mImages;
-    private final static int IMAGE_COUNT_LIMIT = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +49,7 @@ public class NewPostActivity extends Activity {
         if (BuildConfig.DEBUG) {
             System.gc();
         }
-        View.OnClickListener mListener = new View.OnClickListener() {
+        mListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -86,7 +83,7 @@ public class NewPostActivity extends Activity {
             }
         };
         // set all imageView onClick listener when show default image.
-        for (int i = 0; i < IMAGE_COUNT_LIMIT; i++) {
+        for (int i = 0; i < 9; i++) {
             NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[i]);
             imageView.setOnClickListener(mListener);
             imageView.id = i;
@@ -134,29 +131,6 @@ public class NewPostActivity extends Activity {
         mPostFrame.setOnTouchListener(swipeTouchListener);
 
         mImages = new ArrayList<>();
-
-        TextWatcher textWatcher = new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                //TODO
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                //TODO
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                int len = s.toString().length();
-                TextView showNumbers = (TextView)findViewById(R.id.post_numbers);
-                showNumbers.setText(len + "/140");
-            }
-        };
-
-        EditText editText = (EditText)findViewById(R.id.post_desc);
-        editText.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -260,7 +234,7 @@ public class NewPostActivity extends Activity {
     private void startChooseImageActivityByTask() {
         // first hide keyboard...
         // then start
-        if (mImages.size() == IMAGE_COUNT_LIMIT) {
+        if (mImages.size() == 9) {
             showMaxAlert();
             return;
         }
@@ -282,7 +256,7 @@ public class NewPostActivity extends Activity {
     }
 
     private void clearSelection() {
-        for (int i = 0; i < IMAGE_COUNT_LIMIT; i++) {
+        for (int i = 0; i < 9; i++) {
             NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[i]);
             imageView.setVisibility(View.GONE);
             imageView.bDefault = true;
@@ -292,7 +266,7 @@ public class NewPostActivity extends Activity {
 
     private void captureImage() {
 
-        if (mImages.size() == IMAGE_COUNT_LIMIT) {
+        if (mImages.size() == 9) {
             showMaxAlert();
             return;
         }
@@ -327,7 +301,7 @@ public class NewPostActivity extends Activity {
         @Override
         protected void onPostExecute(String strImage) {
             // always add to the rear if not full
-            if (mImages.size() < IMAGE_COUNT_LIMIT) {
+            if (mImages.size() < 9) {
                 int position = mImages.size();
                 NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[position]);
                 mImageFetcher.loadImage(strImage, imageView);
@@ -426,7 +400,7 @@ public class NewPostActivity extends Activity {
     }
 
     private void setDefaultImageView(int position) {
-        if (position >= IMAGE_COUNT_LIMIT)
+        if (position >= 9)
             return;
         NewPostImageView imageView = (NewPostImageView) findViewById(mImageIDs[position]);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -453,7 +427,7 @@ public class NewPostActivity extends Activity {
                 imageView.bDefault = false;
             }
             // set next one to default
-            if (mImages.size() < IMAGE_COUNT_LIMIT) {
+            if (mImages.size() < 9) {
                 setDefaultImageView(mImages.size());
             }
         }
@@ -461,7 +435,7 @@ public class NewPostActivity extends Activity {
 
     private void showMaxAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Share a maximum of " + IMAGE_COUNT_LIMIT +" photos.")
+        builder.setMessage("Share a maximum of 9 photos.")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

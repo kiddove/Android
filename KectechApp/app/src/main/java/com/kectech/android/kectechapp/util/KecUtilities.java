@@ -271,7 +271,7 @@ public class KecUtilities {
 
     public static void initImageLoader() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true).imageScaleType(ImageScaleType.EXACTLY)
+                .cacheOnDisc(true).imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
                 context).defaultDisplayImageOptions(defaultOptions).memoryCache(

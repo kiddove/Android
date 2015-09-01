@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
+import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.listeners.OnSwipeTouchListener;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 
@@ -30,7 +31,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 /**
  * A Register screen that offers register via email/password/nickname.
  * sing up
@@ -68,7 +68,7 @@ public class RegisterActivity extends Activity {
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.register || id == EditorInfo.IME_NULL || id == EditorInfo.IME_ACTION_DONE) {
                     // the action key performs a "done" operation, typically meaning there is nothing more to input and the IME will be closed.
-                    // but seems "OK" is for "done", done is for Enter...
+                    // but seems OK. is for "done", done is for Enter...
                     // IME_NULL for Enter...
                     attemptLogin();
                     return true;
