@@ -65,7 +65,7 @@ public class NewPostActivity extends Activity {
                         PopupMenu popup = new PopupMenu(NewPostActivity.this, v);
                         //Inflating the Popup using xml file
                         //Inflating the Popup using xml file
-                        if (((NewPostImageView) v).bDefault)
+                        //if (((NewPostImageView) v).bDefault)
                             popup.getMenuInflater()
                                     .inflate(R.menu.menu_new_post_popup_choose_or_take, popup.getMenu());
 //                    else

@@ -15,7 +15,7 @@
     <string name="ui_menu_feedback">Feedback</string>
     <string name="ui_menu_about">About</string>
     <string name="ui_menu_share">Share</string>
-    <string name="ui_menu_refresh">Refresh</string>
+    <string name="ui_menu_refresh">Sync</string>
     <string name="ui_menu_show_qr_code">Show QR code(*)</string>
     <string name="video_list_item_img_description">description for video tab item img</string>
     <string name="photo_list_item_img_description">description for photo tab item img</string>

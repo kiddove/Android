@@ -57,7 +57,7 @@
     <GridView
         android:id="@+id/choose_img_gridView"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/choose_img_bottom"
         android:columnWidth="@dimen/choose_image_grid_item_size"
         android:horizontalSpacing="@dimen/choose_image_grid_item_space"

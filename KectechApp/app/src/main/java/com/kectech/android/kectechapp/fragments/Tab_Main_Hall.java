@@ -841,10 +841,8 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             return;
 
         try {
-
             for (Tab_Main_Hall_ListItem item : result) {
                 mAdapter.add(item);
-
             }
 
             final int currentPosition = mListView.getFirstVisiblePosition();

@@ -1,8 +1,10 @@
 <resources>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login or register-->
     <string name="prompt_email">Email</string>
+    <string name="prompt_account">User Name</string>
+    <string name="prompt_password_asterisk">********</string>
     <string name="prompt_nick_name">NickName</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_confirm_password">Confirm Password</string>

@@ -11,7 +11,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -61,6 +63,7 @@ public class LoginActivity extends Activity {
         if (BuildConfig.DEBUG) {
             Utils.enableStrictMode();
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         new checkAutoLogInTask().execute();
@@ -125,6 +128,28 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mEmailView.setError(null);
+                mPasswordView.setError(null);
+            }
+        };
+
+        mEmailView.addTextChangedListener(textWatcher);
+
+        mPasswordView.addTextChangedListener(textWatcher);
     }
 
     private void populateAutoComplete() {

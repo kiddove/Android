@@ -9,7 +9,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -164,6 +166,34 @@ public class RegisterActivity extends Activity {
                 close(true);
             }
         });
+
+        // set textWatcher, to clear error
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mEmailView.setError(null);
+                mPasswordView.setError(null);
+                mConfirmPasswordView.setError(null);
+                mNickNameView.setError(null);
+            }
+        };
+        mEmailView.addTextChangedListener(textWatcher);
+
+        mPasswordView.addTextChangedListener(textWatcher);
+
+        mConfirmPasswordView.addTextChangedListener(textWatcher);
+
+        mNickNameView.addTextChangedListener(textWatcher);
     }
 
     private void checkEmailAddress() {
@@ -209,6 +239,13 @@ public class RegisterActivity extends Activity {
             return;
         }
 
+        // check nickname
+        if (TextUtils.isEmpty(nickname)) {
+            mNickNameView.setError(getString(R.string.error_field_required));
+            mNickNameView.requestFocus();
+            return;
+        }
+
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
@@ -217,13 +254,6 @@ public class RegisterActivity extends Activity {
         } else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             mPasswordView.requestFocus();
-            return;
-        }
-
-        // check nickname
-        if (TextUtils.isEmpty(nickname)) {
-            mNickNameView.setError(getString(R.string.error_field_required));
-            mNickNameView.requestFocus();
             return;
         }
 
