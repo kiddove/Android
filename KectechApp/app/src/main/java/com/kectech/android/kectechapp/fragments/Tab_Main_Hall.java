@@ -111,7 +111,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                         //getActivity().overridePendingTransition(0, 0);
                         activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                     } catch (Exception e) {
-                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+                        Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---onCreateView): " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -314,7 +314,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                         // todo scan result, to be continued...
                         AddItemToList(scanContent);
                     } catch (Exception e) {
-                        Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+                        Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---onActivityResult): " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -750,7 +750,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---getListFromJson): " + e.getMessage());
         }
         return null;
     }
@@ -764,7 +764,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---getJsonFromObject): " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -817,7 +817,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 ////            currentTask.add(task);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---onRefreshComplete): " + e.getMessage());
         }
     }
 
@@ -832,7 +832,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---onRefreshCompleteTop): " + e.getMessage());
         }
     }
 
@@ -854,7 +854,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---onRefreshCompleteBottom): " + e.getMessage());
         }
     }
 

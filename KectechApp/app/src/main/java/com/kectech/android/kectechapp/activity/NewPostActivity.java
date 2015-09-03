@@ -287,7 +287,7 @@ public class NewPostActivity extends Activity {
                     new getCapturedImageTask().execute(data);
                 }
             } catch (Exception e) {
-                Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+                Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostActivity---onActivityResult): " + e.getMessage());
             }
         }
     }
@@ -326,7 +326,7 @@ public class NewPostActivity extends Activity {
             startActivityForResult(intent, CHOOSE_IMAGE_REQUEST_CODE);
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostActivity---startChooseImageActivity): " + e.getMessage());
         }
     }
 
@@ -432,7 +432,7 @@ public class NewPostActivity extends Activity {
             setResult(RESULT_OK, intent);
             closeByTask(false);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostActivity---uploadToServer): " + e.getMessage());
         }
     }
 
@@ -580,7 +580,7 @@ public class NewPostActivity extends Activity {
             startActivity(intent);
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostActivity---preview): " + e.getMessage());
         }
     }
 }

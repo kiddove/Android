@@ -133,7 +133,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 dots.add(dot);
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(PhotoOfHallOfMainActivity--onCreate): " + e.getMessage());
             return;
         }
 

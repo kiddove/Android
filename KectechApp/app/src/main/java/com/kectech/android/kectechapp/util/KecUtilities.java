@@ -148,7 +148,7 @@ public class KecUtilities {
         } catch (IOException ioe) {
             Log.e(MainActivity.LOG_TAG, "readStringFromStream occurs exception: " + ioe.getMessage());
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(KecUtilities---readStringFromStream): " + e.getMessage());
             e.printStackTrace();
         }
         return strJson;
@@ -240,7 +240,7 @@ public class KecUtilities {
 //                }
 //            }
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(KecUtilities---createFolders): " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -265,7 +265,7 @@ public class KecUtilities {
                 }
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(KecUtilities---createSubFolder): " + e.getMessage());
             e.printStackTrace();
             return false;
         }

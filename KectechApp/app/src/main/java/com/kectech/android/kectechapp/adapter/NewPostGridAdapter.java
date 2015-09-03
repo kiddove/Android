@@ -33,7 +33,7 @@ public class NewPostGridAdapter extends ArrayAdapter<String>{
 
     // private view holder class
     private static class ViewHolder {
-        ImageView imageView;
+        RecyclingImageView imageView;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -51,7 +51,7 @@ public class NewPostGridAdapter extends ArrayAdapter<String>{
             } else
                 holder = (ViewHolder) convertView.getTag();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostGridAdapter): " + e.getMessage());
             return convertView;
         }
 

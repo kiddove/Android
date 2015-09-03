@@ -151,7 +151,7 @@ public class VideoOfHallOfMainActivity extends Activity {
             Log.e(MainActivity.LOG_TAG, iae.getMessage());
             iae.printStackTrace();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(onPause webView web page): " + e.getMessage());
             e.printStackTrace();
         }
     }

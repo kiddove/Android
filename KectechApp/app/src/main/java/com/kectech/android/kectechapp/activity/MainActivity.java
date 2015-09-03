@@ -221,7 +221,7 @@ public class MainActivity extends Activity {
             finish();
             overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(MainActivity---startLoginActivity): " + e.getMessage());
         }
     }
 

@@ -255,7 +255,7 @@ public class ChooseImageActivity extends Activity {
             mGridView.setAdapter(mAdapter);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageActivity---onRefreshComplete): " + e.getMessage());
         }
     }
 
@@ -311,7 +311,7 @@ public class ChooseImageActivity extends Activity {
                 try {
                     imageCursor.close();
                 } catch (NullPointerException npe) {
-                    Log.e(MainActivity.LOG_TAG, "Exception caught: " + npe.getMessage());
+                    Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageActivity---getGalleryPhotos): " + npe.getMessage());
                 }
             }
         } catch (Exception e) {
@@ -336,7 +336,7 @@ public class ChooseImageActivity extends Activity {
             setResult(RESULT_OK, intent);
             close();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageActivity---complete): " + e.getMessage());
             close();
         }
     }
@@ -356,7 +356,7 @@ public class ChooseImageActivity extends Activity {
             startActivity(intent);
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageActivity---preview): " + e.getMessage());
         }
     }
 }

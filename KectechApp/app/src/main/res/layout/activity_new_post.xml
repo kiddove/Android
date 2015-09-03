@@ -55,148 +55,138 @@
                 android:maxLength="140"
                 android:padding="2dp" />
 
-            <LinearLayout
-                android:id="@+id/post_img_layer1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/post_desc"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/post_img_layer1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/post_desc"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:orientation="horizontal">-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img1"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img1"-->
+                    <!--android:layout_width="80dp"-->
+                    <!--android:layout_height="80dp"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img2"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img2"-->
+                    <!--android:layout_width="80dp"-->
+                    <!--android:layout_height="80dp"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img3"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-            </LinearLayout>
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img3"-->
+                    <!--android:layout_width="80dp"-->
+                    <!--android:layout_height="80dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:id="@+id/post_img_layer2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/post_img_layer1"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/post_img_layer2"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/post_img_layer1"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:orientation="horizontal">-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img4"
-                    android:layout_width="@dimen/choose_image_grid_item_size"
-                    android:layout_height="@dimen/choose_image_grid_item_size"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img4"-->
+                    <!--android:layout_width="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_height="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img5"
-                    android:layout_width="@dimen/choose_image_grid_item_size"
-                    android:layout_height="@dimen/choose_image_grid_item_size"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img5"-->
+                    <!--android:layout_width="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_height="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img6"
-                    android:layout_width="@dimen/choose_image_grid_item_size"
-                    android:layout_height="@dimen/choose_image_grid_item_size"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-            </LinearLayout>
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img6"-->
+                    <!--android:layout_width="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_height="@dimen/choose_image_grid_item_size"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:id="@+id/post_img_layer3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/post_img_layer2"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/post_img_layer3"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/post_img_layer2"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:orientation="horizontal">-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img7"
-                    android:layout_width="@dimen/choose_image_grid_item_size"
-                    android:layout_height="@dimen/choose_image_grid_item_size"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img7"-->
+                    <!--android:layout_width="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_height="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img8"
-                    android:layout_width="@dimen/choose_image_grid_item_size"
-                    android:layout_height="@dimen/choose_image_grid_item_size"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img8"-->
+                    <!--android:layout_width="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_height="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
 
-                <com.kectech.android.kectechapp.views.NewPostImageView
-                    android:id="@+id/post_img9"
-                    android:layout_width="@dimen/choose_image_grid_item_size"
-                    android:layout_height="@dimen/choose_image_grid_item_size"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_post_default_img"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-            </LinearLayout>
-            <!--<Button-->
-            <!--android:id="@+id/post_submit"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-
-            <!--android:layout_below="@+id/post_img_layer3"-->
-            <!--android:background="@drawable/login_button"-->
-            <!--android:text="@string/prompt_new_post_button_submit"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:layout_marginTop="20dp"/>-->
+                <!--<com.kectech.android.kectechapp.views.NewPostImageView-->
+                    <!--android:id="@+id/post_img9"-->
+                    <!--android:layout_width="@dimen/choose_image_grid_item_size"-->
+                    <!--android:layout_height="@dimen/choose_image_grid_item_size"-->
+                    <!--android:background="@drawable/new_post_image_background_frame"-->
+                    <!--android:contentDescription="@null"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/ic_post_default_img"-->
+                    <!--android:visibility="gone"-->
+                    <!--tools:visibility="visible" />-->
+            <!--</LinearLayout>-->
 
             <com.kectech.android.kectechapp.views.ExpandableHeightGridView
                 android:id="@+id/new_post_img_gridView"

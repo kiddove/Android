@@ -393,7 +393,7 @@ public class RegisterActivity extends Activity {
             setResult(RESULT_OK, intent);
             close(false);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(RegisterActivity): " + e.getMessage());
 
         }
     }

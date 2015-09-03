@@ -58,7 +58,7 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageGridItem> {
             } else
                 holder = (ViewHolder) convertView.getTag();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageAdapter): " + e.getMessage());
             return convertView;
         }
 

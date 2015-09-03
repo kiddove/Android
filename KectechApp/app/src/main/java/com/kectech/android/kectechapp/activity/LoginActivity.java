@@ -317,7 +317,7 @@ public class LoginActivity extends Activity {
             finish();
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(LoginActivity---startMainActivity): " + e.getMessage());
 
         }
     }
@@ -372,7 +372,7 @@ public class LoginActivity extends Activity {
             startActivityForResult(intent, MainActivity.REGISTER_REQUEST_CODE);
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(LoginActivity---startRegisterActivity): " + e.getMessage());
 
         }
     }

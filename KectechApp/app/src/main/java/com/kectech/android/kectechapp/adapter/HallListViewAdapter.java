@@ -71,7 +71,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             } else
                 holder = (ViewHolder) convertView.getTag();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(HallListViewAdapter): " + e.getMessage());
             return convertView;
         }
 

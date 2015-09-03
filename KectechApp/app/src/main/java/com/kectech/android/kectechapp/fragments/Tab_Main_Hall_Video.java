@@ -159,7 +159,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---getListFromJson): " + e.getMessage());
         }
         return null;
     }
@@ -173,7 +173,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---getJsonFromObject): " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -199,7 +199,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             npe.printStackTrace();
         }
         catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshComplete): " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -215,7 +215,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshCompleteTop): " + e.getMessage());
         }
     }
 
@@ -237,7 +237,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshCompleteBottom): " + e.getMessage());
         }
     }
 

@@ -151,7 +151,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                 } catch (Exception e) {
-                    Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+                    Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---onCreateView): " + e.getMessage());
                 }
 
             }
@@ -385,7 +385,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             //new LoadHallPhotoListThumbsTask(mPhotoAdapter, mListView, subFolder).execute(items);
 
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---onRefreshComplete): " + e.getMessage());
         }
     }
 
@@ -401,7 +401,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             }
             mPhotoAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---onRefreshCompleteTop): " + e.getMessage());
         }
     }
 
@@ -422,7 +422,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---onRefreshCompleteBottom): " + e.getMessage());
         }
     }
 
@@ -435,7 +435,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---getListFromJson): " + e.getMessage());
         }
         return null;
     }
@@ -449,7 +449,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---getJsonFromObject): " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -604,7 +604,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             startActivityForResult(intent, MainActivity.NEW_POST_CODE);
             getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---startNewPostActivity): " + e.getMessage());
 
         }
     }
@@ -667,7 +667,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
              Log.e(MainActivity.LOG_TAG, error.getMessage());
 
             } catch (Exception e) {
-                Log.e(MainActivity.LOG_TAG, "Exception caught: " + e.getMessage());
+                Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---UploadPostTask---doInBackground): " + e.getMessage());
             }
 
             return null;
