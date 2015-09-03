@@ -40,18 +40,21 @@ public class KecUtilities {
         if (thumb != null)
             return thumb;
 
-        ImageCache.ImageCacheParams cacheParams =
-                new ImageCache.ImageCacheParams(activity, "thumbs");
+        try {
+            ImageCache.ImageCacheParams cacheParams =
+                    new ImageCache.ImageCacheParams(activity, "thumbs");
 
-        cacheParams.setMemCacheSizePercent(0.10f); // Set memory cache to 10% of app memory
+            cacheParams.setMemCacheSizePercent(0.10f); // Set memory cache to 10% of app memory
 
-        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-        //thumb = new ImageFetcher(activity, 100);
-        thumb = new ImageFetcher(activity, context.getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size));
-        thumb.setLoadingImage(R.drawable.ic_default_image);
-        thumb.setImageFadeIn(false);
-        thumb.addImageCache(activity.getFragmentManager(), cacheParams);
-
+            // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+            //thumb = new ImageFetcher(activity, 100);
+            thumb = new ImageFetcher(activity, context.getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size));
+            thumb.setLoadingImage(R.drawable.ic_default_image);
+            thumb.setImageFadeIn(false);
+            thumb.addImageCache(activity.getFragmentManager(), cacheParams);
+        } catch (NullPointerException npe) {
+            Log.e(MainActivity.LOG_TAG, npe.getMessage());
+        }
         return thumb;
     }
 

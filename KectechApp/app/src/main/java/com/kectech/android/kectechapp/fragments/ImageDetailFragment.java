@@ -109,7 +109,8 @@ public class ImageDetailFragment extends Fragment {
 //        mImageFetcher = null;
         if (mImageView != null) {
             // Cancel any pending image work
-            ImageWorker.cancelWork(mImageView);
+            //ImageWorker.cancelWork(mImageView);
+            ImageLoader.getInstance().cancelDisplayTask(mImageView);
             mImageView.setImageDrawable(null);
         }
     }

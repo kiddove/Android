@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
     public final static String HALL_OF_MAIN_FOLLOW = "event_hall_follow_name";
     // may have plenty
     public final static String PHOTO_TAB_IMAGE_URL_KEY = "imageURL";
+    public final static String PHOTO_TAB_IMAGE_INDEX_KEY = "imageIndex";
 
     public final static String PHOTO_SUB_FOLDER = "Photo";
     public final static String VIDEO_SUB_FOLDER = "Video";
@@ -66,6 +67,9 @@ public class MainActivity extends Activity {
     public final static String CURRENT_USER_KEY = "CURRENT";
     public final static String CURRENT_LOGIN_STATUS_KEY = "LOGIN";
     public static String USER = ""; // kdlinx@kdlinx.com, kevin@kectech.com
+
+    // invariant
+    public final static String NEW_POST_DEFAULT_IMAGE = "new_post_default_image";
 
     public final static int imageId[] = {R.id.hall_photo_list_item_img0, R.id.hall_photo_list_item_img1, R.id.hall_photo_list_item_img2,
             R.id.hall_photo_list_item_img3, R.id.hall_photo_list_item_img4, R.id.hall_photo_list_item_img5,

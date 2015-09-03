@@ -51,9 +51,9 @@
                 android:background="@drawable/edit_text_background_none"
                 android:gravity="start"
                 android:hint="@string/prompt_new_post_desc"
-                android:padding="2dp"
                 android:inputType="textMultiLine"
-                android:maxLength="140"/>
+                android:maxLength="140"
+                android:padding="2dp" />
 
             <LinearLayout
                 android:id="@+id/post_img_layer1"
@@ -68,33 +68,34 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
-                    android:background="@drawable/new_post_image_background_frame"
-                    android:visibility="visible" />
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
                 <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
 
                 <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
             </LinearLayout>
 
@@ -111,11 +112,11 @@
                     android:layout_width="@dimen/choose_image_grid_item_size"
                     android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
 
                 <com.kectech.android.kectechapp.views.NewPostImageView
@@ -123,22 +124,22 @@
                     android:layout_width="@dimen/choose_image_grid_item_size"
                     android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
 
                 <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img6"
                     android:layout_width="@dimen/choose_image_grid_item_size"
                     android:layout_height="@dimen/choose_image_grid_item_size"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
             </LinearLayout>
 
@@ -156,11 +157,11 @@
                     android:layout_width="@dimen/choose_image_grid_item_size"
                     android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
 
                 <com.kectech.android.kectechapp.views.NewPostImageView
@@ -168,22 +169,22 @@
                     android:layout_width="@dimen/choose_image_grid_item_size"
                     android:layout_height="@dimen/choose_image_grid_item_size"
                     android:layout_marginRight="5dp"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
 
                 <com.kectech.android.kectechapp.views.NewPostImageView
                     android:id="@+id/post_img9"
                     android:layout_width="@dimen/choose_image_grid_item_size"
                     android:layout_height="@dimen/choose_image_grid_item_size"
+                    android:background="@drawable/new_post_image_background_frame"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_post_default_img"
                     android:visibility="gone"
-                    android:background="@drawable/new_post_image_background_frame"
                     tools:visibility="visible" />
             </LinearLayout>
             <!--<Button-->
@@ -197,11 +198,23 @@
             <!--android:layout_marginBottom="5dp"-->
             <!--android:layout_marginTop="20dp"/>-->
 
+            <com.kectech.android.kectechapp.views.ExpandableHeightGridView
+                android:id="@+id/new_post_img_gridView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/post_desc"
+                android:columnWidth="@dimen/choose_image_grid_item_size"
+                android:horizontalSpacing="@dimen/choose_image_grid_item_space"
+                android:numColumns="auto_fit"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="@dimen/choose_image_grid_item_space"
+                tools:listitem="@layout/new_post_grid_item" />
+
             <View
                 android:id="@+id/post_separator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/post_img_layer3"
+                android:layout_below="@+id/new_post_img_gridView"
                 android:layout_marginTop="5dp"
                 android:background="@color/post_img_background"
                 android:visibility="visible" />

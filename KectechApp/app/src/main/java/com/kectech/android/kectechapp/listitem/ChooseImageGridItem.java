@@ -2,9 +2,9 @@ package com.kectech.android.kectechapp.listitem;
 
 /**
  * Created by Paul on 21/08/2015.
- * video list view item
+ * choose image grid  item
  */
-public class ChooseImageListItem {
+public class ChooseImageGridItem {
     private String imageURL;
 
     public String getImageURL() {

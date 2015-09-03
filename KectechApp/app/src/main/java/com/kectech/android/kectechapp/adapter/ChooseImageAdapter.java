@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
-import com.kectech.android.kectechapp.listitem.ChooseImageListItem;
+import com.kectech.android.kectechapp.listitem.ChooseImageGridItem;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView;
 
@@ -24,13 +24,13 @@ import java.util.Map;
  * Created by Paul on 21/08/2015.
  * used in choose image activity gridView
  */
-public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
+public class ChooseImageAdapter extends ArrayAdapter<ChooseImageGridItem> {
 
     private ImageFetcher mImageFetcher;
     private Context mContext;
 
     private LinkedHashMap<Integer, Boolean> selection = new LinkedHashMap<>();
-    public ChooseImageAdapter(Context context, int resourceId, ArrayList<ChooseImageListItem> items, ImageFetcher imageFetcher) {
+    public ChooseImageAdapter(Context context, int resourceId, ArrayList<ChooseImageGridItem> items, ImageFetcher imageFetcher) {
         super(context, resourceId, items);
         this.mContext = context;
         this.mImageFetcher = imageFetcher;
@@ -44,7 +44,7 @@ public class ChooseImageAdapter extends ArrayAdapter<ChooseImageListItem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        ChooseImageListItem item = getItem(position);
+        ChooseImageGridItem item = getItem(position);
 
         LayoutInflater layoutInflater = (LayoutInflater)mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 

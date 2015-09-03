@@ -65,6 +65,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         // for load thumb
         //mImageFetcherImage = KecUtilities.getThumbFetcher(this);
 
+        int position = 0;
         try {
             // for using action bar back button
             //getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,6 +79,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             if (intent != null) {
                 URLs = intent.getExtras();
                 ArrayList<String> images = URLs.getStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY);
+                position = URLs.getInt(MainActivity.PHOTO_TAB_IMAGE_INDEX_KEY, 0);
                 if (images != null)
                     imageCount = images.size();
                 else
@@ -107,6 +109,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                 viewPager.setPageTransformer(false, new FadePageTransformer());
 
                 viewPager.setAdapter(new MyPagerAdapter(getFragmentManager(), images));
+
+                //viewPager.setCurrentItem(position);
             }
 
             // for now only one image
@@ -133,7 +137,10 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             return;
         }
 
-        setCurrentPage(0);
+        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
+        // if set after setadapter, will cause nullpointerexception
+        viewPager.setCurrentItem(position);
+        setCurrentPage(position);
     }
 
     @Override

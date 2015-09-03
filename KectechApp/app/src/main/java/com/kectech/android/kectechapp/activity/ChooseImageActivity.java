@@ -24,7 +24,7 @@ import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.adapter.ChooseImageAdapter;
 import com.kectech.android.kectechapp.listeners.OnSwipeTouchListener;
-import com.kectech.android.kectechapp.listitem.ChooseImageListItem;
+import com.kectech.android.kectechapp.listitem.ChooseImageGridItem;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.util.KecUtilities;
@@ -214,14 +214,14 @@ public class ChooseImageActivity extends Activity {
             new InitListTask().execute();
     }
 
-    private class InitListTask extends AsyncTask<Void, Void, ArrayList<ChooseImageListItem>> {
+    private class InitListTask extends AsyncTask<Void, Void, ArrayList<ChooseImageGridItem>> {
         @Override
-        protected ArrayList<ChooseImageListItem> doInBackground(Void... params) {
+        protected ArrayList<ChooseImageGridItem> doInBackground(Void... params) {
             return getGalleryPhotos();
         }
 
         @Override
-        protected void onPostExecute(ArrayList<ChooseImageListItem> result) {
+        protected void onPostExecute(ArrayList<ChooseImageGridItem> result) {
             super.onPostExecute(result);
             if (isCancelled())
                 return;
@@ -231,7 +231,7 @@ public class ChooseImageActivity extends Activity {
         }
     }
 
-    private void onRefreshComplete(final ArrayList<ChooseImageListItem> result) {
+    private void onRefreshComplete(final ArrayList<ChooseImageGridItem> result) {
         if (result == null)
             // means error occurred when sending http request, other wise result should be empty but not null
             return;
@@ -242,7 +242,7 @@ public class ChooseImageActivity extends Activity {
             mAdapter.clear();
             mAdapter.notifyDataSetChanged();
             if (!result.isEmpty()) {
-                for (ChooseImageListItem item : result) {
+                for (ChooseImageGridItem item : result) {
                     mAdapter.add(item);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -282,8 +282,8 @@ public class ChooseImageActivity extends Activity {
     }
 
     @SuppressWarnings("deprecation")
-    private ArrayList<ChooseImageListItem> getGalleryPhotos() {
-        ArrayList<ChooseImageListItem> galleryList = new ArrayList<>();
+    private ArrayList<ChooseImageGridItem> getGalleryPhotos() {
+        ArrayList<ChooseImageGridItem> galleryList = new ArrayList<>();
         final String[] columns = {MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media._ID;
@@ -295,7 +295,7 @@ public class ChooseImageActivity extends Activity {
                 if (imageCursor != null && imageCursor.getCount() > 0) {
 
                     while (imageCursor.moveToNext()) {
-                        ChooseImageListItem item = new ChooseImageListItem();
+                        ChooseImageGridItem item = new ChooseImageGridItem();
 
                         int dataColumnIndex = imageCursor
                                 .getColumnIndex(MediaStore.Images.Media.DATA);
