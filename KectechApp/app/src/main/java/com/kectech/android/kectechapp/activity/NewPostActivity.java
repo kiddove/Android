@@ -2,11 +2,13 @@ package com.kectech.android.kectechapp.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -15,23 +17,25 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
-import com.kectech.android.kectechapp.adapter.NewPostGridAdapter;
 import com.kectech.android.kectechapp.listeners.OnSwipeTouchListener;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.kectechapp.util.KecUtilities;
 import com.kectech.android.kectechapp.views.ExpandableHeightGridView;
+import com.kectech.android.kectechapp.views.NewPostImageView;
 
 import java.util.ArrayList;
 
@@ -146,20 +150,20 @@ public class NewPostActivity extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                //TODO
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                //TODO
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 int len = s.toString().length();
                 TextView showNumbers = (TextView) findViewById(R.id.post_numbers);
-                showNumbers.setText(len + "/140");
+                showNumbers.setText(len + " / 140");
             }
         };
 
@@ -170,31 +174,32 @@ public class NewPostActivity extends Activity {
         gridView.setExpanded(true);
         gridView.setAdapter(mAdapter);
 
-        // click listener
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                hideSoftKeyboard();
-                PopupMenu popup = new PopupMenu(NewPostActivity.this, view);
-                String strUrl = mAdapter.getItem(position);
-                if (strUrl.compareToIgnoreCase(MainActivity.NEW_POST_DEFAULT_IMAGE) == 0) {
-                    // popup menu
-                    popup.getMenuInflater().inflate(R.menu.menu_new_post_popup_choose_or_take, popup.getMenu());
-                } else {
-                    current = position;
-                    popup.getMenuInflater().inflate(R.menu.menu_new_post_popup_preview_or_delete, popup.getMenu());
-                }
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        onOptionsItemSelected(item);
-                        return true;
-                    }
-                });
-
-                popup.show(); //showing popup menu
-            }
-        });
+//        // click listener
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                hideSoftKeyboard();
+//                PopupMenu popup = new PopupMenu(NewPostActivity.this, view);
+//                String strUrl = mAdapter.getItem(position);
+//                if (strUrl.compareToIgnoreCase(MainActivity.NEW_POST_DEFAULT_IMAGE) == 0) {
+//                    // popup menu
+//                    popup.getMenuInflater().inflate(R.menu.menu_new_post_popup_choose_or_take, popup.getMenu());
+//                } else {
+//
+//                    current = position;
+//                    popup.getMenuInflater().inflate(R.menu.menu_new_post_popup_preview_or_delete, popup.getMenu());
+//                }
+//                //registering popup with OnMenuItemClickListener
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        onOptionsItemSelected(item);
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show(); //showing popup menu
+//            }
+//        });
     }
 
     @Override
@@ -524,7 +529,6 @@ public class NewPostActivity extends Activity {
 
 
             int total = result.size() + mAdapter.getCount();
-            int indexLast = total - 1;
             if (mAdapter.getCount() == 1) {
                 // default image always be the last one, except total > IMAGE_COUNT_LIMIT, remove default;
                 // always insert reversely
@@ -582,5 +586,112 @@ public class NewPostActivity extends Activity {
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostActivity---preview): " + e.getMessage());
         }
+    }
+
+    private class NewPostGridAdapter extends ArrayAdapter<String> {
+        private ImageFetcher mImageFetcher;
+        private Context mContext;
+
+        public NewPostGridAdapter(Context context, int resourceId, ArrayList<String> items, ImageFetcher imageFetcher) {
+            super(context, resourceId, items);
+            this.mContext = context;
+            this.mImageFetcher = imageFetcher;
+        }
+
+        // private view holder class
+        private class ViewHolder {
+            NewPostImageView imageView;
+            NewPostImageView removeButton;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            String strUrl = getItem(position);
+
+            LayoutInflater layoutInflater = (LayoutInflater)mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+            try {
+                if (convertView == null) {
+                    convertView = layoutInflater.inflate(R.layout.new_post_grid_item, parent, false);
+                    holder = new ViewHolder();
+                    holder.imageView = (NewPostImageView) convertView.findViewById(R.id.item_image);
+                    holder.removeButton = (NewPostImageView)convertView.findViewById(R.id.item_remove);
+                    convertView.setTag(holder);
+                } else
+                    holder = (ViewHolder) convertView.getTag();
+            } catch (Exception e) {
+                Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostGridAdapter): " + e.getMessage());
+                return convertView;
+            }
+
+            if (strUrl.compareToIgnoreCase(MainActivity.NEW_POST_DEFAULT_IMAGE) == 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img, mContext.getTheme()));
+                    holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame, mContext.getTheme()));
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img));
+                    holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame));
+                } else {
+                    holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img));
+                    holder.imageView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame));
+                }
+                holder.removeButton.setVisibility(View.GONE);
+            } else {
+                mImageFetcher.loadImage(strUrl, holder.imageView);
+                holder.removeButton.setVisibility(View.VISIBLE);
+            }
+
+            holder.imageView.position = position;
+            holder.removeButton.position = position;
+
+            holder.removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v instanceof NewPostImageView) {
+                        current = ((NewPostImageView)v).position;
+                        mAdapter.remove(mAdapter.getItem(current));
+                        if (bReachLimit) {
+                            mAdapter.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
+                            bReachLimit =false;
+                        }
+                    }
+                }
+            });
+
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v instanceof NewPostImageView) {
+                        current = ((NewPostImageView)v).position;
+
+                        hideSoftKeyboard();
+
+                        String strUrl = mAdapter.getItem(current);
+                        if (strUrl.compareToIgnoreCase(MainActivity.NEW_POST_DEFAULT_IMAGE) == 0) {
+                            // popup menu
+                            PopupMenu popup = new PopupMenu(NewPostActivity.this, v);
+                            popup.getMenuInflater().inflate(R.menu.menu_new_post_popup_choose_or_take, popup.getMenu());
+                            //registering popup with OnMenuItemClickListener
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    onOptionsItemSelected(item);
+                                    return true;
+                                }
+                            });
+
+                            popup.show(); //showing popup menu
+                        } else {
+
+                            preview(current);
+
+                        }
+
+                    }
+                }
+            });
+
+            return convertView;
+        }
+
     }
 }

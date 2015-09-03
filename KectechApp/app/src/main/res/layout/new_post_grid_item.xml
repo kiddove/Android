@@ -3,10 +3,21 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.kectech.android.kectechapp.thirdparty.CacheBitmap.RecyclingImageView
+    <com.kectech.android.kectechapp.views.NewPostImageView
         android:id="@+id/item_image"
         android:layout_width="@dimen/choose_image_grid_item_size"
         android:layout_height="@dimen/choose_image_grid_item_size"
+        android:contentDescription="@null"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_default_image" />
+
+    <com.kectech.android.kectechapp.views.NewPostImageView
+        android:id="@+id/item_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/item_image"
+        android:layout_alignTop="@+id/item_image"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_action_new_post_remove"
+        android:visibility="visible" />
 </RelativeLayout>

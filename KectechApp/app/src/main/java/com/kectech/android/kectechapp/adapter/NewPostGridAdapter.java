@@ -34,6 +34,7 @@ public class NewPostGridAdapter extends ArrayAdapter<String>{
     // private view holder class
     private static class ViewHolder {
         RecyclingImageView imageView;
+        ImageView removeButton;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -47,6 +48,7 @@ public class NewPostGridAdapter extends ArrayAdapter<String>{
                 convertView = layoutInflater.inflate(R.layout.new_post_grid_item, parent, false);
                 holder = new ViewHolder();
                 holder.imageView = (RecyclingImageView) convertView.findViewById(R.id.item_image);
+                holder.removeButton = (ImageView)convertView.findViewById(R.id.item_remove);
                 convertView.setTag(holder);
             } else
                 holder = (ViewHolder) convertView.getTag();
@@ -66,8 +68,10 @@ public class NewPostGridAdapter extends ArrayAdapter<String>{
                 holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img));
                 holder.imageView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame));
             }
+            holder.removeButton.setVisibility(View.GONE);
         } else {
             mImageFetcher.loadImage(strUrl, holder.imageView);
+            holder.removeButton.setVisibility(View.VISIBLE);
         }
 
         return convertView;

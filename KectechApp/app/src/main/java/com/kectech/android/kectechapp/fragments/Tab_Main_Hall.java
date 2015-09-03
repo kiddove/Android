@@ -394,7 +394,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     private void onItemChecked(ActionMode mode, int position, boolean checked) {
         if (checked) {
             num++;
-            mAdapter.setSelection(position, checked);
+            mAdapter.setSelection(position, true);
             // set check
         } else {
             num--;

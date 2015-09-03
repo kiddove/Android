@@ -149,7 +149,7 @@ public class ChooseImageActivity extends Activity {
     private void onItemChecked(int position, boolean isChecked, View v) {
         if (isChecked) {
             num++;
-            mAdapter.setSelection(position, isChecked);
+            mAdapter.setSelection(position, true);
             // set check
         } else {
             num--;
@@ -309,9 +309,10 @@ public class ChooseImageActivity extends Activity {
                 e.printStackTrace();
             } finally {
                 try {
-                    imageCursor.close();
-                } catch (NullPointerException npe) {
-                    Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageActivity---getGalleryPhotos): " + npe.getMessage());
+                    if (imageCursor != null)
+                        imageCursor.close();
+                } catch (Exception e) {
+                    Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseImageActivity---getGalleryPhotos): " + e.getMessage());
                 }
             }
         } catch (Exception e) {
