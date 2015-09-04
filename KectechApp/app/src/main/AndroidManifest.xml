@@ -32,7 +32,8 @@
         <activity
             android:name=".activity.PhotoOfHallOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/prompt_navigation_back">
+            android:label="@string/prompt_navigation_back"
+            android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.kectechapp.activity.HallOfMainActivity" />

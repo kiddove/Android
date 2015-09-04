@@ -143,7 +143,7 @@ public class NewPostActivity extends Activity {
         //mImages = new ArrayList<>();
         ArrayList<String> defaultImage = new ArrayList<>();
         defaultImage.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
-        mAdapter = new NewPostGridAdapter(this, R.layout.new_post_grid_item, defaultImage, mImageFetcher);
+        mAdapter = new NewPostGridAdapter(this, R.layout.new_post_grid_item, defaultImage);
 
         TextWatcher textWatcher = new TextWatcher() {
 
@@ -589,13 +589,9 @@ public class NewPostActivity extends Activity {
     }
 
     private class NewPostGridAdapter extends ArrayAdapter<String> {
-        private ImageFetcher mImageFetcher;
-        private Context mContext;
 
-        public NewPostGridAdapter(Context context, int resourceId, ArrayList<String> items, ImageFetcher imageFetcher) {
+        public NewPostGridAdapter(Context context, int resourceId, ArrayList<String> items) {
             super(context, resourceId, items);
-            this.mContext = context;
-            this.mImageFetcher = imageFetcher;
         }
 
         // private view holder class
@@ -608,7 +604,7 @@ public class NewPostActivity extends Activity {
             ViewHolder holder;
             String strUrl = getItem(position);
 
-            LayoutInflater layoutInflater = (LayoutInflater)mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
             try {
                 if (convertView == null) {
@@ -626,14 +622,14 @@ public class NewPostActivity extends Activity {
 
             if (strUrl.compareToIgnoreCase(MainActivity.NEW_POST_DEFAULT_IMAGE) == 0) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img, mContext.getTheme()));
-                    holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame, mContext.getTheme()));
+                    holder.imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_post_default_img, getTheme()));
+                    holder.imageView.setBackground(getResources().getDrawable(R.drawable.new_post_image_background_frame, getTheme()));
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img));
-                    holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame));
+                    holder.imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_post_default_img));
+                    holder.imageView.setBackground(getResources().getDrawable(R.drawable.new_post_image_background_frame));
                 } else {
-                    holder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_post_default_img));
-                    holder.imageView.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.new_post_image_background_frame));
+                    holder.imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_post_default_img));
+                    holder.imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.new_post_image_background_frame));
                 }
                 holder.removeButton.setVisibility(View.GONE);
             } else {
@@ -678,12 +674,9 @@ public class NewPostActivity extends Activity {
                                     return true;
                                 }
                             });
-
                             popup.show(); //showing popup menu
                         } else {
-
                             preview(current);
-
                         }
 
                     }

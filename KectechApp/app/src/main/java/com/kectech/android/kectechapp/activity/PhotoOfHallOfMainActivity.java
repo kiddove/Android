@@ -1,7 +1,10 @@
 package com.kectech.android.kectechapp.activity;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.app.Fragment;
@@ -14,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.kectech.android.kectechapp.BuildConfig;
@@ -22,6 +26,7 @@ import com.kectech.android.kectechapp.adapter.FadePageTransformer;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.fragments.ImageDetailFragment;
+import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 
 import java.util.ArrayList;
 
@@ -32,7 +37,7 @@ import java.util.ArrayList;
  * then download the full image
  * do some research on intent param
  */
-public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener {
+public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutListener, View.OnClickListener {
 //, View.OnClickListener {
 
     private int imageCount = 1;
@@ -47,7 +52,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
 
     //private ImageFetcher mImageFetcherImage;
 
-    //private CustomViewPager viewPager;
+    private CustomViewPager viewPager;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -86,7 +91,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
                     imageCount = 0;
 
                 // pager
-                CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
+                viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
                 viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -137,10 +142,39 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             return;
         }
 
-        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.photo_activity_viewpager);
-        // if set after setadapter, will cause nullpointerexception
+        viewPager.setOffscreenPageLimit(imageCount);
+        // if set right after setAdapter, will cause NullPointerException
         viewPager.setCurrentItem(position);
         setCurrentPage(position);
+
+        viewPager.setPageMargin((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
+        //mPager.setOffscreenPageLimit(2);
+
+        // Set up activity to go full screen
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Enable some additional newer visibility and ActionBar features to create a more
+        // immersive photo viewing experience
+        if (Utils.hasHoneycomb()) {
+            final ActionBar actionBar = getActionBar();
+
+            // Hide and show the ActionBar as the visibility changes
+            viewPager.setOnSystemUiVisibilityChangeListener(
+                    new View.OnSystemUiVisibilityChangeListener() {
+                        @Override
+                        public void onSystemUiVisibilityChange(int vis) {
+                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+                                actionBar.hide();
+                            } else {
+                                actionBar.show();
+                            }
+                        }
+                    });
+
+            // Start low profile mode and hide ActionBar
+            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+            actionBar.hide();
+        }
     }
 
     @Override
@@ -261,44 +295,14 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         //mImageFetcherImage.closeCache();
     }
 
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    @Override
-//    public void onClick(View v) {
-//        final int vis = viewPager.getSystemUiVisibility();
-//        if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
-//            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-//        } else {
-//            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-//        }
-//    }
-//    /**
-//     * Called by the ViewPager child fragments to load images via the one ImageFetcher
-//     */
-//    public ImageFetcher getImageFetcher() {
-//        return mImageFetcherImage;
-//    }
-
-//    private void createFetcher() {
-//        // Fetch screen height and width, to use as our max size when loading images as this
-//        // activity runs full screen
-//        final DisplayMetrics displayMetrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-//        final int height = displayMetrics.heightPixels;
-//        final int width = displayMetrics.widthPixels;
-//
-//        // For this sample we'll use half of the longest width to resize our images. As the
-//        // image scaling ensures the image is larger than this, we should be left with a
-//        // resolution that is appropriate for both portrait and landscape. For best image quality
-//        // we shouldn't divide by 2, but this will use more memory and require a larger memory
-//        // cache.
-//        final int longest = (height > width ? height : width) / 2;
-//
-//        ImageCache.ImageCacheParams cacheParams =
-//                new ImageCache.ImageCacheParams(this, "images");
-//        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
-//
-//        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-//        mImageFetcherImage = new ImageFetcher(this, longest);
-//        mImageFetcherImage.addImageCache(getFragmentManager(), cacheParams);
-//    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public void onClick(View v) {
+        final int vis = viewPager.getSystemUiVisibility();
+        if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        } else {
+            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
+    }
 }

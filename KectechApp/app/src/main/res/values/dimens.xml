@@ -6,7 +6,7 @@
     <!--about 4 lines-->
     <dimen name="new_post_text_height">90dp</dimen>
     <dimen name="choose_image_grid_item_size">80dp</dimen>
-    <dimen name="choose_image_grid_item_space">2dp</dimen>
+    <dimen name="choose_image_grid_item_space">4dp</dimen>
 
     <dimen name="new_post_activity_horizontal_margin">8dp</dimen>
     <dimen name="new_post_activity_vertical_margin">8dp</dimen>
