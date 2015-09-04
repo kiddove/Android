@@ -33,6 +33,7 @@
             android:name=".activity.PhotoOfHallOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/prompt_navigation_back"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

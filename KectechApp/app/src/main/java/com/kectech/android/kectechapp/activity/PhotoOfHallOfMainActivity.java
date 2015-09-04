@@ -157,23 +157,24 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
         // immersive photo viewing experience
         if (Utils.hasHoneycomb()) {
             final ActionBar actionBar = getActionBar();
-
-            // Hide and show the ActionBar as the visibility changes
-            viewPager.setOnSystemUiVisibilityChangeListener(
-                    new View.OnSystemUiVisibilityChangeListener() {
-                        @Override
-                        public void onSystemUiVisibilityChange(int vis) {
-                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
-                                actionBar.hide();
-                            } else {
-                                actionBar.show();
+            if (actionBar != null) {
+                // Hide and show the ActionBar as the visibility changes
+                viewPager.setOnSystemUiVisibilityChangeListener(
+                        new View.OnSystemUiVisibilityChangeListener() {
+                            @Override
+                            public void onSystemUiVisibilityChange(int vis) {
+                                if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+                                    actionBar.hide();
+                                } else {
+                                    actionBar.show();
+                                }
                             }
-                        }
-                    });
+                        });
 
-            // Start low profile mode and hide ActionBar
-            viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-            actionBar.hide();
+                // Start low profile mode and hide ActionBar
+                viewPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                actionBar.hide();
+            }
         }
     }
 
