@@ -61,7 +61,8 @@ public class ImageDetailFragment extends Fragment {
     /**
      * Empty constructor as per the Fragment documentation
      */
-    public ImageDetailFragment() {}
+    public ImageDetailFragment() {
+    }
 
     /**
      * Populate image using a url from extras, use the convenience factory method
@@ -75,7 +76,7 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         // Inflate and locate the main ImageView
         final View v = inflater.inflate(R.layout.photo_activity_image_fragment, container, false);
         mImageView = (ScaleImageView) v.findViewById(R.id.photo_activity_image_fragment_imageView);

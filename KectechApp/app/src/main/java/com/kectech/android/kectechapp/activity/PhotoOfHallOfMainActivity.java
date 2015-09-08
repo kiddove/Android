@@ -58,8 +58,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
 
-        if (BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             System.gc();
         }
 
@@ -264,7 +263,7 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             super.onBackPressed();
         } else {

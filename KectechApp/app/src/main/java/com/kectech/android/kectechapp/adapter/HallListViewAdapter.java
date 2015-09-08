@@ -28,11 +28,12 @@ import java.util.HashMap;
  */
 public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
     public static final int ANIMATION_DURATION = 100;
-    private  Context context;
+    private Context context;
     public boolean showCheckBox = false;
     private ImageFetcher mImageFetcher;
 
     private HashMap<Integer, Boolean> selection = new HashMap<>();
+
     public HallListViewAdapter(Context context, int resourceId, ArrayList<Tab_Main_Hall_ListItem> items, ImageFetcher imageFetcher) {
         super(context, resourceId, items);
         this.context = context;
@@ -54,10 +55,10 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
         ViewHolder holder;
         Tab_Main_Hall_ListItem item = getItem(position);
 
-        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         try {
-            if (convertView == null || ((ViewHolder)convertView.getTag()).needInflate) {
+            if (convertView == null || ((ViewHolder) convertView.getTag()).needInflate) {
                 convertView = layoutInflater.inflate(R.layout.tab_main_hall_list_item, parent, false);
                 holder = new ViewHolder();
                 holder.imageView = (RecyclingImageView) convertView.findViewById(R.id.tab_main_hall_list_item_img);
@@ -121,7 +122,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             @Override
             public void onAnimationEnd(Animation animation) {
                 remove(getItem(index));
-                ViewHolder vh = (ViewHolder)v.getTag();
+                ViewHolder vh = (ViewHolder) v.getTag();
                 vh.needInflate = true;
                 notifyDataSetChanged();
                 //Log.d(MainActivity.LOG_TAG, "finish delete animation at " + index);
@@ -144,11 +145,10 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     if (v.getLayoutParams() == null)
                         return;
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.requestLayout();
                 }
             }
@@ -159,7 +159,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             }
         };
 
-        if (al!=null) {
+        if (al != null) {
             anim.setAnimationListener(al);
         }
         anim.setDuration(ANIMATION_DURATION);

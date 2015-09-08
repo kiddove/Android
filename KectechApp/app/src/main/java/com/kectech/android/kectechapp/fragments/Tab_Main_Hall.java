@@ -54,7 +54,7 @@ import java.util.List;
  * use a SwipeRefreshLayout to fulfil pull down and pull up refresh
  * tab an item to open an activity to tab_main_show video page in a WebView
  */
-public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ListView mListView;
 
@@ -782,7 +782,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             mAdapter.clear();
             mAdapter.notifyDataSetChanged();
             if (!result.isEmpty()) {
-                for(Tab_Main_Hall_ListItem item: result) {
+                for (Tab_Main_Hall_ListItem item : result) {
                     mAdapter.add(item);
 
                 }
