@@ -30,7 +30,7 @@ public class CustomViewPager extends ViewPager {
     }
 
     private void onSwipeOutAtLeft() {
-        if (mOnSwipeOutListener!=null) {
+        if (mOnSwipeOutListener != null) {
             mOnSwipeOutListener.onSwipeOutAtLeft();
         }
     }
@@ -43,7 +43,7 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch(ev.getAction() & MotionEventCompat.ACTION_MASK){
+        switch (ev.getAction() & MotionEventCompat.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 mStartDragX = ev.getX();
                 break;
@@ -52,16 +52,16 @@ public class CustomViewPager extends ViewPager {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev){
+    public boolean onTouchEvent(MotionEvent ev) {
 
-        if(getCurrentItem()==0 || getCurrentItem()==getAdapter().getCount()-1){
+        if (getCurrentItem() == 0 || getCurrentItem() == getAdapter().getCount() - 1) {
             final int action = ev.getAction();
             float x = ev.getX();
-            switch(action & MotionEventCompat.ACTION_MASK){
+            switch (action & MotionEventCompat.ACTION_MASK) {
                 case MotionEvent.ACTION_MOVE:
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (getCurrentItem()==0 && x>mStartDragX) {
+                    if (getCurrentItem() == 0 && x > mStartDragX) {
                         onSwipeOutAtLeft();
                     }
 //                    if (getCurrentItem()==getAdapter().getCount()-1 && x<mStartDragX){
@@ -69,8 +69,8 @@ public class CustomViewPager extends ViewPager {
 //                    }
                     break;
             }
-        }else{
-            mStartDragX=0;
+        } else {
+            mStartDragX = 0;
         }
         return super.onTouchEvent(ev);
 

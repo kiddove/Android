@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -27,9 +27,9 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.LoadedFrom;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageViewAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.LoadedFrom;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageViewAware;
 
 /**
  * Can display bitmap cropped by a circle. This implementation works only with ImageViews wrapped

@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.decode;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.decode;
 
 import android.annotation.TargetApi;
 import android.graphics.BitmapFactory.Options;
 import android.os.Build;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ViewScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.MemoryCacheUtils;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.DisplayImageOptions;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageSize;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.download.ImageDownloader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ViewScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.MemoryCacheUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.DisplayImageOptions;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageSize;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.download.ImageDownloader;
 
 /**
  * Contains needed information for decoding image to Bitmap

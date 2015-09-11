@@ -19,6 +19,7 @@ public class NewPostImageView extends RecyclingImageView {
     public NewPostImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
     //public boolean bDefault = true;
-    public int position= 0;
+    public int position = 0;
 }

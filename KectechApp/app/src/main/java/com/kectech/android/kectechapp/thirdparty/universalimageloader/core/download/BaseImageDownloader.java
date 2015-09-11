@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.download;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.download;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
@@ -26,9 +26,9 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.DisplayImageOptions;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ContentLengthInputStream;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.IoUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.DisplayImageOptions;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ContentLengthInputStream;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.IoUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;

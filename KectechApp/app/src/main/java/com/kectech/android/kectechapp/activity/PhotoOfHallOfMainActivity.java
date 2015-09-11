@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
-import com.kectech.android.kectechapp.adapter.FadePageTransformer;
+import com.kectech.android.kectechapp.transformer.FadePageTransformer;
 import com.kectech.android.kectechapp.pager.CustomViewPager;
 import com.kectech.android.kectechapp.listeners.OnSwipeOutListener;
 import com.kectech.android.kectechapp.fragments.ImageDetailFragment;

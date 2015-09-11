@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.decode;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.decode;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,13 +21,13 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoaderConfiguration;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageSize;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.download.ImageDownloader.Scheme;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.ImageSizeUtils;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.IoUtils;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoaderConfiguration;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageSize;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.download.ImageDownloader.Scheme;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.ImageSizeUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.IoUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
 
 import java.io.IOException;
 import java.io.InputStream;

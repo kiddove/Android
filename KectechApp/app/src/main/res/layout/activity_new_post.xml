@@ -198,6 +198,7 @@
                 android:numColumns="auto_fit"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="@dimen/choose_image_grid_item_space"
+                android:animateLayoutChanges="true"
                 tools:listitem="@layout/new_post_grid_item" />
 
             <View

@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core;
 
 import android.graphics.Bitmap;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.LoadedFrom;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display.BitmapDisplayer;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.LoadedFrom;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display.BitmapDisplayer;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
 
 /**
  * Displays bitmap in {@link ImageAware}. Must be called on UI thread.

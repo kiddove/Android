@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -22,22 +22,22 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.FailReason;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ViewScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageViewAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.NonViewAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.DiskCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.MemoryCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.FlushedInputStream;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageSize;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.LoadedFrom;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingProgressListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.ImageSizeUtils;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.MemoryCacheUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.FailReason;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ViewScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageViewAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.NonViewAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.DiskCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory.MemoryCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.FlushedInputStream;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageSize;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.LoadedFrom;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingProgressListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.SimpleImageLoadingListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.ImageSizeUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.MemoryCacheUtils;
 
 /**
  * Singletone for image loading and displaying at {@link ImageView ImageViews}<br />

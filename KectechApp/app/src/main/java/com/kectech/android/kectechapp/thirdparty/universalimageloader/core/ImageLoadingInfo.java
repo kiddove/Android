@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingProgressListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageSize;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.MemoryCacheUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingProgressListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageSize;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.MemoryCacheUtils;
 
 import java.util.concurrent.locks.ReentrantLock;
 

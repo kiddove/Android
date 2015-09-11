@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.naming;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.naming;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

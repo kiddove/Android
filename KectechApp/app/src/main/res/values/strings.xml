@@ -10,6 +10,7 @@
     <string name="ui_menu_add">Add</string>
     <string name="ui_menu_write_post">Write Post</string>
     <string name="ui_menu_delete">Delete</string>
+    <string name="ui_menu_edit">Edit</string>
     <string name="ui_menu_quit">Quit</string>
     <string name="ui_menu_logout">Log Out</string>
     <string name="ui_menu_feedback">Feedback</string>

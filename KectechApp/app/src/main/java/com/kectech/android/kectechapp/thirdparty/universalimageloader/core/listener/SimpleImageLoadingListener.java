@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener;
 
 import android.graphics.Bitmap;
 import android.view.View;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.FailReason;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.FailReason;
 
 /**
  * A convenient class to extend when you only want to listen for a subset of all the image loading events. This

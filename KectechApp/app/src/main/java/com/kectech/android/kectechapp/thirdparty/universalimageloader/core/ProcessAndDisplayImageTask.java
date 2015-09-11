@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.widget.ImageView;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.process.BitmapProcessor;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.LoadedFrom;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.process.BitmapProcessor;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.LoadedFrom;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
 
 /**
  * Presents process'n'display image task. Processes image {@linkplain Bitmap} and display it in {@link ImageView} using

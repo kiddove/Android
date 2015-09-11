@@ -3,7 +3,6 @@
     <item
         android:id="@+id/menu_new_post_preview"
         android:title="@string/prompt_new_post_popup_preview" />
-
     <item
         android:id="@+id/menu_new_post_delete"
         android:title="@string/prompt_new_post_popup_delete" />

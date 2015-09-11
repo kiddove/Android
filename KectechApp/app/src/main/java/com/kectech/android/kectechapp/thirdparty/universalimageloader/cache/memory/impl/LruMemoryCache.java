@@ -1,8 +1,8 @@
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.impl;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory.impl;
 
 import android.graphics.Bitmap;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.MemoryCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory.MemoryCache;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -9,11 +9,11 @@ import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.MainActivity;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageFetcher;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.impl.WeakMemoryCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.DisplayImageOptions;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoaderConfiguration;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory.impl.WeakMemoryCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.DisplayImageOptions;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoaderConfiguration;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageScaleType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

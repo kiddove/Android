@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory;
 
 import android.graphics.Bitmap;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
 
 import java.util.Collections;
 import java.util.LinkedList;

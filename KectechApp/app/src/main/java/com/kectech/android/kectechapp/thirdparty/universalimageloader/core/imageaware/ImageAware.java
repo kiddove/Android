@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.DisplayImageOptions;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ViewScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display.BitmapDisplayer;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.DisplayImageOptions;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ViewScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display.BitmapDisplayer;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingListener;
 
 /**
  * Represents image aware view which provides all needed properties and behavior for image processing and displaying

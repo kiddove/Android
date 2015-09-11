@@ -113,7 +113,7 @@
         <!--<item name="android:backgroundSplit">@color/ColorPrimary</item>-->
         <item name="android:titleTextStyle">@style/AppTheme.Bar.TitleText</item>
 
-        <item name="android:displayOptions"></item>
+        <item name="android:displayOptions">none</item>
         <!--<item name="android:displayOptions">showHome|showTitle</item>-->
     </style>
 

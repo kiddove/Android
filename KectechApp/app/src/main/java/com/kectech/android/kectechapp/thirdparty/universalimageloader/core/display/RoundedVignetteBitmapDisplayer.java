@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display;
 
 import android.graphics.*;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageViewAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.LoadedFrom;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageViewAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.LoadedFrom;
 
 /**
  * Can display bitmap with rounded corners and vignette effect. This implementation works only with ImageViews wrapped

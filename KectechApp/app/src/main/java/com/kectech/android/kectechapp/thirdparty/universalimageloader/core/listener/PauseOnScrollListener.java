@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener;
 
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.GridView;
 import android.widget.ListView;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoader;
 
 /**
  * Listener-helper for {@linkplain AbsListView list views} ({@link ListView}, {@link GridView}) which can

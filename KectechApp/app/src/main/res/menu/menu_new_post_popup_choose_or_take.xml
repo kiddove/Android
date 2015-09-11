@@ -3,11 +3,9 @@
     <item
         android:id="@+id/menu_new_post_choose_photo"
         android:title="@string/prompt_new_post_popup_choose" />
-
     <item
         android:id="@+id/menu_new_post_take_photo"
         android:title="@string/prompt_new_post_popup_take" />
-
     <item
         android:id="@+id/menu_new_post_cancel"
         android:title="@string/prompt_new_post_popup_cancel" />

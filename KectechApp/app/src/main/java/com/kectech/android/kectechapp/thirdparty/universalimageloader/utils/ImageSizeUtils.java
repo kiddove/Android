@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.utils;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils;
 
 import android.graphics.BitmapFactory;
 import android.opengl.GLES10;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageSize;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ViewScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageSize;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ViewScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
 
 import javax.microedition.khronos.opengles.GL10;
 

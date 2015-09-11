@@ -43,7 +43,7 @@ public class ChooseImageActivity extends Activity {
     private int num = 0;
     private TextView textDone;
     private TextView textPreview;
-    private int limit = 9;
+    private int limit = MainActivity.IMAGE_LIMIT_NUMBER;
 
     @Override
     @SuppressWarnings("deprecation")

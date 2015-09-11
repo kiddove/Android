@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.process;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.process;
 
 import android.graphics.Bitmap;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.DisplayImageOptions;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.DisplayImageOptions;
 
 /**
  * Makes some processing on {@link Bitmap}. Implementations can apply any changes to original {@link Bitmap}.<br />

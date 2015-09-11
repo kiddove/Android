@@ -1,4 +1,4 @@
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist;
 
 /**
  * Source image loaded from.

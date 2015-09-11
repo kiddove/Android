@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener;
 
 import android.view.View;
 

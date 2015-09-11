@@ -60,7 +60,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
 
                 try {
                     // according to item.items.count show or hide imageView, default is gone.
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < MainActivity.IMAGE_LIMIT_NUMBER; i++) {
                         ImageView imageView = (ImageView) convertView.findViewById(MainActivity.imageId[i]);
                         // change layout will cause get tag the wrong content.
                         // according to http://stackoverflow.com/questions/12018997/why-does-getview-return-wrong-convertview-objects-on-separatedlistadapter
@@ -89,7 +89,7 @@ public class PhotoListViewAdapter extends ArrayAdapter<PhotoListItem> {
                 /* We recycle a View that already exists */
                 holder = (ViewHolder) convertView.getTag();
             }
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < MainActivity.IMAGE_LIMIT_NUMBER; i++) {
                 if (i < item.items.size()) {
 //                    Bitmap bitmap = item.items.get(i).getThumbNail();
 //

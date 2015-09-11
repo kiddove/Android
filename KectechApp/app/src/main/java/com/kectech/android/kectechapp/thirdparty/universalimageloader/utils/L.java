@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.utils;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils;
 
 import android.util.Log;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoader;
 
 /**
  * "Less-word" analog of Android {@link android.util.Log logger}

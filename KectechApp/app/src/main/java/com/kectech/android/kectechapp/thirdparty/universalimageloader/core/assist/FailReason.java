@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoader;
 
 /**
  * Presents the reason why image loading and displaying was failed

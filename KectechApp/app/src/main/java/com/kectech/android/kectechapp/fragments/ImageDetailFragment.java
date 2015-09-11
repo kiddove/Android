@@ -25,12 +25,11 @@ import android.view.ViewGroup;
 
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.kectechapp.activity.PhotoOfHallOfMainActivity;
-import com.kectech.android.kectechapp.thirdparty.CacheBitmap.ImageWorker;
 import com.kectech.android.kectechapp.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.kectechapp.thirdparty.ScaleImageView;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.ImageLoader;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageViewAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.ImageLoader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageViewAware;
 
 
 /**

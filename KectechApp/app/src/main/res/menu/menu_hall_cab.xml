@@ -3,5 +3,6 @@
     <item
         android:id="@+id/hall_tab_action_delete"
         android:icon="@drawable/ic_action_delete"
+        android:showAsAction="always"
         android:title="@string/ui_menu_delete" />
 </menu>

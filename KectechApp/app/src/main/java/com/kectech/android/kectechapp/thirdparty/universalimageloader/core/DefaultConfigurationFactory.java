@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
@@ -21,23 +21,23 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.impl.ext.LruDiskCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.MemoryCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.QueueProcessingType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.decode.BaseImageDecoder;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.DiskCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.naming.FileNameGenerator;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.deque.LIFOLinkedBlockingDeque;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.decode.ImageDecoder;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display.BitmapDisplayer;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display.SimpleBitmapDisplayer;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.download.BaseImageDownloader;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.download.ImageDownloader;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.StorageUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.impl.ext.LruDiskCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory.MemoryCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.QueueProcessingType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.decode.BaseImageDecoder;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.DiskCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.impl.UnlimitedDiskCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.naming.FileNameGenerator;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.memory.impl.LruMemoryCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.deque.LIFOLinkedBlockingDeque;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.decode.ImageDecoder;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display.BitmapDisplayer;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display.SimpleBitmapDisplayer;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.download.BaseImageDownloader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.download.ImageDownloader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.StorageUtils;
 
 import java.io.File;
 import java.io.IOException;

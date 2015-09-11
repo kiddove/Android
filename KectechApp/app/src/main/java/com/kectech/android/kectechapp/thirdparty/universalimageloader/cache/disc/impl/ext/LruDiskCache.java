@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.impl.ext;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.impl.ext;
 
 import android.graphics.Bitmap;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.DiskCache;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.cache.disc.naming.FileNameGenerator;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.IoUtils;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.utils.L;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.DiskCache;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.cache.disc.naming.FileNameGenerator;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.IoUtils;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.utils.L;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

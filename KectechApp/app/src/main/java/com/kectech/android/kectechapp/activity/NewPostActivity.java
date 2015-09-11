@@ -1,5 +1,7 @@
 package com.kectech.android.kectechapp.activity;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -642,13 +644,70 @@ public class NewPostActivity extends Activity {
 
             holder.removeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                     if (v instanceof NewPostImageView) {
                         current = ((NewPostImageView)v).position;
-                        mAdapter.remove(mAdapter.getItem(current));
-                        if (bReachLimit) {
-                            mAdapter.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
-                            bReachLimit =false;
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            // try use some animation
+                            // but need api 16....
+                            v.animate().setDuration(300).alpha(0).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.remove(mAdapter.getItem(current));
+                                    v.setAlpha(1);
+                                    if (bReachLimit) {
+                                        mAdapter.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
+                                        bReachLimit = false;
+                                    }
+                                }
+                            });
+                        } else {
+                            // no animation
+                            mAdapter.remove(mAdapter.getItem(current));
+                            if (bReachLimit) {
+                                mAdapter.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
+                                bReachLimit = false;
+                            }
+
+                            // setHasTransientState also need api 16
+                            // but for ViewCompact can use static setHasTransientState(v, false);
+                            // however, wo are using view.... so
+
+//                            ObjectAnimator animator = ObjectAnimator.ofFloat(v, View.ALPHA, 0);
+//                            animator.setDuration(300);
+//                            v.setHasTransientState(true);
+//
+//                            animator.addListener(new Animator.AnimatorListener() {
+//                                @Override
+//                                public void onAnimationStart(Animator animation) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onAnimationEnd(Animator animation) {
+//                                    mAdapter.remove(mAdapter.getItem(current));
+//                                    if (bReachLimit) {
+//                                        mAdapter.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
+//                                        bReachLimit = false;
+//                                    }
+//                                    v.setAlpha(1);
+//                                    v.setHasTransientState(false);
+//                                }
+//
+//                                @Override
+//                                public void onAnimationCancel(Animator animation) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onAnimationRepeat(Animator animation) {
+//
+//                                }
+//                            });
+//
+//
+//                            animator.start();
                         }
                     }
                 }

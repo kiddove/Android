@@ -1,4 +1,4 @@
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist;
 
 import java.io.FilterInputStream;
 import java.io.IOException;

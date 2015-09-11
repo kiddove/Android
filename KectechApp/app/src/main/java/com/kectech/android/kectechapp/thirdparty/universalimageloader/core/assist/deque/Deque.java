@@ -4,7 +4,7 @@
  * at http://creativecommons.org/licenses/publicdomain
  */
 
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.deque;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.deque;
 
 import java.util.Collection;
 import java.util.Iterator;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.kectech.android.kectechapp.thirdparty.universalimageloader.core;
+package com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -21,13 +21,13 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.assist.ImageScaleType;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display.SimpleBitmapDisplayer;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.download.ImageDownloader;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.imageaware.ImageAware;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.listener.ImageLoadingListener;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.process.BitmapProcessor;
-import com.kectech.android.kectechapp.thirdparty.universalimageloader.core.display.BitmapDisplayer;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.assist.ImageScaleType;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display.SimpleBitmapDisplayer;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.download.ImageDownloader;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.imageaware.ImageAware;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.listener.ImageLoadingListener;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.process.BitmapProcessor;
+import com.kectech.android.kectechapp.thirdparty.UniversalImageLoader.core.display.BitmapDisplayer;
 
 /**
  * Contains options for image display. Defines:

@@ -6,6 +6,4 @@
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/prompt_choose_image_done" />
-    <!--<item android:id="@+id/choose_image_preview" android:title="@string/prompt_choose_image_preview"-->
-    <!--android:orderInCategory="100" android:showAsAction="never" />-->
 </menu>

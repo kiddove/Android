@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/menu_hall_tab_item_add"
         android:icon="@drawable/ic_action_av_playlist_add"
@@ -14,14 +13,13 @@
     <item
         android:id="@+id/menu_hall_tab_item_delete"
         android:icon="@drawable/ic_action_content_edit"
-        android:showAsAction="ifRoom"
-        android:title="@string/ui_menu_delete" />
+        android:showAsAction="never"
+        android:title="@string/ui_menu_edit" />
     <item
         android:id="@+id/menu_hall_tab_item_refresh"
         android:icon="@drawable/ic_action_autorenew"
         android:showAsAction="never"
         android:title="@string/ui_menu_refresh" />
-
     <item
         android:id="@+id/menu_hall_tab_item_logout"
         android:icon="@drawable/ic_action_exit_to_app"

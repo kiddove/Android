@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
     // invariant
     public final static String NEW_POST_DEFAULT_IMAGE = "new_post_default_image";
 
+    public final static int IMAGE_LIMIT_NUMBER = 9;
     public final static int imageId[] = {R.id.hall_photo_list_item_img0, R.id.hall_photo_list_item_img1, R.id.hall_photo_list_item_img2,
             R.id.hall_photo_list_item_img3, R.id.hall_photo_list_item_img4, R.id.hall_photo_list_item_img5,
             R.id.hall_photo_list_item_img6, R.id.hall_photo_list_item_img7, R.id.hall_photo_list_item_img8,};
