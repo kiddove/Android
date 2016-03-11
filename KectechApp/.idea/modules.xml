@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/KectechApp.iml" filepath="$PROJECT_DIR$/KectechApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vitamio/vitamio.iml" filepath="$PROJECT_DIR$/vitamio/vitamio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wysLinkApp/wysLinkApp.iml" filepath="$PROJECT_DIR$/wysLinkApp/wysLinkApp.iml" />
     </modules>
   </component>
 </project>

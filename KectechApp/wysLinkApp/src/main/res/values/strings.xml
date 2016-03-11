@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">wysLink</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="label_live">LIVE</string>
+
+    <string name="ui_menu_search">Search</string>
+    <string name="ui_menu_send">Send</string>
+    <string name="ui_menu_add">Add</string>
+    <string name="ui_menu_write_post">Write Post</string>
+    <string name="ui_menu_delete">Delete</string>
+    <string name="ui_menu_edit">Edit</string>
+    <string name="ui_menu_quit">Quit</string>
+    <string name="ui_menu_logout">Log Out</string>
+    <string name="ui_menu_feedback">Feedback</string>
+    <string name="ui_menu_about">About</string>
+    <string name="ui_menu_share">Share</string>
+    <string name="ui_menu_refresh">Sync</string>
+    <string name="ui_menu_capture_video">capture</string>
+    <string name="ui_menu_show_qr_code">Show QR code(*)</string>
+    <string name="video_list_item_img_description">description for video tab item img</string>
+    <string name="photo_list_item_img_description">description for photo tab item img</string>
+    <string name="title_activity_main_hall">Shows</string>
+    <string name="title_activity_main_hall_photo">Post</string>
+    <string name="title_activity_main_hall_Video">Video</string>
+    <string name="title_activity_register">Sign In</string>
+    <string name="title_activity_account">Account</string>
+    <string name="loading_video">Loading video</string>
+    <string name="tab_default_string">To be continued…</string>
+    <string name="title_activity_test_button">testButtonActivity</string>
+    <string name="clear_cache_menu">Clear Cache</string>
+    <string name="clear_cache_complete_toast">Cache has been cleared</string>
+    <string name="imageView_description">Image Thumbnail</string>
+    <string name="no_network_connection_toast">No network connection found</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="new_user">New user?</string>
+    <string name="prompt_new_post_title">title</string>
+    <string name="prompt_new_post_desc">Share something…</string>
+    <string name="prompt_new_post_menu_choose_from_photo">Share Photo</string>
+    <string name="prompt_new_post_menu_take_a_photo">Take a Photo</string>
+    <string name="prompt_new_post_button_submit">Submit</string>
+    <string name="title_activity_new_post">NewPostActivity</string>
+    <string name="title_activity_choose_image">ChooseImageActivity</string>
+    <string name="prompt_choose_image_preview">Preview</string>
+    <string name="prompt_choose_image_done">Done</string>
+    <string name="prompt_choose_image_cancel">Cancel</string>
+    <string name="prompt_navigation_back">Back</string>
+    <string name="prompt_new_post_popup_preview">Preview</string>
+    <string name="prompt_new_post_popup_delete">Delete</string>
+    <string name="prompt_new_post_popup_choose">Choose from Photos</string>
+    <string name="prompt_new_post_popup_take">Take a Photo</string>
+    <string name="prompt_new_post_popup_cancel">Cancel</string>
+    <string name="prompt_new_post_number">0 / 140</string>
+</resources>

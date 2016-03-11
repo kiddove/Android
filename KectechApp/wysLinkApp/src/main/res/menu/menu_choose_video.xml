@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kectech.android.wyslink.activity.ChooseImageActivity">
+    <item
+        android:id="@+id/capture_video"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_av_videocam"
+        android:title="@string/ui_menu_capture_video" />
+</menu>
