@@ -23,9 +23,9 @@ import java.io.File;
 public class MainActivity extends Activity {
 
     // for choose video activity
-    static final int REQUEST_VIDEO_CAPTURE = 1;
-    static final int REQUEST_SELECT_VIDEO = 2;
-    static final String BUNDLE_KEY_CONTENT_URL = "content_url";
+    public static final int REQUEST_VIDEO_CAPTURE = 1;
+    public static final int REQUEST_SELECT_VIDEO = 2;
+    public static final String BUNDLE_KEY_CONTENT_URL = "content_url";
     // strings
     // for register activity result
     public final static int REGISTER_REQUEST_CODE = 6008;

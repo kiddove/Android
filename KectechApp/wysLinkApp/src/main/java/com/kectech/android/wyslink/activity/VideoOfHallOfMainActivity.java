@@ -34,7 +34,7 @@ public class VideoOfHallOfMainActivity extends Activity {
         mWebView = new HTML5WebView(this);
         setContentView(mWebView.getLayout());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mWebView.setWebContentsDebuggingEnabled(true);
+            WebView.setWebContentsDebuggingEnabled(true);
         }
 ////////////////////////////////////////////////////////////////
 //        // important

@@ -39,14 +39,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />
         </activity>
-        <activity
-            android:name="com.kectech.android.wyslink.activity.VideoOfHallOfMainActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall_Video">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />
-        </activity>
+        <!--<activity-->
+            <!--android:name="com.kectech.android.wyslink.activity.VideoOfHallOfMainActivity"-->
+            <!--android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+            <!--android:label="@string/title_activity_main_hall_Video">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />-->
+        <!--</activity>-->
         <activity
             android:name="com.kectech.android.wyslink.activity.LoginActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"

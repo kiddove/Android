@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.wyslink.MyHttpEntity;
+import com.kectech.android.wyslink.miscellaneous.VideoDownloadHttpEntity;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.wyslink.adapter.ChooseVideoAdapter;
 import com.kectech.android.wyslink.listeners.OnSwipeTouchListener;
@@ -339,7 +339,7 @@ public class ChooseVideoActivity extends Activity {
                                     if (cou == 0) {
                                         MediaStore.Video.Thumbnails.getThumbnail(getContentResolver(), id,
                                                 MediaStore.Images.Thumbnails.MICRO_KIND, null);
-                                        io.vov.vitamio.utils.Log.d("%s", "bu kai xin");
+                                        //Log.d(MainActivity.LOG_TAG, "bu kai xin");
                                     }
                                 }
                             }
@@ -435,7 +435,7 @@ public class ChooseVideoActivity extends Activity {
                 return null;
             }
         } catch (NullPointerException e) {
-            io.vov.vitamio.utils.Log.e("%s", e.getMessage());
+            e.printStackTrace();
             return null;
         } finally {
             if (cursor != null) {
@@ -479,7 +479,7 @@ public class ChooseVideoActivity extends Activity {
                             jsonObject.put("description", !description.isEmpty() ? description : "description");
                             post_string = jsonObject.toString();
                         } catch (JSONException e) {
-                            io.vov.vitamio.utils.Log.e("%s", e.getMessage());
+                            e.printStackTrace();
                             Toast.makeText(ChooseVideoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -532,7 +532,7 @@ public class ChooseVideoActivity extends Activity {
             builder.addPart("post_string", post);
 
             // progress listener
-            MyHttpEntity.ProgressListener progressListener = new MyHttpEntity.ProgressListener() {
+            VideoDownloadHttpEntity.ProgressListener progressListener = new VideoDownloadHttpEntity.ProgressListener() {
                 @Override
                 public void transferred(float progress) {
                     UploadTask.this.publishProgress((int) progress);
@@ -540,7 +540,7 @@ public class ChooseVideoActivity extends Activity {
             };
             try {
                 //httpPost.setEntity(builder.build());
-                httpPost.setEntity(new MyHttpEntity(builder.build(), progressListener));
+                httpPost.setEntity(new VideoDownloadHttpEntity(builder.build(), progressListener));
                 //httpPost.abort();
             } catch (NoSuchFieldError e) {
                 io.vov.vitamio.utils.Log.e("no such file %s", e.getMessage());
@@ -562,7 +562,7 @@ public class ChooseVideoActivity extends Activity {
                 return true;
 
             } catch (NetworkOnMainThreadException e) {
-                io.vov.vitamio.utils.Log.e("%s", e.getMessage());
+                e.printStackTrace();
                 return false;
             } finally {
                 httpClient.getConnectionManager().shutdown();
@@ -583,7 +583,7 @@ public class ChooseVideoActivity extends Activity {
             try {
                 return uploadVideo(params[0], params[1]);
             } catch (Exception e) {
-                io.vov.vitamio.utils.Log.e("%s", e.getMessage());
+                e.printStackTrace();
                 return false;
             }
         }
@@ -622,15 +622,15 @@ public class ChooseVideoActivity extends Activity {
             NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
             if (wifi.isAvailable() && wifi.isConnectedOrConnecting()) {
-                io.vov.vitamio.utils.Log.d("%s", "******* using wifi ******");
+                Log.d(MainActivity.LOG_TAG, "******* using wifi ******");
             } else if (mobile.isAvailable() && mobile.isConnectedOrConnecting()) {
-                io.vov.vitamio.utils.Log.d("%s", "******* using cellular data *******");
+                Log.d(MainActivity.LOG_TAG, "******* using cellular data *******");
                 // TODO: 08/03/2016 prompt user to switch to wifi 
             } else {
-                io.vov.vitamio.utils.Log.d("%s", "******* no network *******");
+                Log.d(MainActivity.LOG_TAG, "******* no network *******");
             }
         } else {
-            io.vov.vitamio.utils.Log.d("%s", "******* no network *******");
+            Log.d(MainActivity.LOG_TAG, "******* no network *******");
         }
     }
 }

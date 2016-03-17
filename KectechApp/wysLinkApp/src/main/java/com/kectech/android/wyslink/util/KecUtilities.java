@@ -3,6 +3,7 @@ package com.kectech.android.wyslink.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Base64;
 import android.util.Log;
 
 import com.kectech.android.kectechapp.R;
@@ -24,6 +25,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Paul on 25/06/2015.
@@ -53,7 +63,8 @@ public class KecUtilities {
             thumb.setImageFadeIn(false);
             thumb.addImageCache(activity.getFragmentManager(), cacheParams);
         } catch (NullPointerException npe) {
-            Log.e(MainActivity.LOG_TAG, npe.getMessage());
+            if (npe.getMessage() != null)
+                Log.e(MainActivity.LOG_TAG, npe.getMessage());
         }
         return thumb;
     }
@@ -283,5 +294,37 @@ public class KecUtilities {
         ImageLoaderConfiguration config = builder.build();
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(config);
+    }
+
+    public static String decryptUrl(String encryptUrl) {
+        encryptUrl = encryptUrl.replace("%2B", "+");
+
+        byte[] bytesDecoded;
+
+        try {
+            bytesDecoded = Base64.decode(encryptUrl, Base64.NO_WRAP);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (bytesDecoded != null) {
+            String DECRYPT_KEY = "phpWVnet";
+            SecretKeySpec key = new SecretKeySpec(DECRYPT_KEY.getBytes(), "DES");
+            Cipher cipher;
+            String result;
+
+            try {
+                cipher = Cipher.getInstance("DES/ECB/ZeroBytePadding", "BC");
+                cipher.init(Cipher.DECRYPT_MODE, key);
+                byte[] text = cipher.doFinal(bytesDecoded);
+                result = new String(text);
+                return result;
+            } catch (NoSuchAlgorithmException | NoSuchProviderException | IllegalBlockSizeException | NoSuchPaddingException | InvalidKeyException | BadPaddingException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else
+            return null;
     }
 }

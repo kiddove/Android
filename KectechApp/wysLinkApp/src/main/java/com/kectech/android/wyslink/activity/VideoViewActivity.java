@@ -9,11 +9,11 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.utils.Log;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 
@@ -23,6 +23,10 @@ public class VideoViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
         if (!LibsChecker.checkVitamioLibs(this))
             return;
         setContentView(R.layout.activity_videoview);
@@ -35,7 +39,7 @@ public class VideoViewActivity extends Activity {
                  if (strURL != null)
                     contentUri = Uri.parse(strURL);
             } catch (Exception e) {
-                Log.e("%s", e.getMessage());
+                e.printStackTrace();
             }
         }
 

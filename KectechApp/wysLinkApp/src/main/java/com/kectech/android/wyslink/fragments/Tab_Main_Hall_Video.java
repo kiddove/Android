@@ -20,7 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import com.kectech.android.kectechapp.BuildConfig;
 import com.kectech.android.kectechapp.R;
 import com.kectech.android.wyslink.activity.MainActivity;
-import com.kectech.android.wyslink.activity.VideoOfHallOfMainActivity;
+import com.kectech.android.wyslink.activity.VideoViewActivity;
 import com.kectech.android.wyslink.adapter.VideoListViewAdapter;
 import com.kectech.android.wyslink.listitem.VideoListItem;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
@@ -123,17 +123,19 @@ public class Tab_Main_Hall_Video extends Fragment {
                                     int position, long id) {
 
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
-                // get another activity to run
-                Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
+                String strUrl = videoListItem.getVideoUrl();
+                String strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
+                Intent intent = new Intent(activity, VideoViewActivity.class);
+                intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, KecUtilities.decryptUrl(strVideo));
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
+//                // get another activity to run
+//                Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
+//
+//                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//
+//                intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
                 startActivity(intent);
                 activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
-
-//                // try chrome custom tab
-//                openCustomTab(videoListItem.getVideoUrl());
             }
         });
 

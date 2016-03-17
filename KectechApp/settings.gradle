@@ -1,2 +1,1 @@
-include 'vitamio'
-include ':wysLinkApp'
+include ':wysLinkApp', ':vitamio'
