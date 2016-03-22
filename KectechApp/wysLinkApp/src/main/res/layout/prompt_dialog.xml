@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/prompt_dialog_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/prompt_dialog_text"
+        android:textSize="18sp"
+        android:padding="10dp" />
+
+
+    <RelativeLayout
+        android:id="@+id/prompt_dialog_check_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/prompt_dialog_text">
+
+        <CheckBox
+            android:id="@+id/prompt_dialog_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:button="@drawable/prompt_checkbox_selector"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/prompt_dialog_check_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/prompt_dialog_check_text"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/prompt_dialog_check"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -432,8 +432,8 @@ public class LoginActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
-                current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
+                boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+                current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
                 return bAuto;
 
             } catch (Exception e) {
@@ -463,7 +463,7 @@ public class LoginActivity extends Activity {
                 current_user = params[0];
                 // test
                 if (!TextUtils.isEmpty(current_user)) {
-                    SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+                    SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE);
                     if (username == null)
                         username = new HashSet<>();
                     username.add(current_user);
@@ -495,7 +495,7 @@ public class LoginActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                username = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getStringSet(MainActivity.USER_NAME_SET_KEY, null);
+                username = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getStringSet(MainActivity.USER_NAME_SET_KEY, null);
 
             } catch (Exception e) {
                 Log.e(MainActivity.LOG_TAG, e.getMessage());

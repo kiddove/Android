@@ -296,13 +296,13 @@ public class KecUtilities {
         imageLoader.init(config);
     }
 
-    public static String decryptUrl(String encryptUrl) {
-        encryptUrl = encryptUrl.replace("%2B", "+");
+    public static String decryptUrl(String encrypt) {
+        encrypt = encrypt.replace("%2B", "+");
 
         byte[] bytesDecoded;
 
         try {
-            bytesDecoded = Base64.decode(encryptUrl, Base64.NO_WRAP);
+            bytesDecoded = Base64.decode(encrypt, Base64.NO_WRAP);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return null;

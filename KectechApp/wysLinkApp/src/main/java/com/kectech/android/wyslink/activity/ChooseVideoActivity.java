@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.NetworkOnMainThreadException;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -72,6 +75,9 @@ public class ChooseVideoActivity extends Activity {
     private TextView textDone;
     private TextView textPreview;
     private CurrentSelect currentSelect = new CurrentSelect();
+    private int network_status = -1;
+
+    private boolean bShowPrompt;
 
     private class CurrentSelect {
         public int position;
@@ -87,7 +93,6 @@ public class ChooseVideoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkNetworkStatus();
         setContentView(R.layout.activity_choose_image);
         if (BuildConfig.DEBUG) {
             System.gc();
@@ -276,7 +281,13 @@ public class ChooseVideoActivity extends Activity {
         try {
             mAdapter = new ChooseVideoAdapter(this, R.layout.choose_image_list_item, result, mImageFetcher);
             mGridView.setAdapter(mAdapter);
-
+            // check if wifi, then give prompt, save user's choice
+            if (needPrompt()) {
+                checkNetworkStatus();
+                //if (network_status == 2) {
+                showPrompt();
+                //}
+            }
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(ChooseVideoActivity---onRefreshComplete): " + e.getMessage());
         }
@@ -487,7 +498,6 @@ public class ChooseVideoActivity extends Activity {
 //                        // hide soft keyboard
 //                        final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
 //                        imm1.hideSoftInputFromWindow(promptView.getWindowToken(), 0);
-
                         new UploadTask(ChooseVideoActivity.this).execute(video, post_string);
                     }
                 })
@@ -615,7 +625,7 @@ public class ChooseVideoActivity extends Activity {
     }
 
     private void checkNetworkStatus() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
         if (connectivityManager != null) {
             NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -623,14 +633,76 @@ public class ChooseVideoActivity extends Activity {
 
             if (wifi.isAvailable() && wifi.isConnectedOrConnecting()) {
                 Log.d(MainActivity.LOG_TAG, "******* using wifi ******");
+                network_status = 1;
             } else if (mobile.isAvailable() && mobile.isConnectedOrConnecting()) {
                 Log.d(MainActivity.LOG_TAG, "******* using cellular data *******");
-                // TODO: 08/03/2016 prompt user to switch to wifi 
+                network_status = 2;
             } else {
                 Log.d(MainActivity.LOG_TAG, "******* no network *******");
+                network_status = -1;
             }
         } else {
             Log.d(MainActivity.LOG_TAG, "******* no network *******");
+            network_status = -1;
         }
+    }
+
+    private boolean needPrompt() {
+        // read from sp first
+        try {
+            return getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getBoolean(MainActivity.NEED_PROMPT_KEY, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
+    private void showPrompt() {
+        // show custom alert dialog
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.prompt_dialog, null);
+        final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.prompt_dialog_check);
+        final TextView checkText = (TextView) dialogView.findViewById(R.id.prompt_dialog_check_text);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bShowPrompt = !bShowPrompt;
+                checkBox.setChecked(!bShowPrompt);
+            }
+        });
+
+        checkText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bShowPrompt = !bShowPrompt;
+                checkBox.setChecked(!bShowPrompt);
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // save user's choice
+                        bShowPrompt = !checkBox.isChecked();
+                        SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = userDetails.edit();
+                        editor.putBoolean(MainActivity.NEED_PROMPT_KEY, bShowPrompt);
+                        editor.apply();
+
+                    }
+                })
+                .setNegativeButton("Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //dialog.cancel();
+                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    }
+                });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

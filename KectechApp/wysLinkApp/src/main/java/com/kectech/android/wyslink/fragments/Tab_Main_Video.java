@@ -127,7 +127,16 @@ public class Tab_Main_Video extends Fragment {
 
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
                 String strUrl = videoListItem.getVideoUrl();
-                String strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
+                String strVideo = null;
+                if (strUrl.indexOf("?url=") > 0) {
+                    if (strUrl.indexOf("&tl=") > 0) {
+                        strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
+                    } else {
+                        strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.length() - 1);
+                    }
+                }
+
+                //strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
                 Intent intent = new Intent(activity, VideoViewActivity.class);
                 intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, KecUtilities.decryptUrl(strVideo));
 //                // get another activity to run

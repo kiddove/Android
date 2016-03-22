@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
     public final static int DOWNLOAD_BUFFER = 1024 * 10;
 
     // use for log tag
-    public final static String LOG_TAG = "kecTech_log";
+    public final static String LOG_TAG = "kecTech";
 
     // default encoding for files
     public final static String ENCODING = "UTF-8";
@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
     public final static String CURRENT_USER_KEY = "CURRENT";
     public final static String CURRENT_LOGIN_STATUS_KEY = "LOGIN";
     public static String USER = ""; // kdlinx@kdlinx.com, kevin@kectech.com
+    public final static String NEED_PROMPT_KEY = "PROMPT";
 
     // invariant
     public final static String NEW_POST_DEFAULT_IMAGE = "new_post_default_image";
@@ -236,7 +237,7 @@ public class MainActivity extends Activity {
         protected Void doInBackground(Void... params) {
             try {
 
-                SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+                SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = userDetails.edit();
                 editor.putString(MainActivity.CURRENT_USER_KEY, null);
                 editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);

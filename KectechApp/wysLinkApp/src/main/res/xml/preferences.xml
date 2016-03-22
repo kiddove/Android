@@ -23,6 +23,12 @@
             android:title="Debug Logs"
             android:widgetLayout="@layout/check_box_in_preference" />
 
+        <CheckBoxPreference
+            android:key="needPrompt"
+            android:summary="Check if using cellular data before upload"
+            android:title="Show Prompt"
+            android:widgetLayout="@layout/check_box_in_preference" />
+
     </PreferenceCategory>
     <PreferenceCategory android:title="Notification">
         <CheckBoxPreference
