@@ -53,7 +53,6 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-
         if (getCurrentItem() == 0 || getCurrentItem() == getAdapter().getCount() - 1) {
             final int action = ev.getAction();
             float x = ev.getX();
@@ -73,6 +72,5 @@ public class CustomViewPager extends ViewPager {
             mStartDragX = 0;
         }
         return super.onTouchEvent(ev);
-
     }
 }

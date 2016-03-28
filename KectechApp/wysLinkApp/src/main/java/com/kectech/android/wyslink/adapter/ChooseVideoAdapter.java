@@ -97,7 +97,7 @@ public class ChooseVideoAdapter extends ArrayAdapter<ChooseVideoGridItem> {
     public String getSelection() {
         if (isSelectionEmpty() || selection.size() > 1)
             return null;
-        ArrayList<String> result = new ArrayList<>();
+
         for (Map.Entry<Integer, Boolean> entry : selection.entrySet()) {
             int key = entry.getKey();
             return getItem(key).getVideoURL();

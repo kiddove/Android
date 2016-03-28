@@ -1,5 +1,7 @@
 package com.kectech.android.wyslink.miscellaneous;
 
+import android.support.annotation.Nullable;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.HttpEntityWrapper;
 
@@ -50,19 +52,21 @@ public class VideoDownloadHttpEntity extends HttpEntityWrapper {
         }
 
         @Override
-        public void write(byte[] buffer, int offset, int length) throws IOException {
-
-            out.write(buffer, offset, length);
-            this.transferred += length;
-            this.progressListener.transferred(this._getCurrentProgress());
+        public void write(@Nullable byte[] buffer, int offset, int length) throws IOException {
+            if (buffer != null) {
+                out.write(buffer, offset, length);
+                this.transferred += length;
+                this.progressListener.transferred(this._getCurrentProgress());
+            }
         }
 
         @Override
-        public void write(byte[] buffer) throws IOException {
-
-            out.write(buffer);
-            this.transferred++;
-            this.progressListener.transferred(this._getCurrentProgress());
+        public void write(@Nullable byte[] buffer) throws IOException {
+            if (buffer != null) {
+                out.write(buffer);
+                this.transferred++;
+                this.progressListener.transferred(this._getCurrentProgress());
+            }
         }
 
         private float _getCurrentProgress() {

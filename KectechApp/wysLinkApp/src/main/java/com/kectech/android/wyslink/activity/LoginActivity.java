@@ -66,7 +66,12 @@ public class LoginActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        new checkAutoLogInTask().execute();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new checkAutoLogInTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new checkAutoLogInTask().execute();
 
 //        boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
 //        current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
@@ -77,7 +82,12 @@ public class LoginActivity extends Activity {
 
         // for autocomplete
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        new getAutoCompleteListTask().execute();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new getAutoCompleteListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new getAutoCompleteListTask().execute();
         //username = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getStringSet(MainActivity.USER_NAME_SET_KEY, null);
         // Set up the login form.
         //populateAutoComplete();
@@ -208,7 +218,11 @@ public class LoginActivity extends Activity {
         // perform the user login attempt.
         showProgress(true);
         mAuthTask = new UserLoginTask();
-        mAuthTask.execute(email, password);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            mAuthTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, email, password);
+        else
+            mAuthTask.execute(email, password);
 
         //hide keyboard
         final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -290,9 +304,13 @@ public class LoginActivity extends Activity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
             if (success) {
-                new saveStateTask().execute(mEmailView.getText().toString());
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString());
+                else
+                    new saveStateTask().execute(mEmailView.getText().toString());
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -318,7 +336,6 @@ public class LoginActivity extends Activity {
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(LoginActivity---startMainActivity): " + e.getMessage());
-
         }
     }
 
@@ -373,7 +390,6 @@ public class LoginActivity extends Activity {
             overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(LoginActivity---startRegisterActivity): " + e.getMessage());
-
         }
     }
 
@@ -385,7 +401,11 @@ public class LoginActivity extends Activity {
                     // set email then new task
                     //current_user = data.getStringExtra(MainActivity.CURRENT_USER);
                     mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER));
-                    new saveStateTask().execute(mEmailView.getText().toString());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        // allow async task to run simultaneously
+                        new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString());
+                    else
+                        new saveStateTask().execute(mEmailView.getText().toString());
                 }
             }
         }

@@ -52,4 +52,6 @@
     <string name="prompt_new_post_number">0 / 140</string>
     <string name="prompt_dialog_text">To reduce network provider data charges, please use Wi-Fi to upload videos.</string>
     <string name="prompt_dialog_check_text">Do not ask me again</string>
+    <string name="is_up_to_date">is up to date</string>
+    <string name="text_limit"> / 140</string>
 </resources>

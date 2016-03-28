@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -259,7 +260,12 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         int pos = url.indexOf("id=");
         String eventId = url.substring(pos + 3);
         String strURl = "http://198.105.216.190/generateFollow.ashx?handle=insert&url=" + eventId + "&username=" + MainActivity.USER + "&type=3";
-        new AddNewEventTask().execute(strURl);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new AddNewEventTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, strURl);
+        else
+            new AddNewEventTask().execute(strURl);
     }
 
     @Override
@@ -282,7 +288,11 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
             case R.id.menu_hall_tab_item_refresh:
                 // clear cache, json file
                 // and refresh
-                new ClearCacheTask().execute();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new ClearCacheTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                else
+                    new ClearCacheTask().execute();
                 return true;
             // handle in main activity
 //            case R.id.menu_hall_tab_item_quit:
@@ -476,7 +486,12 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 if (!strIdList.isEmpty()) {
                     //strIdList = strIdList.substring(0, strIdList.length() - 1);
                     String strURL = "http://198.105.216.190/generateFollow.ashx?handle=delete&id=" + strIdList;
-                    new DeleteEventTask().execute(strURL);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        // allow async task to run simultaneously
+                        new DeleteEventTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, strURL);
+                    else
+                        new DeleteEventTask().execute(strURL);
                     // do this in another thread
 //                    Thread thread = new Thread() {
 //                        @Override
@@ -720,26 +735,56 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     public void Refresh(SwipeRefreshLayoutDirection direction) {
         // actually bottom and init can use same interface??
         if (direction == SwipeRefreshLayoutDirection.TOP && mAdapter != null) {
-            if (mAdapter.getCount() > 0)
-                new UpdateThumbListTaskTop().execute(mAdapter.getItem(0).getId());
-            else
-                new UpdateThumbListTaskTop().execute(0);
+            if (mAdapter.getCount() > 0) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new UpdateThumbListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mAdapter.getItem(0).getId());
+                else
+                    new UpdateThumbListTaskTop().execute(mAdapter.getItem(0).getId());
+
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new UpdateThumbListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+                else
+                    new UpdateThumbListTaskTop().execute(0);
+            }
         } else if (direction == SwipeRefreshLayoutDirection.BOTTOM && mAdapter != null) {
             if (mAdapter.getCount() > 0) {
                 int i = mAdapter.getCount();
-                new UpdateThumbListTaskBottom().execute(mAdapter.getItem(i - 1).getId());
-            } else
-                new UpdateThumbListTaskBottom().execute(0);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new UpdateThumbListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mAdapter.getItem(i - 1).getId());
+                else
+                    new UpdateThumbListTaskBottom().execute(mAdapter.getItem(i - 1).getId());
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new UpdateThumbListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+                else
+                    new UpdateThumbListTaskBottom().execute(0);
+            }
         } else {
             if (mAdapter != null)
                 mAdapter.clear();
             // use as init
-            new UpdateThumbListTask().execute(0);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+            else
+                new UpdateThumbListTask().execute(0);
         }
     }
 
     public void initList() {
-        new InitListTask().execute();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new InitListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new InitListTask().execute();
     }
 
     public ArrayList<Tab_Main_Hall_ListItem> getListFromJson(String strJson) {

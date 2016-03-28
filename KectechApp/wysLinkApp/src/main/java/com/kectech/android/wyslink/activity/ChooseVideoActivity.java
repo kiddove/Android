@@ -498,7 +498,11 @@ public class ChooseVideoActivity extends Activity {
 //                        // hide soft keyboard
 //                        final InputMethodManager imm1 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
 //                        imm1.hideSoftInputFromWindow(promptView.getWindowToken(), 0);
-                        new UploadTask(ChooseVideoActivity.this).execute(video, post_string);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                            // allow async task to run simultaneously
+                            new UploadTask(ChooseVideoActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, video, post_string);
+                        else
+                            new UploadTask(ChooseVideoActivity.this).execute(video, post_string);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

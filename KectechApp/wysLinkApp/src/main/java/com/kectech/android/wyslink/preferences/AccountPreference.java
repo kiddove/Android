@@ -24,7 +24,7 @@ public class AccountPreference extends Preference {
         super.onBindView(view);
         final TextView tLabel = (TextView)view.findViewById(R.id.account_setting_label);
         if (tLabel != null)
-            tLabel.setText("Account Name");
+            tLabel.setText(getContext().getResources().getString(R.string.title_activity_account));
 
         final TextView tUser = (TextView)view.findViewById(R.id.account_setting_user);
         if (tUser != null)

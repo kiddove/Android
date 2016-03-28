@@ -204,7 +204,11 @@ public class RegisterActivity extends Activity {
         String email = mEmailView.getText().toString();
 
         mAuthTask = new UserActionTask();
-        mAuthTask.execute(email);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            mAuthTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, email);
+        else
+            mAuthTask.execute(email);
     }
 
     /**
@@ -268,7 +272,11 @@ public class RegisterActivity extends Activity {
         // perform the user login attempt.
         showProgress(true);
         mAuthTask = new UserActionTask();
-        mAuthTask.execute(email, password, nickname);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            mAuthTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, email, password, nickname);
+        else
+            mAuthTask.execute(email, password, nickname);
     }
 
     private boolean isEmailValid(String email) {

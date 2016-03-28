@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -101,7 +102,6 @@ public class Tab_Main_Video extends Fragment {
             subFolder = folder;
         } else
             subFolder = null;
-
     }
 
     @Override
@@ -167,7 +167,11 @@ public class Tab_Main_Video extends Fragment {
         // read from local first
         if (subFolder == null)
             return;
-        new InitListTask().execute();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new InitListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new InitListTask().execute();
     }
 
     public ArrayList<VideoListItem> getListFromJson(String strJson) {
@@ -296,13 +300,26 @@ public class Tab_Main_Video extends Fragment {
 
         // actually bottom and init can use same interface??
         if (direction == SwipeRefreshLayoutDirection.TOP) {
-            new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(0).getId());
+            else
+                new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
         } else if (direction == SwipeRefreshLayoutDirection.BOTTOM) {
             int i = mVideoAdapter.getCount();
-            new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(i - 1).getId());
+            else
+                new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
         } else
             // use as init
-            new UpdateThumbListTask().execute(0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+            else
+                new UpdateThumbListTask().execute(0);
     }
 
     // for download thumbs

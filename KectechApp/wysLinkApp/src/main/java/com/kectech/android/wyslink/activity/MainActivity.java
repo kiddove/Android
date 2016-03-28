@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -50,10 +51,10 @@ public class MainActivity extends Activity {
 
     // for network
     public final static int CONNECTION_TIMEOUT = 3000;
-    public final static int DOWNLOAD_BUFFER = 1024 * 10;
+    public final static int DOWNLOAD_BUFFER = 1024 * 100;
 
     // use for log tag
-    public final static String LOG_TAG = "kecTech";
+    public final static String LOG_TAG = "wysLink";
 
     // default encoding for files
     public final static String ENCODING = "UTF-8";
@@ -182,7 +183,12 @@ public class MainActivity extends Activity {
             case R.id.menu_hall_tab_item_logout:
             case R.id.menu_setting_logout:
                 // return false to deal with it in fragment (Tab_Main_Hall)
-                new logOutTask().execute();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    // allow async task to run simultaneously
+                    new logOutTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                else
+                    new logOutTask().execute();
                 break;
             //case R.id.menu_item_quit:   // from main_menu
             case R.id.menu_hall_tab_item_quit:  // from tab_hall_menu

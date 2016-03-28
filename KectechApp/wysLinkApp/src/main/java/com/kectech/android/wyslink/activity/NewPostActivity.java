@@ -52,6 +52,7 @@ public class NewPostActivity extends Activity {
     private NewPostGridAdapter mAdapter;
     private boolean bReachLimit = false;
     int current = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +164,7 @@ public class NewPostActivity extends Activity {
             public void afterTextChanged(Editable s) {
                 int len = s.toString().length();
                 TextView showNumbers = (TextView) findViewById(R.id.post_numbers);
-                showNumbers.setText(len + " / 140");
+                showNumbers.setText(len + getResources().getString(R.string.text_limit));
             }
         };
 
@@ -251,7 +252,7 @@ public class NewPostActivity extends Activity {
                 mAdapter.remove(mAdapter.getItem(current));
                 if (bReachLimit) {
                     mAdapter.add(MainActivity.NEW_POST_DEFAULT_IMAGE);
-                    bReachLimit =false;
+                    bReachLimit = false;
                 }
                 return true;
             }
@@ -264,7 +265,12 @@ public class NewPostActivity extends Activity {
     }
 
     private void closeByTask(boolean bBackward) {
-        new ExitActivityTask().execute(bBackward);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new ExitActivityTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, bBackward);
+        else
+            new ExitActivityTask().execute(bBackward);
 
     }
 
@@ -289,7 +295,12 @@ public class NewPostActivity extends Activity {
 //                    }
                     setImages(result);
                 } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-                    new getCapturedImageTask().execute(data);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        // allow async task to run simultaneously
+                        new getCapturedImageTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
+                    else
+                        new getCapturedImageTask().execute(data);
                 }
             } catch (Exception e) {
                 Log.e(MainActivity.LOG_TAG, "Exception caught(NewPostActivity---onActivityResult): " + e.getMessage());
@@ -319,7 +330,11 @@ public class NewPostActivity extends Activity {
             return;
         }
 
-        new StartChoosePhotoActivityTask().execute();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new StartChoosePhotoActivityTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new StartChoosePhotoActivityTask().execute();
     }
 
     private void startChooseImageActivity() {
@@ -362,12 +377,17 @@ public class NewPostActivity extends Activity {
 
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         try {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-
-            return cursor.getString(column_index);
+            int column_index;
+            if (cursor != null) {
+                column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                return cursor.getString(column_index);
+            } else
+                return null;
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -604,14 +624,14 @@ public class NewPostActivity extends Activity {
             ViewHolder holder;
             String strUrl = getItem(position);
 
-            LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
             try {
                 if (convertView == null) {
                     convertView = layoutInflater.inflate(R.layout.new_post_grid_item, parent, false);
                     holder = new ViewHolder();
                     holder.imageView = (NewPostImageView) convertView.findViewById(R.id.item_image);
-                    holder.removeButton = (NewPostImageView)convertView.findViewById(R.id.item_remove);
+                    holder.removeButton = (NewPostImageView) convertView.findViewById(R.id.item_remove);
                     convertView.setTag(holder);
                 } else
                     holder = (ViewHolder) convertView.getTag();
@@ -644,7 +664,7 @@ public class NewPostActivity extends Activity {
                 @Override
                 public void onClick(final View v) {
                     if (v instanceof NewPostImageView) {
-                        current = ((NewPostImageView)v).position;
+                        current = ((NewPostImageView) v).position;
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             // try use some animation
@@ -715,7 +735,7 @@ public class NewPostActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     if (v instanceof NewPostImageView) {
-                        current = ((NewPostImageView)v).position;
+                        current = ((NewPostImageView) v).position;
 
                         hideSoftKeyboard();
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -99,8 +100,8 @@ public class Tab_Main_Hall_Video extends Fragment {
             subFolder = folder;
         } else
             subFolder = null;
-
     }
+
     @Override
     @SuppressWarnings("deprecation")
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -156,7 +157,11 @@ public class Tab_Main_Hall_Video extends Fragment {
         // read from local first
         if (subFolder == null)
             return;
-        new InitListTask().execute();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new InitListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new InitListTask().execute();
     }
 
     public ArrayList<VideoListItem> getListFromJson(String strJson) {
@@ -202,12 +207,10 @@ public class Tab_Main_Hall_Video extends Fragment {
             // first add to adapter and listView
             mVideoAdapter = new VideoListViewAdapter(activity, R.layout.video_list_item, result, mImageFetcher);
             mListView.setAdapter(mVideoAdapter);
-
         } catch (NullPointerException npe) {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshComplete): " + e.getMessage());
             e.printStackTrace();
         }
@@ -217,11 +220,9 @@ public class Tab_Main_Hall_Video extends Fragment {
         if (result == null || result.isEmpty())
             return;
         try {
-
             for (int position = result.size() - 1; position >= 0; position--) {
                 VideoListItem item = result.get(position);
                 mVideoAdapter.insert(item, 0);
-
             }
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshCompleteTop): " + e.getMessage());
@@ -301,13 +302,26 @@ public class Tab_Main_Hall_Video extends Fragment {
 
         // actually bottom and init can use same interface??
         if (direction == SwipeRefreshLayoutDirection.TOP) {
-            new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(0).getId());
+            else
+                new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
         } else if (direction == SwipeRefreshLayoutDirection.BOTTOM) {
             int i = mVideoAdapter.getCount();
-            new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(i - 1).getId());
+            else
+                new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
         } else
             // use as init
-            new UpdateThumbListTask().execute(0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdateThumbListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+            else
+                new UpdateThumbListTask().execute(0);
     }
 
     // for download thumbs
@@ -530,6 +544,7 @@ public class Tab_Main_Hall_Video extends Fragment {
         super.onDestroy();
         //mImageFetcher.closeCache();
     }
+
     private class InitListTask extends AsyncTask<Void, Void, ArrayList<VideoListItem>> {
         @Override
         protected ArrayList<VideoListItem> doInBackground(Void... params) {
@@ -542,7 +557,7 @@ public class Tab_Main_Hall_Video extends Fragment {
             }
             if (items != null && !items.isEmpty()) {
                 return items;
-            }else {
+            } else {
                 Refresh(SwipeRefreshLayoutDirection.BOTH);
             }
 

@@ -43,6 +43,6 @@ public class VersionPreference extends Preference {
         super.onBindView(view);
         final TextView t1 = (TextView)view.findViewById(R.id.current_version1);
         if (t1 != null)
-            t1.setText("is up to date");
+            t1.setText(getContext().getResources().getString(R.string.is_up_to_date));
     }
 }

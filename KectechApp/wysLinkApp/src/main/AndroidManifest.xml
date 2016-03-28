@@ -62,11 +62,11 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/title_activity_register"
             android:windowSoftInputMode="adjustResize|stateVisible" />
-        <activity
-            android:name="com.kectech.android.wyslink.activity.AccountPreferenceActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_account"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!--<activity-->
+            <!--android:name="com.kectech.android.wyslink.activity.AccountPreferenceActivity"-->
+            <!--android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
+            <!--android:label="@string/title_activity_account"-->
+            <!--android:windowSoftInputMode="adjustResize|stateHidden" />-->
         <activity
             android:name="com.kectech.android.wyslink.activity.NewPostActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"

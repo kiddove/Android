@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -178,30 +179,41 @@ public class Tab_Main_Hall_Photo extends Fragment {
         return v;
     }
 
-
     // refresh list
     public void Refresh(SwipeRefreshLayoutDirection direction) {
 
         // actually bottom and init can use same interface??
         if (direction == SwipeRefreshLayoutDirection.TOP) {
-            new UpdatePhotoListTaskTop().execute("todo");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdatePhotoListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            else
+                new UpdatePhotoListTaskTop().execute();
         } else if (direction == SwipeRefreshLayoutDirection.BOTTOM) {
-            new UpdatePhotoListTaskBottom().execute("todo");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdatePhotoListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            else
+                new UpdatePhotoListTaskBottom().execute();
         } else
             // use as init
-            new UpdatePhotoListTask().execute("todo");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new UpdatePhotoListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            else
+                new UpdatePhotoListTask().execute();
     }
 
     // used to get the list item json file init, top_refresh, bottom_refresh, maybe need param when sending http request
     // to be continued...
     // may need to write 3 task
-    private class UpdatePhotoListTask extends AsyncTask<String, Void, ArrayList<PhotoListItem>> {
+    private class UpdatePhotoListTask extends AsyncTask<Void, Void, ArrayList<PhotoListItem>> {
 
         public UpdatePhotoListTask() {
         }
 
         @Override
-        protected ArrayList<PhotoListItem> doInBackground(String... params) {
+        protected ArrayList<PhotoListItem> doInBackground(Void... params) {
             // step1 Read from loacl if has data
             // step2 if not send http request
             // if updated write to local... after refresh... a lot of work to do
@@ -245,9 +257,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
         }
     }
 
-    private class UpdatePhotoListTaskTop extends AsyncTask<String, Void, ArrayList<PhotoListItem>> {
+    private class UpdatePhotoListTaskTop extends AsyncTask<Void, Void, ArrayList<PhotoListItem>> {
         @Override
-        protected ArrayList<PhotoListItem> doInBackground(String... params) {
+        protected ArrayList<PhotoListItem> doInBackground(Void... params) {
             // for test
             String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php?type=top&count=5";
 
@@ -302,9 +314,9 @@ public class Tab_Main_Hall_Photo extends Fragment {
         }
     }
 
-    private class UpdatePhotoListTaskBottom extends AsyncTask<String, Void, ArrayList<PhotoListItem>> {
+    private class UpdatePhotoListTaskBottom extends AsyncTask<Void, Void, ArrayList<PhotoListItem>> {
         @Override
-        protected ArrayList<PhotoListItem> doInBackground(String... params) {
+        protected ArrayList<PhotoListItem> doInBackground(Void... params) {
 
             // for test
             String strURL = "http://173.236.36.10/cds/generateThumbnail_multi.php?type=bottom&count=5";
@@ -458,7 +470,11 @@ public class Tab_Main_Hall_Photo extends Fragment {
     public void initList() {
         if (subFolder == null)
             return;
-        new InitListTask().execute();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            // allow async task to run simultaneously
+            new InitListTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            new InitListTask().execute();
     }
 
     @Override
@@ -557,7 +573,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
             }
             if (items != null && !items.isEmpty()) {
                 return items;
-            }else {
+            } else {
                 Refresh(SwipeRefreshLayoutDirection.BOTH);
             }
 
@@ -618,8 +634,12 @@ public class Tab_Main_Hall_Photo extends Fragment {
                     // 1. show in list first ?? maybe not now
 
                     // 2. send intent to async task
-                    new UploadPostTask().execute(data);
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        // allow async task to run simultaneously
+                        new UploadPostTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
+                    else
+                        new UploadPostTask().execute(data);
                     // when task finish refresh top...
                 }
             }
@@ -664,7 +684,7 @@ public class Tab_Main_Hall_Photo extends Fragment {
                 HttpResponse response = httpClient.execute(httpPost);
                 Log.i(MainActivity.LOG_TAG, "[http return --- status code: " + response.getStatusLine().getStatusCode() + ", message: " + EntityUtils.toString(response.getEntity()) + "]");
             } catch (NoSuchFieldError error) {
-             Log.e(MainActivity.LOG_TAG, error.getMessage());
+                Log.e(MainActivity.LOG_TAG, error.getMessage());
 
             } catch (Exception e) {
                 Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_photo---UploadPostTask---doInBackground): " + e.getMessage());
