@@ -9,7 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".VideoViewActivity"
-    android:background="@color/black">
+    android:background="@color/black"
+    tools:menu="menu_video_view_activity">
 
     <io.vov.vitamio.widget.VideoView
         android:id="@+id/myVideo"
@@ -35,11 +36,7 @@
         android:layout_centerInParent="true"
         android:indeterminate="true"
         android:visibility="visible"
-        app:cpb_max_sweep_angle="300"
-        app:cpb_min_sweep_angle="30"
-        app:cpb_rotation_speed="0.4"
-        app:cpb_stroke_width="4dp"
-        app:cpb_sweep_speed="0.8" />
+        style="@style/CircularProgressBar" />
 
     <!--<LinearLayout-->
         <!--android:id="@+id/loading_progress1"-->

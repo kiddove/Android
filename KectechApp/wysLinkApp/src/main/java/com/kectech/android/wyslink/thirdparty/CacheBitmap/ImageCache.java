@@ -32,7 +32,7 @@ import android.os.StatFs;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
-import com.kectech.android.kectechapp.BuildConfig;
+import com.kectech.android.wyslink.BuildConfig;
 
 import java.io.File;
 import java.io.FileDescriptor;

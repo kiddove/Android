@@ -34,7 +34,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 
 /**
  * The SwipeRefreshLayout should be used whenever the user can refresh the

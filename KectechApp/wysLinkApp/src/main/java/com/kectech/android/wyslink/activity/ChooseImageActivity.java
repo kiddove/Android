@@ -20,8 +20,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.adapter.ChooseImageAdapter;
 import com.kectech.android.wyslink.listeners.OnSwipeTouchListener;
 import com.kectech.android.wyslink.listitem.ChooseImageGridItem;
@@ -50,9 +50,9 @@ public class ChooseImageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_image);
-        if (BuildConfig.DEBUG) {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG) {
+//            System.gc();
+//        }
         // start get data first
         initList();
         Intent intent = getIntent();
@@ -272,7 +272,8 @@ public class ChooseImageActivity extends Activity {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close();
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

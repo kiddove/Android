@@ -1,4 +1,4 @@
-package com.kectech.android.kectechapp.adapter;
+package com.kectech.android.wyslink.adapter;
 
 import junit.framework.TestCase;
 

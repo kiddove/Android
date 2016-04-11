@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 
 /**
@@ -24,7 +24,7 @@ public class AccountPreference extends Preference {
         super.onBindView(view);
         final TextView tLabel = (TextView)view.findViewById(R.id.account_setting_label);
         if (tLabel != null)
-            tLabel.setText(getContext().getResources().getString(R.string.title_activity_account));
+            tLabel.setText(getContext().getString(R.string.title_activity_account));
 
         final TextView tUser = (TextView)view.findViewById(R.id.account_setting_user);
         if (tUser != null)

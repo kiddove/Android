@@ -21,8 +21,8 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.activity.NewPostActivity;
 import com.kectech.android.wyslink.activity.PhotoOfHallOfMainActivity;

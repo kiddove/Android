@@ -54,4 +54,10 @@
     <string name="prompt_dialog_check_text">Do not ask me again</string>
     <string name="is_up_to_date">is up to date</string>
     <string name="text_limit"> / 140</string>
+    <string name="video_upload_url">http://206.190.133.140/videoupload.php</string>
+    <string name="facebook_app_id">1050500904983170</string>
+    <string name="facebook_app_name">wyslink.com</string>
+    <string name="share_facebook">Facebook</string>
+    <string name="share_twitter">Twitter</string>
+    <string name="gcm_SenderId">181107137417</string>
 </resources>

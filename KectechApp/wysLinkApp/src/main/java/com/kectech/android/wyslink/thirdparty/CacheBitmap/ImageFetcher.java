@@ -23,7 +23,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 
-import com.kectech.android.kectechapp.BuildConfig;
+import com.kectech.android.wyslink.BuildConfig;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

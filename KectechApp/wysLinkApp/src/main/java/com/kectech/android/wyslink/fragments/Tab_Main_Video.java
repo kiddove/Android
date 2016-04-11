@@ -3,9 +3,12 @@ package com.kectech.android.wyslink.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +17,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.ChooseVideoActivity;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.activity.VideoViewActivity;
@@ -35,12 +45,14 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 10/06/2015.
@@ -65,6 +77,9 @@ public class Tab_Main_Video extends Fragment {
     private ImageFetcher mImageFetcher;
 
     //private CustomTabActivityHelper mCustomTabActivityHelper;
+    // for test facebook sdk
+    private CallbackManager callbackManager;
+    private ShareDialog shareDialog;
 
     public void setType(int tabType) {
 
@@ -109,6 +124,28 @@ public class Tab_Main_Video extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_main_video, container, false);
 
+        // for test facebook sdk
+        callbackManager = CallbackManager.Factory.create();
+        FacebookCallback<Sharer.Result> callback =
+                new FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onCancel() {
+                        Log.d(MainActivity.LOG_TAG, "Canceled");
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d(MainActivity.LOG_TAG, String.format("Error: %s", error.toString()));
+                    }
+
+                    @Override
+                    public void onSuccess(Sharer.Result result) {
+                        Log.d(MainActivity.LOG_TAG, "Success!");
+                    }
+                };
+        shareDialog = new ShareDialog(this);
+        shareDialog.registerCallback(callbackManager, callback);
+
         mListView = (ListView) v.findViewById(R.id.video_tab_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.video_tab_swipe_refresh_layout);
         mSwipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.BOTH);
@@ -139,12 +176,7 @@ public class Tab_Main_Video extends Fragment {
                 //strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
                 Intent intent = new Intent(activity, VideoViewActivity.class);
                 intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, KecUtilities.decryptUrl(strVideo));
-//                // get another activity to run
-//                Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
-//
-//                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//
-//                intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
+
                 startActivity(intent);
                 activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
@@ -159,7 +191,6 @@ public class Tab_Main_Video extends Fragment {
         initList();
 
         //mCustomTabActivityHelper = new CustomTabActivityHelper();
-
         return v;
     }
 
@@ -587,6 +618,12 @@ public class Tab_Main_Video extends Fragment {
                 // open a new activity, and get result here
                 startChooseVideoActivity();
                 return true;
+            case R.id.video_share_facebook:
+                shareViaFacebook("Panda", "play around", "http://www.wyslink.com/video.aspx?url=/XpIMmZkJJIUF1vCVQWuvf3Fri8FxfJ6MiNgnx/EK2lQIbpWV/h4DyjG%2BqE7ixs09V/oBtEvOVCZX41AkBXEQBG308WZOzaj");
+                return true;
+            case R.id.video_share_twitter:
+                shareViaTwitter("panda", "http://www.wyslink.com/video.aspx?url=/XpIMmZkJJIUF1vCVQWuvf3Fri8FxfJ6MiNgnx/EK2lQIbpWV/h4DyjG%2BqE7ixs09V/oBtEvOVCZX41AkBXEQBG308WZOzaj");
+                return true;
             default:
                 break;
         }
@@ -594,18 +631,121 @@ public class Tab_Main_Video extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public View getActionBarView() {
+        Window window = getActivity().getWindow();
+        View v = window.getDecorView();
+        int resId = getResources().getIdentifier("action_bar_container", "id", "android");
+        return v.findViewById(resId);
+    }
+
     private void startChooseVideoActivity() {
 
         Intent intent = new Intent(getActivity(), ChooseVideoActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, "http://www.wyslink.com/");
         try {
             // do not finish, instead call startActivityForResult
-            startActivityForResult(intent, MainActivity.NEW_POST_CODE);
+            //startActivityForResult(intent, MainActivity.NEW_POST_CODE);
+            startActivity(intent);
             getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         } catch (Exception e) {
             Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_video---startChooseVideoActivity): " + e.getMessage());
 
         }
+    }
 
+//    private void showShareMenu() {
+//        //Creating the instance of PopupMenu
+//        PopupMenu popup = new PopupMenu(getActivity(), menuItemView);
+//        //Inflating the Popup using xml file
+//        popup.getMenuInflater()
+//                .inflate(R.menu.menu_video_share, popup.getMenu());
+//
+//        //registering popup with OnMenuItemClickListener
+//        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            public boolean onMenuItemClick(MenuItem item) {
+//
+//                return true;
+//            }
+//        });
+//
+//        popup.show(); //showing popup menu
+//    }
+
+    private void share(String nameApp, String imagePath) {
+        List<Intent> targetedShareIntents = new ArrayList<Intent>();
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        List<ResolveInfo> resInfo = getActivity().getPackageManager().queryIntentActivities(share, 0);
+        if (!resInfo.isEmpty()) {
+            for (ResolveInfo info : resInfo) {
+                Intent targetedShare = new Intent(android.content.Intent.ACTION_SEND);
+                targetedShare.setType("image/jpeg"); // put here your mime type
+
+                if (info.activityInfo.packageName.toLowerCase().contains(nameApp) ||
+                        info.activityInfo.name.toLowerCase().contains(nameApp)) {
+                    targetedShare.putExtra(Intent.EXTRA_TEXT, "My body of post/email");
+                    targetedShare.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imagePath)));
+                    targetedShare.setPackage(info.activityInfo.packageName);
+                    targetedShareIntents.add(targetedShare);
+                }
+            }
+
+            Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Select app to share");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[targetedShareIntents.size()]));
+            startActivity(chooserIntent);
+        }
+    }
+
+    private void shareViaTwitter(String text, String url) {
+        // Create intent using ACTION_VIEW and a normal Twitter url:
+        String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
+                urlEncode(text),
+                urlEncode(url));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+
+        // Narrow down to official Twitter app, if available:
+        List<ResolveInfo> matches = getActivity().getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith("com.twitter")) {
+                intent.setPackage(info.activityInfo.packageName);
+            }
+        }
+
+        startActivity(intent);
+    }
+
+    public static String urlEncode(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.wtf(MainActivity.LOG_TAG, "UTF-8 should always be supported", e);
+            throw new RuntimeException("URLEncoder.encode() failed for " + s);
+        }
+    }
+
+    private void shareViaFacebook(String title, String description, String url) {
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle(title)
+                    .setContentDescription(description)
+                    .setContentUrl(Uri.parse(url))
+                    .build();
+
+//            shareDialog.show(linkContent, ShareDialog.Mode.WEB);
+
+            if (shareDialog.canShow(linkContent, ShareDialog.Mode.NATIVE)) {
+                shareDialog.show(linkContent, ShareDialog.Mode.NATIVE);
+            } else if (shareDialog.canShow(linkContent, ShareDialog.Mode.WEB)) {
+                shareDialog.show(linkContent, ShareDialog.Mode.WEB);
+            } else
+                shareDialog.show(linkContent, ShareDialog.Mode.AUTOMATIC);
+        }
+    }
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

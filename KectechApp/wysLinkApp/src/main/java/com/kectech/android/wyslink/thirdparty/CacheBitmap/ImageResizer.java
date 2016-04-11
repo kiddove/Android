@@ -24,7 +24,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
-import com.kectech.android.kectechapp.BuildConfig;
+import com.kectech.android.wyslink.BuildConfig;
 import com.kectech.android.wyslink.activity.MainActivity;
 
 import java.io.FileDescriptor;

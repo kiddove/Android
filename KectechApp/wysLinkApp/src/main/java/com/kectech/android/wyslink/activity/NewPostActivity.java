@@ -29,8 +29,8 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.listeners.OnSwipeTouchListener;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.wyslink.util.KecUtilities;
@@ -58,9 +58,9 @@ public class NewPostActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        if (BuildConfig.DEBUG) {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG) {
+//            System.gc();
+//        }
 
 //        View.OnClickListener mListener = new View.OnClickListener() {
 //            @Override
@@ -164,7 +164,7 @@ public class NewPostActivity extends Activity {
             public void afterTextChanged(Editable s) {
                 int len = s.toString().length();
                 TextView showNumbers = (TextView) findViewById(R.id.post_numbers);
-                showNumbers.setText(len + getResources().getString(R.string.text_limit));
+                showNumbers.setText(len + getString(R.string.text_limit));
             }
         };
 
@@ -218,7 +218,8 @@ public class NewPostActivity extends Activity {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close(true);
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 
 /**

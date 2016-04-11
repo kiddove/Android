@@ -9,8 +9,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.adapter.HallOfMainAdapter;
 import com.kectech.android.wyslink.pager.CustomViewPager;
 import com.kectech.android.wyslink.listeners.OnSwipeOutListener;
@@ -33,10 +33,10 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_hall);
-        if (BuildConfig.DEBUG)
-        {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG)
+//        {
+//            System.gc();
+//        }
 
         try {
             CustomViewPager pager;
@@ -47,7 +47,7 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             int tabId = 0;
             String tabName = "";
             String tabFollowName = "";
-            CharSequence Titles[] = {getResources().getString(R.string.title_activity_main_hall_Video), getResources().getString(R.string.title_activity_main_hall_photo)};
+            CharSequence Titles[] = {getString(R.string.title_activity_main_hall_Video), getString(R.string.title_activity_main_hall_photo)};
             // depends on type, may be different num of tabs
             // for test
             // todo to be continued...
@@ -160,7 +160,8 @@ public class HallOfMainActivity extends Activity implements OnSwipeOutListener {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close();
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

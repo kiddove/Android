@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.listitem.Tab_Main_Hall_ListItem;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;

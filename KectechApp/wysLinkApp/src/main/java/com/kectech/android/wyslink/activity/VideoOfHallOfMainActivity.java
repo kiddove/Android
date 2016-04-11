@@ -12,8 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.thirdparty.HTML5WebView;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,10 +27,10 @@ public class VideoOfHallOfMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.DEBUG)
-        {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG)
+//        {
+//            System.gc();
+//        }
         mWebView = new HTML5WebView(this);
         setContentView(mWebView.getLayout());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -128,7 +128,8 @@ public class VideoOfHallOfMainActivity extends Activity {
                     } else {
                         close();
                     }
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

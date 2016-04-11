@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.listitem.VideoListItem;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.RecyclingImageView;

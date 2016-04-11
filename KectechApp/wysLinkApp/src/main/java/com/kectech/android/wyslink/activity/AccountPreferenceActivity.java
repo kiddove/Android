@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 
 
 /**
@@ -18,10 +18,10 @@ public class AccountPreferenceActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.DEBUG)
-        {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG)
+//        {
+//            System.gc();
+//        }
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         addPreferencesFromResource(R.xml.account_preference);
     }
@@ -58,7 +58,8 @@ public class AccountPreferenceActivity extends PreferenceActivity {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close();
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

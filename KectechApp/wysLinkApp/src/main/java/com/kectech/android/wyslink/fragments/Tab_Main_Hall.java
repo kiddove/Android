@@ -27,8 +27,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.HallOfMainActivity;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.adapter.HallListViewAdapter;
@@ -205,6 +205,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 mMode = null;
             }
         });
+
         return v;
     }
 
@@ -282,9 +283,6 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 IntentIntegrator integrator = new IntentIntegrator(this);
                 integrator.initiateScan();
                 return true;
-            case R.id.menu_hall_tab_item_logout:
-                // return false in main activity, so deal with it in fragment
-                return true;
             case R.id.menu_hall_tab_item_refresh:
                 // clear cache, json file
                 // and refresh
@@ -294,12 +292,9 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                 else
                     new ClearCacheTask().execute();
                 return true;
-            // handle in main activity
+//            // handle in main activity
 //            case R.id.menu_hall_tab_item_quit:
-//                // clear cache
-//                //mImageFetcher.clearCache();
-//                if (BuildConfig.DEBUG)
-//                    KecUtilities.clearCache();
+//            case R.id.menu_hall_tab_item_logout:
 //                return true;
         }
         return super.onOptionsItemSelected(item);

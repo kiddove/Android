@@ -1,4 +1,4 @@
-package com.kectech.android.kectechapp;
+package com.kectech.android.wyslink;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

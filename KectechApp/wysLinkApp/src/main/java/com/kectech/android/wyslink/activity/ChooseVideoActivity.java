@@ -3,11 +3,11 @@ package com.kectech.android.wyslink.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -18,6 +18,7 @@ import android.os.NetworkOnMainThreadException;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,9 +33,9 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kectech.android.kectechapp.BuildConfig;
+import com.kectech.android.wyslink.BuildConfig;
 import com.kectech.android.wyslink.miscellaneous.VideoDownloadHttpEntity;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.adapter.ChooseVideoAdapter;
 import com.kectech.android.wyslink.listeners.OnSwipeTouchListener;
 import com.kectech.android.wyslink.listitem.ChooseVideoGridItem;
@@ -74,6 +75,7 @@ public class ChooseVideoActivity extends Activity {
     private ImageFetcher mImageFetcher;
     private TextView textDone;
     private TextView textPreview;
+    private TextView fileName;
     private CurrentSelect currentSelect = new CurrentSelect();
     private int network_status = -1;
 
@@ -94,9 +96,9 @@ public class ChooseVideoActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_choose_image);
-        if (BuildConfig.DEBUG) {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG) {
+//            System.gc();
+//        }
         // start get data first
         initList();
 
@@ -109,6 +111,16 @@ public class ChooseVideoActivity extends Activity {
                                     int position, long id) {
                 boolean isChecked = mAdapter.isChecked(position);
                 onItemChecked(position, !isChecked, view);
+                if (BuildConfig.DEBUG) {
+                    String strName = mAdapter.getSelection();
+                    if (!TextUtils.isEmpty(strName)) {
+                        int last = strName.lastIndexOf("/");
+                        if (last > 0) {
+                            strName = strName.substring(last + 1, strName.length());
+                            fileName.setText(strName);
+                        }
+                    }
+                }
             }
         });
 
@@ -157,6 +169,8 @@ public class ChooseVideoActivity extends Activity {
                 preview();
             }
         });
+
+        fileName = (TextView) findViewById(R.id.choose_img_name);
     }
 
     @Override
@@ -180,6 +194,7 @@ public class ChooseVideoActivity extends Activity {
             }
             case R.id.capture_video:
                 captureVideo();
+                //chooseVideo();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -306,7 +321,8 @@ public class ChooseVideoActivity extends Activity {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close();
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 
@@ -420,6 +436,13 @@ public class ChooseVideoActivity extends Activity {
         }
     }
 
+    private void chooseVideo() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);   // ACTION_GET_CONTENT, ACTION_PICK
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(intent, "Select a video"), MainActivity.REQUEST_VIDEO_CAPTURE);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MainActivity.REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
@@ -465,6 +488,25 @@ public class ChooseVideoActivity extends Activity {
     }
 
     protected void showInputDialog(final String video) {
+        if (TextUtils.isEmpty(video))
+            return;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        //use one of overloaded setDataSource() functions to set your data source
+        final File file = new File(video);
+
+        retriever.setDataSource(getApplicationContext(), Uri.fromFile(file));
+        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        long duration = Long.parseLong(time); // millisecond
+        if (duration < 10 * 1000) {
+            //
+            new AlertDialog.Builder(ChooseVideoActivity.this)
+                    .setTitle("Warning")
+                    .setMessage("Can not upload video. Please choose those duration are greater than 10s.")
+                    .create()
+                    .show();
+            return;
+        }
+
         LayoutInflater layoutInflater = LayoutInflater.from(ChooseVideoActivity.this);
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ChooseVideoActivity.this);
@@ -491,7 +533,7 @@ public class ChooseVideoActivity extends Activity {
                             post_string = jsonObject.toString();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ChooseVideoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -500,9 +542,9 @@ public class ChooseVideoActivity extends Activity {
 //                        imm1.hideSoftInputFromWindow(promptView.getWindowToken(), 0);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                             // allow async task to run simultaneously
-                            new UploadTask(ChooseVideoActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, video, post_string);
+                            new UploadTask(file.length()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, video, post_string);
                         else
-                            new UploadTask(ChooseVideoActivity.this).execute(video, post_string);
+                            new UploadTask(file.length()).execute(video, post_string);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -516,23 +558,22 @@ public class ChooseVideoActivity extends Activity {
     }
 
     public class UploadTask extends AsyncTask<String, Integer, Boolean> {
-        private Context context;
         //private Exception exception;
         private ProgressDialog progressDialog;
+        private HttpClient httpClient;
+        private long fileLength;
 
-        //HttpPost httpPost = new HttpPost("http://192.168.9.13/testFingerPrint/recvvideo.php");
-
-        public UploadTask(Context context) {
-            this.context = context;
+        public UploadTask(long fileLength) {
+            this.fileLength = fileLength;
         }
 
         // once worked, encapsulated in a thread
         private boolean uploadVideo(String videoPath, String postString) throws ParseException, IOException {
             if (videoPath == null)
                 return false;
-            HttpClient httpClient = new DefaultHttpClient();
-            //HttpPost httpPost = new HttpPost("http://192.168.9.13/testFingerPrint/videoupload.php?XDEBUG_SESSION_START=ECLIPSE_DBGP&KEY=14571217868765");
-            HttpPost httpPost = new HttpPost("http://206.190.133.140/videoupload.php");
+            httpClient = new DefaultHttpClient();
+
+            HttpPost httpPost = new HttpPost(getString(R.string.video_upload_url));
 
             FileBody fileBodyVideo = new FileBody(new File(videoPath));
             //StringBody owner = new StringBody(videoOwner, ContentType.TEXT_PLAIN);
@@ -585,9 +626,18 @@ public class ChooseVideoActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            this.progressDialog = new ProgressDialog(this.context);
+            this.progressDialog = new ProgressDialog(ChooseVideoActivity.this);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             this.progressDialog.setCancelable(false);
+            this.progressDialog.setMessage("File Size:" + KecUtilities.formatSize(fileLength));
+            this.progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel(true);
+                    if (httpClient != null)
+                        httpClient.getConnectionManager().shutdown();
+                }
+            });
             this.progressDialog.show();
         }
 
@@ -604,11 +654,12 @@ public class ChooseVideoActivity extends Activity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            httpClient = null;
             if (this.progressDialog != null) {
                 this.progressDialog.dismiss();
             }
             if (!success) {
-                Toast.makeText(ChooseVideoActivity.this, "upload failed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "upload failed.", Toast.LENGTH_SHORT).show();
             }
             if (success)
                 close();
@@ -617,6 +668,7 @@ public class ChooseVideoActivity extends Activity {
         @Override
         protected void onCancelled() {
             //httpPost.abort();
+            httpClient = null;
             if (this.progressDialog != null) {
                 this.progressDialog.dismiss();
             }

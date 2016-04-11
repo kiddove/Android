@@ -43,6 +43,14 @@
                 android:textStyle="italic|bold" />
 
             <TextView
+                android:id="@+id/choose_img_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                android:textStyle="italic|bold" />
+
+            <TextView
                 android:id="@+id/choose_img_done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -17,7 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 
 public class CircularProgressDrawable extends Drawable
     implements Animatable {

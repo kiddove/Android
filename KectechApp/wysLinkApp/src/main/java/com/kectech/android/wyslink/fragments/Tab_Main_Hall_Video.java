@@ -18,8 +18,8 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.activity.VideoViewActivity;
 import com.kectech.android.wyslink.adapter.VideoListViewAdapter;
@@ -128,6 +128,7 @@ public class Tab_Main_Hall_Video extends Fragment {
                 String strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
                 Intent intent = new Intent(activity, VideoViewActivity.class);
                 intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, KecUtilities.decryptUrl(strVideo));
+                // rtmp is not accepted by fb sdk. cause error code 100, href is not properly formatted
 
 //                // get another activity to run
 //                Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
@@ -149,7 +150,6 @@ public class Tab_Main_Hall_Video extends Fragment {
         initList();
 
         //mCustomTabActivityHelper = new CustomTabActivityHelper();
-
         return v;
     }
 
@@ -281,21 +281,6 @@ public class Tab_Main_Hall_Video extends Fragment {
         inflater.inflate(R.menu.menu_video_tab, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        switch (id) {
-//             case R.id.menu_item_show_qr_code:
-//                 // clear cache
-//                 //mImageFetcher.clearCache();
-//                 if (BuildConfig.DEBUG)
-//                     KecUtilities.clearCache();
-//                 return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     // refresh list
     public void Refresh(SwipeRefreshLayoutDirection direction) {

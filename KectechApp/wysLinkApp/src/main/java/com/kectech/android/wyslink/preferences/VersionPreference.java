@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 
 /**
@@ -43,6 +43,6 @@ public class VersionPreference extends Preference {
         super.onBindView(view);
         final TextView t1 = (TextView)view.findViewById(R.id.current_version1);
         if (t1 != null)
-            t1.setText(getContext().getResources().getString(R.string.is_up_to_date));
+            t1.setText(getContext().getString(R.string.is_up_to_date));
     }
 }

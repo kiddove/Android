@@ -20,8 +20,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.transformer.FadePageTransformer;
 import com.kectech.android.wyslink.pager.CustomViewPager;
 import com.kectech.android.wyslink.listeners.OnSwipeOutListener;
@@ -58,9 +58,9 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
 
-        if (BuildConfig.DEBUG) {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG) {
+//            System.gc();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
@@ -218,7 +218,8 @@ public class PhotoOfHallOfMainActivity extends Activity implements OnSwipeOutLis
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close();
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

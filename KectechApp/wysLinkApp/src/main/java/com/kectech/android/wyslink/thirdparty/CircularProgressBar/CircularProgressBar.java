@@ -7,10 +7,11 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 
 /**
  * Created by castorflex on 11/10/13.
+ *
  */
 public class CircularProgressBar extends ProgressBar {
 
@@ -19,7 +20,7 @@ public class CircularProgressBar extends ProgressBar {
   }
 
   public CircularProgressBar(Context context, AttributeSet attrs) {
-    this(context, attrs, R.attr.cpbStyle);
+    this(context, attrs, R.attr.cpb_style);
   }
 
   public CircularProgressBar(Context context, AttributeSet attrs, int defStyle) {

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kectech.android.kectechapp.activity.PhotoActivity">
+    tools:context="com.kectech.android.wyslink.activity.PhotoOfHallOfMainActivity">
 
     <com.kectech.android.wyslink.pager.CustomViewPager
         android:id="@+id/photo_activity_viewpager"

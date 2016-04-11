@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kectech.android.wyslink.activity.ChooseImageActivity">
+    <item
+        android:id="@+id/video_share"
+        android:icon="@drawable/ic_action_social_share"
+        android:showAsAction="ifRoom"
+        android:title="@string/ui_menu_share">
+        <menu>
+            <item
+                android:id="@+id/video_share_facebook"
+                android:icon="@drawable/ic_action_ic_facebook"
+                android:showAsAction="ifRoom|withText"
+                android:title="@string/share_facebook" />
+            <item
+                android:id="@+id/video_share_twitter"
+                android:icon="@drawable/ic_action_ic_twitter"
+                android:showAsAction="withText|always"
+                android:title="@string/share_twitter" />
+        </menu>
+    </item>
+</menu>

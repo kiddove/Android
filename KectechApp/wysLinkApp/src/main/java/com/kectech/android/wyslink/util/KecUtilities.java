@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.util.Base64;
 import android.util.Log;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageCache;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.text.DecimalFormat;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -46,6 +47,7 @@ public class KecUtilities {
     public static void init(Context context) {
         KecUtilities.context = context;
     }
+
     public static ImageFetcher getThumbFetcher(Activity activity) {
         if (thumb != null)
             return thumb;
@@ -75,6 +77,7 @@ public class KecUtilities {
         ImageLoader.getInstance().clearMemoryCache();
         ImageLoader.getInstance().clearDiskCache();
     }
+
     public static void closeCache() {
         if (thumb != null) {
             thumb.closeCache();
@@ -326,5 +329,31 @@ public class KecUtilities {
             }
         } else
             return null;
+    }
+
+    public static String formatSize(long size) {
+        String hrSize = "";
+        long b = size;
+        double k = size / 1024.0;
+        double m = size / (1024.0 * 1024.0);
+        double g = size / (1024.0 * 1024.0 * 1024.0);
+        double t = size / (1024.0 * 1024.0 * 1024.0 * 1024.0);
+
+        DecimalFormat dec = new DecimalFormat("0.00");
+
+        if (t > 1.0) {
+            hrSize = dec.format(t).concat("TB");
+        } else if (g > 1.0) {
+            hrSize = dec.format(g).concat("GB");
+        } else if (m > 1.0) {
+
+            hrSize = dec.format(m).concat("MB");
+        } else if (k > 1.0) {
+            hrSize = dec.format(k).concat("KB");
+        } else {
+            hrSize = dec.format(b).concat("byte");
+        }
+
+        return hrSize;
     }
 }

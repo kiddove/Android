@@ -4,7 +4,20 @@
         android:id="@+id/video_menu_item_share"
         android:icon="@drawable/ic_action_social_share"
         android:showAsAction="ifRoom"
-        android:title="@string/ui_menu_share" />
+        android:title="@string/ui_menu_share">
+        <menu>
+            <item
+                android:id="@+id/video_share_facebook"
+                android:icon="@drawable/ic_action_ic_facebook"
+                android:showAsAction="ifRoom|withText"
+                android:title="@string/share_facebook" />
+            <item
+                android:id="@+id/video_share_twitter"
+                android:icon="@drawable/ic_action_ic_twitter"
+                android:showAsAction="withText|ifRoom"
+                android:title="@string/share_twitter" />
+        </menu>
+    </item>
     <item
         android:id="@+id/video_menu_item_search"
         android:icon="@drawable/ic_action_search"

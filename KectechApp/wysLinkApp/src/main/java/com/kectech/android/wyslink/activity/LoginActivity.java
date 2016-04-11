@@ -36,8 +36,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.wyslink.util.KecUtilities;
@@ -56,7 +56,7 @@ public class LoginActivity extends Activity {
     private View mProgressView;
     private View mLoginFormView;
     private Set<String> username;
-    private String current_user;
+    //private String current_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +67,11 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            // allow async task to run simultaneously
-            new checkAutoLogInTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        else
-            new checkAutoLogInTask().execute();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+//            // allow async task to run simultaneously
+//            new checkAutoLogInTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        else
+//            new checkAutoLogInTask().execute();
 
 //        boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
 //        current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
@@ -167,7 +167,7 @@ public class LoginActivity extends Activity {
         if (username != null && username.size() > 0) {
             List<String> emailAddressCollection = new ArrayList<>(username);
             ArrayAdapter<String> adapter =
-                    new ArrayAdapter<>(LoginActivity.this,
+                    new ArrayAdapter<>(getApplicationContext(),
                             android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
             mEmailView.setAdapter(adapter);
@@ -329,7 +329,6 @@ public class LoginActivity extends Activity {
         Intent intent = new Intent(this, MainActivity.class);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(MainActivity.CURRENT_USER, current_user);
         try {
             startActivity(intent);
             finish();
@@ -400,7 +399,7 @@ public class LoginActivity extends Activity {
                 if (data != null) {
                     // set email then new task
                     //current_user = data.getStringExtra(MainActivity.CURRENT_USER);
-                    mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER));
+                    mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER_KEY));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                         // allow async task to run simultaneously
                         new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString());
@@ -446,33 +445,32 @@ public class LoginActivity extends Activity {
         super.onRestart();
         Log.d("StrictMode", "LA restart.");
     }
-
-    public class checkAutoLogInTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
-                current_user = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
-                return bAuto;
-
-            } catch (Exception e) {
-                Log.e(MainActivity.LOG_TAG, e.getMessage());
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean autoLogIn) {
-            if (autoLogIn)
-                startMainActivity();
-        }
-
-        @Override
-        protected void onCancelled() {
-        }
-    }
+//
+//    public class checkAutoLogInTask extends AsyncTask<Void, Void, Boolean> {
+//
+//        @Override
+//        protected Boolean doInBackground(Void... params) {
+//            try {
+//                boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+//                return bAuto;
+//
+//            } catch (Exception e) {
+//                Log.e(MainActivity.LOG_TAG, e.getMessage());
+//                e.printStackTrace();
+//            }
+//            return false;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean autoLogIn) {
+//            if (autoLogIn)
+//                startMainActivity();
+//        }
+//
+//        @Override
+//        protected void onCancelled() {
+//        }
+//    }
 
     public class saveStateTask extends AsyncTask<String, Void, Void> {
 
@@ -480,7 +478,7 @@ public class LoginActivity extends Activity {
         protected Void doInBackground(String... params) {
             try {
                 //current_user = mEmailView.getText().toString();
-                current_user = params[0];
+                String current_user = params[0];
                 // test
                 if (!TextUtils.isEmpty(current_user)) {
                     SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE);
@@ -544,7 +542,8 @@ public class LoginActivity extends Activity {
                     KecUtilities.closeCache();
                     finish();
                     System.exit(0);
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

@@ -30,7 +30,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.kectech.android.kectechapp.BuildConfig;
+import com.kectech.android.wyslink.BuildConfig;
 
 import java.lang.ref.WeakReference;
 

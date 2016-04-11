@@ -42,6 +42,10 @@
 
         <!--cab done button icon-->
         <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
+
+        <item name="cpb_style">@style/CircularProgressBar</item>
+
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <!--overflow menu drop down-->
@@ -55,6 +59,7 @@
     <style name="PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
         <item name="android:popupBackground">@color/bar_background</item>
         <!--<item name="android:popupBackground">@drawable/tab_list_selector</item>-->
+        <item name="android:textColor">@color/bar_menu_text</item>
     </style>
     <!-- Change Overflow Menu ListView Divider Property or selector-->
     <style name="DropDownListView" parent="@android:style/Widget.Holo.ListView.DropDown">
@@ -183,5 +188,13 @@
 
     <style name="AppTheme.FullScreen" parent="@style/AppTheme">
         <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="CircularProgressBar" parent="android:Widget.Holo.ProgressBar">
+        <item name="cpb_max_sweep_angle">300</item>
+        <item name="cpb_min_sweep_angle">30</item>
+        <item name="cpb_rotation_speed">0.4</item>
+        <item name="cpb_stroke_width">4dp</item>
+        <item name="cpb_sweep_speed">0.8</item>
     </style>
 </resources>

@@ -70,7 +70,7 @@
         <!--android:summary="click to change"-->
         <!--android:defaultValue="Demo user">-->
         <!--&lt;!&ndash;// so fussy...&ndash;&gt;-->
-        <!--<intent android:targetPackage="com.kectech.android.kectechapp"-->
+        <!--<intent android:targetPackage="com.kectech.android.wyslink"-->
         <!--android:targetClass="AccountPreferenceActivity"-->
         <!--android:action="what ever send to activity?"/>-->
         <!--</Preference>-->

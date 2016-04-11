@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/video_share_facebook"
+        android:showAsAction="ifRoom"
+        android:title="@string/share_facebook" />
+    <item
+        android:id="@+id/video_share_twitter"
+        android:showAsAction="ifRoom"
+        android:title="@string/share_twitter" />
+</menu>

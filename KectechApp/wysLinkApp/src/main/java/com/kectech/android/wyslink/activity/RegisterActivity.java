@@ -23,8 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.kectech.android.kectechapp.BuildConfig;
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.BuildConfig;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.listeners.OnSwipeTouchListener;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
 
@@ -60,9 +60,9 @@ public class RegisterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        if (BuildConfig.DEBUG) {
-            System.gc();
-        }
+//        if (BuildConfig.DEBUG) {
+//            System.gc();
+//        }
         // when click done on confirm
         mConfirmPasswordView = (EditText) findViewById(R.id.confirm_password);
         mConfirmPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -396,7 +396,7 @@ public class RegisterActivity extends Activity {
 
         // actually is go back to login activity and then go to main activity from login
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.CURRENT_USER, mEmailView.getText().toString());
+        intent.putExtra(MainActivity.CURRENT_USER_KEY, mEmailView.getText().toString());
         try {
             setResult(RESULT_OK, intent);
             close(false);
@@ -503,7 +503,8 @@ public class RegisterActivity extends Activity {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     close(true);
-                    return super.onKeyDown(keyCode, event);
+                    //return super.onKeyDown(keyCode, event);
+                    return true;
             }
         }
 

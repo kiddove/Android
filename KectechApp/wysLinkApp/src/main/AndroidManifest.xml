@@ -1,92 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kectech.android.kectechapp">
+    package="com.kectech.android.wyslink">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <permission
+        android:name="com.kectech.android.wyslink.service.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.kectech.android.wyslink.service.permission.C2D_MESSAGE" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <!--https://developer.android.com/training/camera/photobasics.html-->
+
+    <!-- https://developer.android.com/training/camera/photobasics.html -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/wyslink"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationName"
+            android:value="@string/facebook_app_name" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1050500904983170"
+            android:exported="true" />
+
         <activity
-            android:name="com.kectech.android.wyslink.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/MainTheme"/>
-        <activity
-            android:name="com.kectech.android.wyslink.activity.HallOfMainActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kectech.android.wyslink.activity.MainActivity" />
-        </activity>
-        <activity
-            android:name="com.kectech.android.wyslink.activity.PhotoOfHallOfMainActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/prompt_navigation_back"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.FullScreen">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />
-        </activity>
-        <!--<activity-->
-            <!--android:name="com.kectech.android.wyslink.activity.VideoOfHallOfMainActivity"-->
-            <!--android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
-            <!--android:label="@string/title_activity_main_hall_Video">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />-->
-        <!--</activity>-->
-        <activity
-            android:name="com.kectech.android.wyslink.activity.LoginActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:theme="@style/MainTheme"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kectech.android.wyslink.activity.RegisterActivity"
+            android:name=".activity.HallOfMainActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main_hall"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PhotoOfHallOfMainActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/prompt_navigation_back"
+            android:parentActivityName=".activity.HallOfMainActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.FullScreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />
+        </activity>
+        <!-- <activity -->
+        <!-- android:name="com.kectech.android.wyslink.activity.VideoOfHallOfMainActivity" -->
+        <!-- android:configChanges="orientation|keyboard|keyboardHidden|screenSize" -->
+        <!-- android:label="@string/title_activity_main_hall_Video"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" /> -->
+        <!-- </activity> -->
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:theme="@style/MainTheme"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
+        <activity
+            android:name=".activity.RegisterActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/title_activity_register"
             android:windowSoftInputMode="adjustResize|stateVisible" />
-        <!--<activity-->
-            <!--android:name="com.kectech.android.wyslink.activity.AccountPreferenceActivity"-->
-            <!--android:configChanges="orientation|keyboard|keyboardHidden|screenSize"-->
-            <!--android:label="@string/title_activity_account"-->
-            <!--android:windowSoftInputMode="adjustResize|stateHidden" />-->
+        <!-- <activity -->
+        <!-- android:name="com.kectech.android.wyslink.activity.AccountPreferenceActivity" -->
+        <!-- android:configChanges="orientation|keyboard|keyboardHidden|screenSize" -->
+        <!-- android:label="@string/title_activity_account" -->
+        <!-- android:windowSoftInputMode="adjustResize|stateHidden" /> -->
         <activity
-            android:name="com.kectech.android.wyslink.activity.NewPostActivity"
+            android:name=".activity.NewPostActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/title_activity_main_hall_photo"
             android:windowSoftInputMode="adjustResize|stateVisible" />
-        <!--not using for now-->
-        <!--android:theme="@style/PopupTheme"-->
+        <!-- not using for now -->
+        <!-- android:theme="@style/PopupTheme" -->
         <activity
-            android:name="com.kectech.android.wyslink.activity.ChooseImageActivity"
+            android:name=".activity.ChooseImageActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/prompt_navigation_back" />
+        <activity
+            android:name=".activity.ChooseVideoActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/prompt_navigation_back"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.VideoViewActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/prompt_navigation_back"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- [START gcm_receiver] -->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-        <activity
-            android:name="com.kectech.android.wyslink.activity.ChooseVideoActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/prompt_navigation_back" />
-        <activity
-            android:name="com.kectech.android.wyslink.activity.VideoViewActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/prompt_navigation_back" />
+                <category android:name="com.kectech.android.wyslink.service" />
+            </intent-filter>
+        </receiver>
+        <!-- [END gcm_receiver] -->
+        <!-- [START gcm_listener] -->
+        <service
+            android:name=".service.MyGcmListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <!-- [END gcm_listener] -->
+        <!-- [START instanceId_listener] -->
+        <service
+            android:name=".service.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <!-- [END instanceId_listener] -->
+        <service
+            android:name=".service.RegistrationIntentService"
+            android:exported="false" />
     </application>
-
 </manifest>

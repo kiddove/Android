@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.MainActivity;
 import com.kectech.android.wyslink.listitem.ChooseVideoGridItem;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;

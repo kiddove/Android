@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-import com.kectech.android.kectechapp.R;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.activity.PhotoOfHallOfMainActivity;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.wyslink.thirdparty.ScaleImageView;

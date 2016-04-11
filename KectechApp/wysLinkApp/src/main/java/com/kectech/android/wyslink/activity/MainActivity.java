@@ -13,8 +13,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.kectech.android.kectechapp.R;
+import com.facebook.FacebookSdk;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.adapter.MainAdapter;
+import com.kectech.android.wyslink.service.RegistrationIntentService;
 import com.kectech.android.wyslink.thirdparty.SlidingTabLayout;
 import com.kectech.android.wyslink.util.KecUtilities;
 
@@ -66,7 +70,6 @@ public class MainActivity extends Activity {
     public final static String POST_IMAGES = "post_images";
 
     // default user
-    public final static String CURRENT_USER = "current_user";
     public final static String SHARED_PREFERENCE_KEY = "USER_INFO";
     public final static String USER_NAME_SET_KEY = "USERNAME";
     public final static String CURRENT_USER_KEY = "CURRENT";
@@ -83,13 +86,17 @@ public class MainActivity extends Activity {
             R.id.hall_photo_list_item_img6, R.id.hall_photo_list_item_img7, R.id.hall_photo_list_item_img8,};
 
     public static String HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+
+    // for GCM
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     // variables
     // declaring view and variables
     //Toolbar toolbar;
     ViewPager pager;
     MainAdapter adapter;
     SlidingTabLayout tabs;
-//    CharSequence Titles[] = {"Hall", "Shows", "Public", "Me"};
+    //    CharSequence Titles[] = {"Hall", "Shows", "Public", "Me"};
 //    int NumOfTabs = 4;
     CharSequence Titles[] = {"Shows", "Me", "Settings"};
     int NumOfTabs = 3;
@@ -99,13 +106,21 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            USER = intent.getStringExtra(MainActivity.CURRENT_USER);
-            HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+        // if what then start login activity
+        // else start main
+        boolean bAuto = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+        if (!bAuto) {
+            // start login activity
+            startLogInActivity();
+            return;
         }
 
-        KecUtilities.init(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        USER = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
+        HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+
+        KecUtilities.init(getApplicationContext());
         if (!KecUtilities.createFolders()) {
             Log.e(MainActivity.LOG_TAG, "create folders failed.");
             finish();
@@ -156,6 +171,12 @@ public class MainActivity extends Activity {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
         }
 
+        // for GCM
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent register_intent = new Intent(this, RegistrationIntentService.class);
+            startService(register_intent);
+        }
     }
 
     @Override
@@ -189,7 +210,7 @@ public class MainActivity extends Activity {
                     new logOutTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 else
                     new logOutTask().execute();
-                break;
+                return true;
             //case R.id.menu_item_quit:   // from main_menu
             case R.id.menu_hall_tab_item_quit:  // from tab_hall_menu
             case R.id.menu_setting_quit:
@@ -207,14 +228,22 @@ public class MainActivity extends Activity {
     // use back button to navigate backward
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+
         // check if the key event was the Back button and if there's history
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    KecUtilities.closeCache();
-                    finish();
-                    System.exit(0);
-                    return super.onKeyDown(keyCode, event);
+                    //this cause activity exit....
+//                    KecUtilities.closeCache();
+//                    finish();
+//                    System.exit(0);
+//                    return super.onKeyDown(keyCode, event);
+
+                    // for preventing close the app, so next when start will continue the specific activity. avoid call onCreate();
+                    // http://stackoverflow.com/questions/6514657/prevent-back-button-from-closing-my-application
+                    moveTaskToBack( true );
+                    return true;
+
             }
         }
 
@@ -266,5 +295,26 @@ public class MainActivity extends Activity {
         @Override
         protected void onCancelled() {
         }
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(LOG_TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }
