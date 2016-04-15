@@ -19,6 +19,7 @@
             android:animationCache="false"
             android:listSelector="@drawable/tab_list_selector"
             android:scrollingCache="false"
+            tools:scrollingCache="true"
             android:smoothScrollbar="true"
             tools:listitem="@layout/video_list_item" />
 

@@ -81,4 +81,4 @@
         tools:text="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         tools:visibility="visible"/>
 
-</LinearLayout><!-- From: file:/I:/Github/Android/KectechApp/vitamio/res/layout/mediacontroller.xml -->
+</LinearLayout>

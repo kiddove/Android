@@ -16,15 +16,22 @@
 
 package com.kectech.android.wyslink.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.kectech.android.wyslink.R;
@@ -90,7 +97,15 @@ public class MyGcmListenerService extends GcmListenerService {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        // http://stackoverflow.com/questions/25030710/gcm-push-notification-large-icon-size
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification_large);
+        float multiplier= getImageFactor(getResources());
+        largeIcon=Bitmap.createScaledBitmap(largeIcon, (int)(largeIcon.getWidth()*multiplier), (int)(largeIcon.getHeight()*multiplier), false);
+
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setLargeIcon(largeIcon)
                 .setSmallIcon(R.drawable.ic_stat_communication_message)
                 .setContentTitle("wysLink Message")
                 .setContentText(message)
@@ -99,9 +114,37 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setContentIntent(pendingIntent)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // support from API 17 and above (Android 4.2)
+            notificationBuilder.setSubText("click to open");
+        }
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        // Another issue i had in android lollipop is that the small icon was displayed next to the large icon.
+        // http://stackoverflow.com/questions/16170648/android-notification-builder-show-a-notification-without-icon/33943309#33943309
+        Notification notification = notificationBuilder.build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int smallIconViewId = this.getResources().getIdentifier("right_icon", "id", android.R.class.getPackage().getName());
+
+            if (smallIconViewId != 0) {
+                if (notification.contentIntent != null)
+                    notification.contentView.setViewVisibility(smallIconViewId, View.INVISIBLE);
+
+                if (notification.headsUpContentView != null)
+                    notification.headsUpContentView.setViewVisibility(smallIconViewId, View.INVISIBLE);
+
+                if (notification.bigContentView != null)
+                    notification.bigContentView.setViewVisibility(smallIconViewId, View.INVISIBLE);
+            }
+        }
+
+        notificationManager.notify(0 /* ID of notification */, notification);
+    }
+
+    public static float getImageFactor(Resources r){
+        DisplayMetrics metrics = r.getDisplayMetrics();
+        float multiplier=metrics.density/3f;
+        return multiplier;
     }
 }

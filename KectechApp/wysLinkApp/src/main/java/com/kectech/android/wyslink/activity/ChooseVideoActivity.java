@@ -67,7 +67,7 @@ import java.util.Collections;
 
 /**
  * Created by Paul on 07/03/2016.
- * for choose video
+ * for choosing video
  */
 public class ChooseVideoActivity extends Activity {
     private GridView mGridView;

@@ -28,7 +28,7 @@ public class Tab_Main_Hall_ListItem {
         this.follow = item.follow;
     }
 
-    public String getDesc() {
+    public String getDescription() {
         return desc.replace("<br/>", "\n");
     }
 

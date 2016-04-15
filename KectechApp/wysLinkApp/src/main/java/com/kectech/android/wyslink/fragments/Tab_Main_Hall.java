@@ -1,6 +1,5 @@
 package com.kectech.android.wyslink.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -67,7 +66,6 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     private ActionMode mMode;
 
     private int num = 0;
-    private Activity activity;
 
     private ImageFetcher mImageFetcher;
 
@@ -100,7 +98,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 
                     Tab_Main_Hall_ListItem tabMainHallListItem = mAdapter.getItem(position);
                     // get another activity to run  activity_main_hall
-                    Intent intent = new Intent(activity, HallOfMainActivity.class);
+                    Intent intent = new Intent(getActivity(), HallOfMainActivity.class);
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra(MainActivity.HALL_OF_MAIN_TYPE, tabMainHallListItem.getType());
@@ -111,7 +109,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
                     try {
                         startActivity(intent);
                         //getActivity().overridePendingTransition(0, 0);
-                        activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                        getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
                     } catch (Exception e) {
                         Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall---onCreateView): " + e.getMessage());
                         e.printStackTrace();
@@ -277,7 +275,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
 
         switch (id) {
             case R.id.menu_hall_tab_item_delete:
-                mMode = activity.startActionMode(new ModeCallback());
+                mMode = getActivity().startActionMode(new ModeCallback());
                 return true;
             case R.id.hall_tab_add_sub_scan:
                 IntentIntegrator integrator = new IntentIntegrator(this);
@@ -835,7 +833,7 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
         try {
 
             // first add to adapter and listView
-            mAdapter = new HallListViewAdapter(activity, R.layout.tab_main_hall_list_item, result, mImageFetcher);
+            mAdapter = new HallListViewAdapter(getActivity(), R.layout.tab_main_hall_list_item, result, mImageFetcher);
             mListView.setAdapter(mAdapter);
 
 //            // now can start another task to load image async
@@ -926,16 +924,8 @@ public class Tab_Main_Hall extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
-
-        this.activity = null;
     }
 
     @Override

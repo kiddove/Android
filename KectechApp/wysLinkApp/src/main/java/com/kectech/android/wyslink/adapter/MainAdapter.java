@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 
 import com.kectech.android.wyslink.fragments.Tab_Main_Hall;
 import com.kectech.android.wyslink.fragments.Tab_Main_Setting;
-import com.kectech.android.wyslink.fragments.Tab_Main_Video;
+import com.kectech.android.wyslink.fragments.Tab_Main_Me;
 
 import android.support.v13.app.FragmentPagerAdapter;
 
@@ -37,7 +37,7 @@ public class MainAdapter extends FragmentPagerAdapter {
                 return new Tab_Main_Hall();
             }
             case 1: {
-                return new Tab_Main_Video();
+                return new Tab_Main_Me();
             }
             case 2: {
                 return new Tab_Main_Setting();

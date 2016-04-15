@@ -76,7 +76,7 @@ public class HallListViewAdapter extends ArrayAdapter<Tab_Main_Hall_ListItem> {
             return convertView;
         }
 
-        holder.txtDesc.setText(item.getDesc());
+        holder.txtDesc.setText(item.getDescription());
         holder.txtTitle.setText(item.getTitle());
         //holder.imageView.setImageBitmap(item.getImage());
         holder.checkBox.setChecked(isChecked(position));

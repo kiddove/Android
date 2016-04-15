@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/new_post_activity_horizontal_margin"
     android:paddingRight="@dimen/new_post_activity_horizontal_margin"
     android:paddingTop="@dimen/new_post_activity_vertical_margin"
-    tools:context="com.kectech.android.wyslink.activity.ChooseImageActivity"
+    tools:context=".activity.ChooseImageActivity"
     tools:menu="menu_choose_image">
 
     <LinearLayout

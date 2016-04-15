@@ -20,6 +20,7 @@
     <string name="video_list_item_img_description">description for video tab item img</string>
     <string name="photo_list_item_img_description">description for photo tab item img</string>
     <string name="title_activity_main_hall">Shows</string>
+    <string name="title_activity_main_me">My Videos</string>
     <string name="title_activity_main_hall_photo">Post</string>
     <string name="title_activity_main_hall_Video">Video</string>
     <string name="title_activity_register">Sign In</string>
@@ -60,4 +61,13 @@
     <string name="share_facebook">Facebook</string>
     <string name="share_twitter">Twitter</string>
     <string name="gcm_SenderId">181107137417</string>
+    <string name="tab_main_me_title_private">Private</string>
+    <string name="tab_main_me_title_public">Public</string>
+    <string name="tab_main_me_title_showroom">Showroom</string>
+    <string name="tab_main_me_description_private">Description for Private</string>
+    <string name="tab_main_me_description_public">Description for Public</string>
+    <string name="tab_main_me_description_showroom">Description for Showroom</string>
+    <string name="share_type_showroom">msShow</string>
+    <string name="share_type_video">video</string>
+    <string name="test_video_url">http://206.190.133.140/VideoStorage/kiddove_gmail_com/1449593792775_D.mp4</string>
 </resources>

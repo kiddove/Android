@@ -22,7 +22,7 @@ public class VideoListItem {
         this.id = id;
     }
 
-    public String getDesc() {
+    public String getDescription() {
         return description;
     }
 

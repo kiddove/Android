@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.kectech.android.wyslink.activity.ChooseImageActivity">
+    tools:context=".activity.ChooseImageActivity">
     <item
         android:id="@+id/capture_video"
         android:orderInCategory="100"

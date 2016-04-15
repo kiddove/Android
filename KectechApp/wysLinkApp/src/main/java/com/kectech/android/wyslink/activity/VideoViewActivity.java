@@ -34,7 +34,10 @@ import io.vov.vitamio.widget.VideoView;
 
 public class VideoViewActivity extends Activity {
     private VideoView videoView;
-    private String videoURL;
+    private String videoURLEncode;
+    private String title;
+    private String description;
+    private String shareType;
 
     // for test facebook sdk
     private CallbackManager callbackManager;
@@ -73,21 +76,28 @@ public class VideoViewActivity extends Activity {
         shareDialog.registerCallback(callbackManager, callback);
 
         // rtmp will cause fb sdk -- href is not properly formatted, error code 100
-        videoURL = "http://206.190.133.140/VideoStorage/kiddove_gmail_com/1449593792775_D.mp4";
         setContentView(R.layout.activity_videoview);
 
         Intent intent = getIntent();
         Uri contentUri = null;
+        String videoURL;
         if (intent != null) {
             try {
                 videoURL = intent.getStringExtra(MainActivity.BUNDLE_KEY_CONTENT_URL);
                 if (videoURL != null)
                     contentUri = Uri.parse(videoURL);
+
+                videoURLEncode = intent.getStringExtra(MainActivity.BUNDLE_KEY_CONTENT_URL_ENCODE);
+                title = intent.getStringExtra(MainActivity.BUNDLE_KEY_SHARE_TITLE);
+                description = intent.getStringExtra(MainActivity.BUNDLE_KEY_SHARE_DESCRIPTION);
+
+                shareType = intent.getStringExtra(MainActivity.BUNDLE_KEY_SHARE_TYPE);
+                if (TextUtils.isEmpty(shareType))
+                    shareType = getString(R.string.share_type_showroom);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else
-            videoURL = null;
+        }
 
         videoView = (VideoView) findViewById(R.id.myVideo);
         View mProgress = findViewById(R.id.loading_progress);
@@ -98,7 +108,7 @@ public class VideoViewActivity extends Activity {
             }
         });
         if (contentUri == null) {
-            String vidAddress = "http://206.190.133.140/VideoStorage/kiddove_gmail_com/1449593792775_D.mp4";
+            String vidAddress = getString(R.string.test_video_url);
             //String vidAddress = "http://192.168.9.13/video.mp4";
             videoView.setVideoPath(vidAddress);
         } else
@@ -160,11 +170,11 @@ public class VideoViewActivity extends Activity {
                 return true;
             }
             case R.id.video_share_facebook: {
-                shareViaFacebook("Remarkable video", "go check it out.");
+                shareViaFacebook(title, description);
                 return true;
             }
             case R.id.video_share_twitter: {
-                shareViaTwitter("What an amazing video.");
+                shareViaTwitter(title);
                 return true;
             }
         }
@@ -174,17 +184,21 @@ public class VideoViewActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_video_view_activity, menu);
+        if (TextUtils.isEmpty(videoURLEncode) || TextUtils.isEmpty(shareType))
+            return true;
+        else
+            getMenuInflater().inflate(R.menu.menu_video_view_activity, menu);
         return true;
     }
 
     private void shareViaTwitter(String text) {
-        if (videoURL == null || TextUtils.isEmpty(videoURL))
+        if (videoURLEncode == null || TextUtils.isEmpty(videoURLEncode))
             return;
+        String shareURL = String.format("http://206.190.141.88/%s.aspx?url=%s", shareType, videoURLEncode);
         // Create intent using ACTION_VIEW and a normal Twitter url:
         String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
                 urlEncode(text),
-                urlEncode(videoURL));
+                urlEncode(shareURL));
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
 
         // Narrow down to official Twitter app, if available:
@@ -208,13 +222,15 @@ public class VideoViewActivity extends Activity {
     }
 
     private void shareViaFacebook(String title, String description) {
-        if (videoURL == null || TextUtils.isEmpty(videoURL))
+        if (videoURLEncode == null || TextUtils.isEmpty(videoURLEncode))
             return;
+
+        String shareURL = String.format("http://206.190.141.88/%s.aspx?url=%s", shareType, videoURLEncode);
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle(title)
                     .setContentDescription(description)
-                    .setContentUrl(Uri.parse("http://www.wyslink.com"))
+                    .setContentUrl(Uri.parse(shareURL))
                     .build();
 
             if (shareDialog.canShow(linkContent, ShareDialog.Mode.NATIVE)) {

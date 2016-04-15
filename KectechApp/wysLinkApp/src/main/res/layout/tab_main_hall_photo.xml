@@ -20,6 +20,7 @@
             android:dividerHeight="2dp"
             android:listSelector="@drawable/tab_list_selector"
             android:scrollingCache="false"
+            tools:scrollingCache="true"
             android:smoothScrollbar="true"
             tools:listitem="@layout/photo_list_item" />
 

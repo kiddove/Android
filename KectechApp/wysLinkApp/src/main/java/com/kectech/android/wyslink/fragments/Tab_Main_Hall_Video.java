@@ -1,6 +1,4 @@
 package com.kectech.android.wyslink.fragments;
-
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -58,7 +56,6 @@ public class Tab_Main_Hall_Video extends Fragment {
     private String tabFollow;
 
     private String subFolder = null;
-    private Activity activity;
 
     private ImageFetcher mImageFetcher;
 
@@ -126,7 +123,10 @@ public class Tab_Main_Hall_Video extends Fragment {
                 VideoListItem videoListItem = mVideoAdapter.getItem(position);
                 String strUrl = videoListItem.getVideoUrl();
                 String strVideo = strUrl.substring(strUrl.indexOf("?url=") + 5, strUrl.indexOf("&tl="));
-                Intent intent = new Intent(activity, VideoViewActivity.class);
+                Intent intent = new Intent(getActivity(), VideoViewActivity.class);
+                intent.putExtra(MainActivity.BUNDLE_KEY_SHARE_TITLE, videoListItem.getTitle());
+                intent.putExtra(MainActivity.BUNDLE_KEY_SHARE_DESCRIPTION, videoListItem.getDescription());
+                intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL_ENCODE, strUrl);
                 intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, KecUtilities.decryptUrl(strVideo));
                 // rtmp is not accepted by fb sdk. cause error code 100, href is not properly formatted
 
@@ -137,7 +137,7 @@ public class Tab_Main_Hall_Video extends Fragment {
 //
 //                intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
                 startActivity(intent);
-                activity.overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
+                getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 
@@ -202,10 +202,8 @@ public class Tab_Main_Hall_Video extends Fragment {
                 Log.d(MainActivity.LOG_TAG, "ListView(mAdapter) already had data, and will be cleared...");
         }
         try {
-            if (activity == null)
-                return;
             // first add to adapter and listView
-            mVideoAdapter = new VideoListViewAdapter(activity, R.layout.video_list_item, result, mImageFetcher);
+            mVideoAdapter = new VideoListViewAdapter(getActivity(), R.layout.video_list_item, result, mImageFetcher);
             mListView.setAdapter(mVideoAdapter);
         } catch (NullPointerException npe) {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
@@ -491,18 +489,6 @@ public class Tab_Main_Hall_Video extends Fragment {
         //mCustomTabActivityHelper.bindCustomTabsService(getActivity());
         if (BuildConfig.DEBUG)
             Log.d(MainActivity.LOG_TAG, "tab_main_hall_video onStart.");
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.activity = null;
     }
 
     @Override

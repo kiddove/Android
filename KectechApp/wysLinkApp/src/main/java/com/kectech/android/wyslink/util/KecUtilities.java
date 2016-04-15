@@ -211,24 +211,6 @@ public class KecUtilities {
                 }
             }
 
-            // show
-            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER);
-            if (!folder.exists()) {
-                if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + ").");
-                    return false;
-                }
-            }
-
-            // public
-            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER);
-            if (!folder.exists()) {
-                if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.PUBLIC_SUB_FOLDER + ").");
-                    return false;
-                }
-            }
-
             // setting
             folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SETTING_SUB_FOLDER);
             if (!folder.exists()) {
@@ -237,6 +219,16 @@ public class KecUtilities {
                     return false;
                 }
             }
+
+            // me
+            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.ME_SUB_FOLDER);
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.ME_SUB_FOLDER + ").");
+                    return false;
+                }
+            }
+
             // now has id, every id has photo and video
 //            // video and photo in hall
 //            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER);
@@ -332,8 +324,7 @@ public class KecUtilities {
     }
 
     public static String formatSize(long size) {
-        String hrSize = "";
-        long b = size;
+        String hrSize;
         double k = size / 1024.0;
         double m = size / (1024.0 * 1024.0);
         double g = size / (1024.0 * 1024.0 * 1024.0);
@@ -351,7 +342,7 @@ public class KecUtilities {
         } else if (k > 1.0) {
             hrSize = dec.format(k).concat("KB");
         } else {
-            hrSize = dec.format(b).concat("byte");
+            hrSize = dec.format(size).concat("byte");
         }
 
         return hrSize;

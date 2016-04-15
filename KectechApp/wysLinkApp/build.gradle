@@ -17,7 +17,7 @@ android {
         applicationId 'com.kectech.android.wyslink'
         minSdkVersion 15
         targetSdkVersion 21
-        versionName '0.9.39'
+        versionName '0.9.40'
     }
     buildTypes {
         release {

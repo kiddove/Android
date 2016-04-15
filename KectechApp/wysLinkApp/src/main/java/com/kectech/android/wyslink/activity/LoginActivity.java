@@ -347,7 +347,8 @@ public class LoginActivity extends Activity {
         BufferedInputStream in = null;
         try {
             //final String urlString = "http://www.kdlinx.com/registor.ashx?handleType=4&email=xxx&pwd=xxx&nickname=xxx";
-            final String urlString = "http://198.105.216.190/registor.ashx?handleType=20&username=" + params[0] + "&pwd=" + params[1];
+            //final String urlString = "http://198.105.216.190/registor.ashx?handleType=20&username=" + params[0] + "&pwd=" + params[1];
+            final String urlString = "http://206.190.141.88/registor.ashx?handleType=20&username=" + params[0] + "&pwd=" + params[1];
             final URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);

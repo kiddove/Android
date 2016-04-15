@@ -31,6 +31,10 @@ public class MainActivity extends Activity {
     public static final int REQUEST_VIDEO_CAPTURE = 1;
     public static final int REQUEST_SELECT_VIDEO = 2;
     public static final String BUNDLE_KEY_CONTENT_URL = "content_url";
+    public static final String BUNDLE_KEY_CONTENT_URL_ENCODE = "content_url_encode";
+    public static final String BUNDLE_KEY_SHARE_TYPE = "share_type";
+    public static final String BUNDLE_KEY_SHARE_TITLE = "share_title";
+    public static final String BUNDLE_KEY_SHARE_DESCRIPTION = "share_description";
     // strings
     // for register activity result
     public final static int REGISTER_REQUEST_CODE = 6008;
@@ -49,9 +53,8 @@ public class MainActivity extends Activity {
     public final static String PHOTO_SUB_FOLDER = "Photo";
     public final static String VIDEO_SUB_FOLDER = "Video";
     public final static String HALL_SUB_FOLDER = "Hall";
-    public final static String SHOW_SUB_FOLDER = "Show";
-    public final static String PUBLIC_SUB_FOLDER = "Public";
     public final static String SETTING_SUB_FOLDER = "Setting";
+    public final static String ME_SUB_FOLDER = "Me";
 
     // for network
     public final static int CONNECTION_TIMEOUT = 3000;

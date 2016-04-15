@@ -57,6 +57,16 @@
                 android:value="com.kectech.android.wyslink.activity.MainActivity" />
         </activity>
         <activity
+            android:name=".activity.MeOfMainActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main_me"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".activity.PhotoOfHallOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/prompt_navigation_back"

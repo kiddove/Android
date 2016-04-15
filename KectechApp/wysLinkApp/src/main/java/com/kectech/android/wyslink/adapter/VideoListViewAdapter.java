@@ -56,7 +56,7 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.txtDesc.setText(item.getDesc());
+        holder.txtDesc.setText(item.getDescription());
         holder.txtTitle.setText(item.getTitle());
         holder.txtLabel.setText(item.getStreamType());
         mImageFetcher.loadImage(item.getThumbURL(), holder.imageView);
