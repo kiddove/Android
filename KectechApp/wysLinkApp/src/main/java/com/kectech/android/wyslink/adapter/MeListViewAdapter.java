@@ -2,6 +2,7 @@ package com.kectech.android.wyslink.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,13 @@ public class MeListViewAdapter extends ArrayAdapter<MeListItem> {
 
         holder.txtDesc.setText(item.getDescription());
         holder.txtTitle.setText(item.getTitle());
-        holder.imageView.setImageResource(R.drawable.default_video_poster);
+
+        if (item.getTitle().equalsIgnoreCase("private"))
+            holder.imageView.setImageResource(R.drawable.ic_av_movie_red);
+        else if (item.getTitle().equalsIgnoreCase("public"))
+            holder.imageView.setImageResource(R.drawable.ic_av_movie_green);
+        else
+            holder.imageView.setImageResource(R.drawable.ic_av_movie_blue);
 
         return convertView;
     }

@@ -201,6 +201,12 @@ public class ImageResizer extends ImageWorker {
         } catch (OutOfMemoryError ome) {
             Log.e(MainActivity.LOG_TAG, "no no no no no.***************************************************************************");
             return null;
+        } catch (IllegalArgumentException iae) {
+            Log.e(MainActivity.LOG_TAG, iae.getMessage());
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

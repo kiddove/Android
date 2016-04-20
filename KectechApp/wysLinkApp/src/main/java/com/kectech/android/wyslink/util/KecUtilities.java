@@ -203,10 +203,10 @@ public class KecUtilities {
             }
 
             // hall
-            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER);
+            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + ").");
+                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + ").");
                     return false;
                 }
             }
@@ -231,17 +231,17 @@ public class KecUtilities {
 
             // now has id, every id has photo and video
 //            // video and photo in hall
-//            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER);
+//            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER);
 //            if (!folder.exists()) {
 //                if (!folder.mkdir()) {
-//                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER + ").");
+//                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + File.separator + MainActivity.VIDEO_SUB_FOLDER + ").");
 //                    return false;
 //                }
 //            }
-//            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER);
+//            folder = new File(context.getFilesDir() + File.separator + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER);
 //            if (!folder.exists()) {
 //                if (!folder.mkdir()) {
-//                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER + ").");
+//                    Log.e(MainActivity.LOG_TAG, "create folder failed(" + MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + File.separator + MainActivity.PHOTO_SUB_FOLDER + ").");
 //                    return false;
 //                }
 //            }

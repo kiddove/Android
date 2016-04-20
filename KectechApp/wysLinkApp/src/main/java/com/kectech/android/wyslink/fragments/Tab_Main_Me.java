@@ -50,7 +50,7 @@ public class Tab_Main_Me extends Fragment {
                 String strType = meListItem.getTitle(); // private, public, showroom
 
                 Intent intent = new Intent(getActivity(), MeOfMainActivity.class);
-                intent.putExtra(MainActivity.HALL_OF_MAIN_NAME, strType);
+                intent.putExtra(MainActivity.SHOW_OF_MAIN_SHOWROOM_NAME, strType);
 
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);

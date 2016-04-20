@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--list item in tab hall of main activity-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="2dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="2dp">
+
+    <CheckBox
+        android:id="@+id/tab_main_show_list_item_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:button="@drawable/checkbox_selector"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center"
+        android:paddingRight="5dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <com.kectech.android.wyslink.thirdparty.CacheBitmap.RecyclingImageView
+        android:id="@+id/tab_main_show_list_item_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tab_main_show_list_item_title"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="2dp"
+        android:contentDescription="@string/video_list_item_img_description"
+        android:paddingRight="10dp"
+        tools:src="@drawable/ic_default_image"/>
+
+    <TextView
+        android:id="@+id/tab_main_show_list_item_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_toRightOf="@+id/tab_main_show_list_item_check"
+        android:gravity="center"
+        android:text="@string/hello_world"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tab_main_show_list_item_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:layout_below="@+id/tab_main_show_list_item_title"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_alignLeft="@+id/tab_main_show_list_item_title"
+        android:layout_toLeftOf="@+id/tab_main_show_list_item_img"
+        android:gravity="left"
+        android:maxLines="4"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/action_settings"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/tab_main_show_list_item_memo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tab_main_show_list_item_img"
+        android:layout_alignLeft="@+id/tab_main_show_list_item_title"
+        android:layout_toLeftOf="@+id/tab_main_show_list_item_img"
+        android:layout_below="@+id/tab_main_show_list_item_desc"
+        android:layout_marginTop="2dp"
+        android:gravity="left"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        tools:text="EventHall @kevin"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp" />
+</RelativeLayout>

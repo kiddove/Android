@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ *
+ */
 package com.kectech.android.wyslink.service;
 
 public class QuickstartPreferences {

@@ -17,7 +17,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
     <!-- https://developer.android.com/training/camera/photobasics.html -->
     <application
         android:allowBackup="true"
@@ -43,14 +42,14 @@
             android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.HallOfMainActivity"
+            android:name=".activity.ShowOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall"
-            android:launchMode="singleTask"
+            android:label="@string/title_activity_main_show"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -60,30 +59,29 @@
             android:name=".activity.MeOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/title_activity_main_me"
-            android:launchMode="singleTask"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.wyslink.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.PhotoOfHallOfMainActivity"
+            android:name=".activity.PhotoOfShowOfMainActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/prompt_navigation_back"
-            android:parentActivityName=".activity.HallOfMainActivity"
+            android:parentActivityName=".activity.ShowOfMainActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" />
+                android:value=".activity.ShowOfMainActivity" />
         </activity>
         <!-- <activity -->
-        <!-- android:name="com.kectech.android.wyslink.activity.VideoOfHallOfMainActivity" -->
+        <!-- android:name="com.kectech.android.wyslink.activity.VideoOfShowOfMainActivity" -->
         <!-- android:configChanges="orientation|keyboard|keyboardHidden|screenSize" -->
         <!-- android:label="@string/title_activity_main_hall_Video"> -->
         <!-- <meta-data -->
         <!-- android:name="android.support.PARENT_ACTIVITY" -->
-        <!-- android:value="com.kectech.android.wyslink.activity.HallOfMainActivity" /> -->
+        <!-- android:value="com.kectech.android.wyslink.activity.ShowOfMainActivity" /> -->
         <!-- </activity> -->
         <activity
             android:name=".activity.LoginActivity"
@@ -103,7 +101,7 @@
         <activity
             android:name=".activity.NewPostActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/title_activity_main_hall_photo"
+            android:label="@string/title_activity_main_show_photo"
             android:windowSoftInputMode="adjustResize|stateVisible" />
         <!-- not using for now -->
         <!-- android:theme="@style/PopupTheme" -->
@@ -115,7 +113,8 @@
             android:name=".activity.ChooseVideoActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:label="@string/prompt_navigation_back"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".activity.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kectech.android.wyslink.activity.MainActivity" />
@@ -168,5 +167,25 @@
         <service
             android:name=".service.RegistrationIntentService"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.AddShowroomActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/title_activity_main_show"
+            android:parentActivityName=".activity.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.RecommendShowroomActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
+            android:label="@string/prompt_navigation_back"
+            android:parentActivityName=".activity.AddShowroomActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kectech.android.wyslink.activity.AddShowroomActivity" />
+        </activity>
     </application>
 </manifest>

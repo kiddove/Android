@@ -39,20 +39,19 @@ public class MainActivity extends Activity {
     // for register activity result
     public final static int REGISTER_REQUEST_CODE = 6008;
     public final static int NEW_POST_CODE = 6009;
+    public final static int ADD_SHOWROOM_CODE = 6010;
     // for communicate with other activities
     // hall activity of main
-    public final static String VIDEO_OF_HALL_OF_MAIN_URL = "video_hall_of_main_url";
-    public final static String HALL_OF_MAIN_TYPE = "event_hall_type";
-    public final static String HALL_OF_MAIN_ID = "event_hall_id";   //  used as timestamp... no id
-    public final static String HALL_OF_MAIN_NAME = "event_hall_name";
-    public final static String HALL_OF_MAIN_FOLLOW = "event_hall_follow_name";
+    public final static String VIDEO_OF_SHOW_OF_MAIN_URL = "video_show_of_main_url";
+    public final static String SHOW_OF_MAIN_SHOWROOM_NAME = "show_showroom_name";
+    public final static String SHOW_OF_MAIN_SHOWROOM_OWNER = "show_showroom_owner";
     // may have plenty
     public final static String PHOTO_TAB_IMAGE_URL_KEY = "imageURL";
     public final static String PHOTO_TAB_IMAGE_INDEX_KEY = "imageIndex";
 
     public final static String PHOTO_SUB_FOLDER = "Photo";
     public final static String VIDEO_SUB_FOLDER = "Video";
-    public final static String HALL_SUB_FOLDER = "Hall";
+    public final static String SHOW_SUB_FOLDER = "Show";
     public final static String SETTING_SUB_FOLDER = "Setting";
     public final static String ME_SUB_FOLDER = "Me";
 
@@ -71,6 +70,7 @@ public class MainActivity extends Activity {
     public final static String CHOOSE_IMAGE_PARAM = "choose_image_result";
     public final static String POST_DESC = "post_desc";
     public final static String POST_IMAGES = "post_images";
+    public final static String SHOWROOM_NAME= "showroom_name";
 
     // default user
     public final static String SHARED_PREFERENCE_KEY = "USER_INFO";
@@ -84,11 +84,13 @@ public class MainActivity extends Activity {
     public final static String NEW_POST_DEFAULT_IMAGE = "new_post_default_image";
 
     public final static int IMAGE_LIMIT_NUMBER = 9;
-    public final static int imageId[] = {R.id.hall_photo_list_item_img0, R.id.hall_photo_list_item_img1, R.id.hall_photo_list_item_img2,
-            R.id.hall_photo_list_item_img3, R.id.hall_photo_list_item_img4, R.id.hall_photo_list_item_img5,
-            R.id.hall_photo_list_item_img6, R.id.hall_photo_list_item_img7, R.id.hall_photo_list_item_img8,};
+    public final static int imageId[] = {
+            R.id.show_photo_list_item_img0, R.id.show_photo_list_item_img1, R.id.show_photo_list_item_img2,
+            R.id.show_photo_list_item_img3, R.id.show_photo_list_item_img4, R.id.show_photo_list_item_img5,
+            R.id.show_photo_list_item_img6, R.id.show_photo_list_item_img7, R.id.show_photo_list_item_img8
+    };
 
-    public static String HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+    public static String SHOW_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER;
 
     // for GCM
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -121,7 +123,7 @@ public class MainActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         USER = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getString(MainActivity.CURRENT_USER_KEY, "");
-        HALL_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+        SHOW_OF_MAIN_SUBFOLDER = MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER;
 
         KecUtilities.init(getApplicationContext());
         if (!KecUtilities.createFolders()) {
@@ -200,13 +202,13 @@ public class MainActivity extends Activity {
         switch (id) {
 //            case R.id.menu_item_search:
 //                return true;
-            case R.id.menu_hall_tab_item_add:
+            case R.id.menu_show_tab_item_add:
                 // handle in fragment
                 // return false here
                 return false;
-            case R.id.menu_hall_tab_item_logout:
+            case R.id.menu_show_tab_item_logout:
             case R.id.menu_setting_logout:
-                // return false to deal with it in fragment (Tab_Main_Hall)
+                // return false to deal with it in fragment (Tab_Main_Show)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                     // allow async task to run simultaneously
@@ -215,7 +217,7 @@ public class MainActivity extends Activity {
                     new logOutTask().execute();
                 return true;
             //case R.id.menu_item_quit:   // from main_menu
-            case R.id.menu_hall_tab_item_quit:  // from tab_hall_menu
+            case R.id.menu_show_tab_item_quit:  // from tab_hall_menu
             case R.id.menu_setting_quit:
                 KecUtilities.closeCache();
                 finish();

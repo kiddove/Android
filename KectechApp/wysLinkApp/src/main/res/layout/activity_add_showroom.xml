@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_showroom_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_vertical_margin"
+    tools:context="com.kectech.android.wyslink.activity.AddShowroomActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/new_post_activity_vertical_margin"
+        android:background="@drawable/edit_text_background_login">
+
+        <ImageView
+            android:id="@+id/icon_showroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_action_search" />
+
+        <EditText
+            android:id="@+id/edit_showroom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/new_post_activity_vertical_margin"
+            android:layout_toRightOf="@+id/icon_showroom"
+            android:background="@drawable/edit_text_background_none"
+            android:hint="@string/showroom_name_hint"
+            android:singleLine="true"
+            android:imeOptions="actionDone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_edit"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/layout_view_background">
+
+        <ImageView
+            android:id="@+id/icon_scan_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_scan" />
+
+        <TextView
+            android:id="@+id/text_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/photo_tab_grid_item_space"
+            android:layout_toRightOf="@+id/icon_scan_left"
+            android:text="@string/label_scan_qr_code"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_scan_sub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/text_scan"
+            android:layout_below="@+id/text_scan"
+            android:text="@string/label_scan_qr_code_sub"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/icon_scan_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_navigation_chevron_right" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/layout_scan"
+        android:layout_marginTop="@dimen/new_post_activity_vertical_margin"
+        android:background="@color/post_img_background" />
+
+    <RelativeLayout
+        android:id="@+id/layout_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separator"
+        android:layout_marginTop="@dimen/new_post_activity_vertical_margin"
+        android:background="@drawable/layout_view_background">
+
+        <ImageView
+            android:id="@+id/icon_list_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_editor_format_list_bulleted" />
+
+        <TextView
+            android:id="@+id/text_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/photo_tab_grid_item_space"
+            android:layout_toRightOf="@+id/icon_list_left"
+            android:text="@string/recommend_showrooms"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_list_sub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/text_list"
+            android:layout_below="@+id/text_list"
+            android:text="@string/recommend_showroom_sub"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/icon_list_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_navigation_chevron_right" />
+    </RelativeLayout>
+</RelativeLayout>

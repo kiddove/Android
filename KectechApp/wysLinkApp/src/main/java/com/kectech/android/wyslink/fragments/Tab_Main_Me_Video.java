@@ -1,4 +1,5 @@
 package com.kectech.android.wyslink.fragments;
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -49,18 +50,18 @@ public class Tab_Main_Me_Video extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private String tabName;
+    private String tabType;
 
     private String subFolder = null;
 
     private ImageFetcher mImageFetcher;
 
-    public void setName(String name) {
-        this.tabName = name;
+    public void setType(String type) {
+        this.tabType = type;
     }
 
     public void createSubFolder() {
-        String folder = MainActivity.USER + File.separator + MainActivity.ME_SUB_FOLDER + File.separator + tabName + File.separator + MainActivity.VIDEO_SUB_FOLDER;
+        String folder = MainActivity.USER + File.separator + MainActivity.ME_SUB_FOLDER + File.separator + tabType + File.separator + MainActivity.VIDEO_SUB_FOLDER;
         if (KecUtilities.createSubFolders(folder)) {
             subFolder = folder;
         } else
@@ -70,7 +71,7 @@ public class Tab_Main_Me_Video extends Fragment {
     @Override
     @SuppressWarnings("deprecation")
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab_main_hall_video, container, false);
+        View v = inflater.inflate(R.layout.tab_main_show_video, container, false);
 
         mListView = (ListView) v.findViewById(R.id.video_tab_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.video_tab_swipe_refresh_layout);
@@ -95,16 +96,16 @@ public class Tab_Main_Me_Video extends Fragment {
                 intent.putExtra(MainActivity.BUNDLE_KEY_SHARE_TITLE, videoListItem.getTitle());
                 intent.putExtra(MainActivity.BUNDLE_KEY_SHARE_DESCRIPTION, videoListItem.getDescription());
                 intent.putExtra(MainActivity.BUNDLE_KEY_CONTENT_URL, KecUtilities.decryptUrl(strUrl));
-                if (!tabName.equalsIgnoreCase("showroom"))
+                if (!tabType.equalsIgnoreCase("showroom"))
                     intent.putExtra(MainActivity.BUNDLE_KEY_SHARE_TYPE, getActivity().getString(R.string.share_type_video));
                 // rtmp is not accepted by fb sdk. cause error code 100, href is not properly formatted
 
 //                // get another activity to run
-//                Intent intent = new Intent(activity, VideoOfHallOfMainActivity.class);
+//                Intent intent = new Intent(activity, VideoOfShowOfMainActivity.class);
 //
 //                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //
-//                intent.putExtra(MainActivity.VIDEO_OF_HALL_OF_MAIN_URL, videoListItem.getVideoUrl());
+//                intent.putExtra(MainActivity.VIDEO_OF_SHOW_OF_MAIN_URL, videoListItem.getVideoUrl());
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
@@ -142,7 +143,7 @@ public class Tab_Main_Me_Video extends Fragment {
 
             return gson.fromJson(strJson, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---getListFromJson): " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_show_video---getListFromJson): " + e.getMessage());
         }
         return null;
     }
@@ -156,7 +157,7 @@ public class Tab_Main_Me_Video extends Fragment {
 
             return gson.toJson(items, typeOfObjects);
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---getJsonFromObject): " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_show_video---getJsonFromObject): " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -178,7 +179,7 @@ public class Tab_Main_Me_Video extends Fragment {
             Log.e(MainActivity.LOG_TAG, npe.getMessage());
             npe.printStackTrace();
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshComplete): " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_show_video---onRefreshComplete): " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -192,7 +193,7 @@ public class Tab_Main_Me_Video extends Fragment {
                 mVideoAdapter.insert(item, 0);
             }
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshCompleteTop): " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_show_video---onRefreshCompleteTop): " + e.getMessage());
         }
     }
 
@@ -214,7 +215,7 @@ public class Tab_Main_Me_Video extends Fragment {
                 }
             });
         } catch (Exception e) {
-            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_hall_video---onRefreshCompleteBottom): " + e.getMessage());
+            Log.e(MainActivity.LOG_TAG, "Exception caught(tab_main_show_video---onRefreshCompleteBottom): " + e.getMessage());
         }
     }
 
@@ -225,9 +226,9 @@ public class Tab_Main_Me_Video extends Fragment {
 
         if (BuildConfig.DEBUG) {
             if (isVisibleToUser) {
-                Log.d(MainActivity.LOG_TAG, "tab_main_hall_video becomes visible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_show_video becomes visible.");
             } else {
-                Log.d(MainActivity.LOG_TAG, "tab_main_hall_video becomes invisible.");
+                Log.d(MainActivity.LOG_TAG, "tab_main_show_video becomes invisible.");
             }
         }
     }
@@ -286,7 +287,7 @@ public class Tab_Main_Me_Video extends Fragment {
         @Override
         protected ArrayList<VideoListItem> doInBackground(Integer... params) {
             try {
-                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=&count=6&user=" + MainActivity.USER + "&eh=" + tabName;
+                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=&count=6&user=" + MainActivity.USER + "&eh=" + tabType;
 
                 URL url = new URL(strURL);
 
@@ -327,7 +328,7 @@ public class Tab_Main_Me_Video extends Fragment {
         protected ArrayList<VideoListItem> doInBackground(Integer... params) {
             try {
                 int id = params[0];
-                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + MainActivity.USER + "&eh=" + tabName;
+                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + MainActivity.USER + "&eh=" + tabType;
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=top&count=5&tabtype=" + tabType;
                 URL url = new URL(strURL);
 
@@ -386,7 +387,7 @@ public class Tab_Main_Me_Video extends Fragment {
         protected ArrayList<VideoListItem> doInBackground(Integer... params) {
             try {
                 int id = params[0];
-                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=" + id + "&count=2&direction=before&user=" + MainActivity.USER + "&eh=" + tabName;
+                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=" + id + "&count=2&direction=before&user=" + MainActivity.USER + "&eh=" + tabType;
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=bottom&count=5&tabtype=" + tabType;
                 URL url = new URL(strURL);
 
@@ -440,7 +441,7 @@ public class Tab_Main_Me_Video extends Fragment {
         super.onStop();
         //mCustomTabActivityHelper.unbindCustomTabsService(getActivity());
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOG_TAG, "tab_main_hall_video onStop.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_show_video onStop.");
     }
 
     @Override
@@ -448,7 +449,7 @@ public class Tab_Main_Me_Video extends Fragment {
         super.onStart();
         //mCustomTabActivityHelper.bindCustomTabsService(getActivity());
         if (BuildConfig.DEBUG)
-            Log.d(MainActivity.LOG_TAG, "tab_main_hall_video onStart.");
+            Log.d(MainActivity.LOG_TAG, "tab_main_show_video onStart.");
     }
 
     @Override

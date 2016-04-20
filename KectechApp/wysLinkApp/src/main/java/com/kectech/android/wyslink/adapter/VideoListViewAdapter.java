@@ -47,11 +47,11 @@ public class VideoListViewAdapter extends ArrayAdapter<VideoListItem> {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.video_list_item, parent, false);
             holder = new ViewHolder();
-            holder.imageView = (RecyclingImageView) convertView.findViewById(R.id.hall_video_list_item_img);
+            holder.imageView = (RecyclingImageView) convertView.findViewById(R.id.show_video_list_item_img);
             //holder.imageView = null;
-            holder.txtTitle = (TextView) convertView.findViewById(R.id.hall_video_list_item_title);
-            holder.txtDesc = (TextView) convertView.findViewById(R.id.hall_video_list_item_desc);
-            holder.txtLabel = (TextView) convertView.findViewById(R.id.hall_video_list_item_label);
+            holder.txtTitle = (TextView) convertView.findViewById(R.id.show_video_list_item_title);
+            holder.txtDesc = (TextView) convertView.findViewById(R.id.show_video_list_item_desc);
+            holder.txtLabel = (TextView) convertView.findViewById(R.id.show_video_list_item_label);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();

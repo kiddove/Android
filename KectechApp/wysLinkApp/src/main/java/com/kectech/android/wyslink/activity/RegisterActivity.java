@@ -60,9 +60,9 @@ public class RegisterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-//        if (BuildConfig.DEBUG) {
-//            System.gc();
-//        }
+        if (BuildConfig.DEBUG) {
+            System.gc();
+        }
         // when click done on confirm
         mConfirmPasswordView = (EditText) findViewById(R.id.confirm_password);
         mConfirmPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

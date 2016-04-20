@@ -18,10 +18,10 @@ public class AccountPreferenceActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (BuildConfig.DEBUG)
-//        {
-//            System.gc();
-//        }
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
         addPreferencesFromResource(R.xml.account_preference);
     }

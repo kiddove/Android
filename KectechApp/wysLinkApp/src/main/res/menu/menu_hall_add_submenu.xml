@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/hall_tab_add_sub_scan"
-        android:title="Scan By a QR Code." />
-    <!--<item-->
-    <!--android:title="Add By an ID."-->
-    <!--android:id="@+id/hall_tab_add_sub_id"/>-->
+        android:id="@+id/show_tab_add_sub_scan"
+        android:title="@string/label_scan_qr_code" />
+    <item
+        android:id="@+id/show_tab_add_sub_id"
+        android:title="Add By an ID." />
 </menu>

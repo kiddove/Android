@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_video"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:menu="menu_video_tab">
+
+    <com.kectech.android.wyslink.thirdparty.SwipeRefreshLayout
+
+        android:id="@+id/video_tab_swipe_refresh_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/video_tab_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animationCache="false"
+            android:listSelector="@drawable/tab_list_selector"
+            android:scrollingCache="false"
+            android:smoothScrollbar="true"
+            tools:listitem="@layout/video_list_item"
+            tools:scrollingCache="true" />
+
+    </com.kectech.android.wyslink.thirdparty.SwipeRefreshLayout>
+</FrameLayout>

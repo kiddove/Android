@@ -14,15 +14,15 @@ public class MeOfMainAdapter extends FragmentPagerAdapter {
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
 
-    String tabName;
+    String tabType;
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public MeOfMainAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabs, String tabName) {
+    public MeOfMainAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabs, String tabType) {
         super(fm);
 
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabs;
-        this.tabName = tabName;
+        this.tabType = tabType;
     }
 
     //This method return the fragment for the every position in the View Pager
@@ -32,7 +32,7 @@ public class MeOfMainAdapter extends FragmentPagerAdapter {
 
             case 0: {
                 Tab_Main_Me_Video tabVideo =  new Tab_Main_Me_Video();
-                tabVideo.setName(tabName);
+                tabVideo.setType(tabType);
                 tabVideo.createSubFolder();
                 return tabVideo;
             }

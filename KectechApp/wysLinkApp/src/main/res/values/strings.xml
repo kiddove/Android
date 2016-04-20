@@ -19,10 +19,10 @@
     <string name="ui_menu_show_qr_code">Show QR code(*)</string>
     <string name="video_list_item_img_description">description for video tab item img</string>
     <string name="photo_list_item_img_description">description for photo tab item img</string>
-    <string name="title_activity_main_hall">Shows</string>
-    <string name="title_activity_main_me">My Videos</string>
-    <string name="title_activity_main_hall_photo">Post</string>
-    <string name="title_activity_main_hall_Video">Video</string>
+    <string name="title_activity_main_show">Shows</string>
+    <string name="title_activity_main_me">Me</string>
+    <string name="title_activity_main_show_photo">Post</string>
+    <string name="title_activity_main_show_Video">Video</string>
     <string name="title_activity_register">Sign In</string>
     <string name="title_activity_account">Account</string>
     <string name="loading_video">Loading video</string>
@@ -70,4 +70,17 @@
     <string name="share_type_showroom">msShow</string>
     <string name="share_type_video">video</string>
     <string name="test_video_url">http://206.190.133.140/VideoStorage/kiddove_gmail_com/1449593792775_D.mp4</string>
+    <string name="title_activity_add_showroom">AddShowroomActivity</string>
+    <string name="Label_Add_Showroom">Add a showroom</string>
+    <string name="prompt_upload_title">Title</string>
+    <string name="prompt_upload_title_hint">title of your video</string>
+    <string name="prompt_upload_description">Description</string>
+    <string name="prompt_upload_description_hint">description of your video</string>
+    <string name="showroom_name_hint">Showroom Name</string>
+    <string name="label_scan_qr_code">Scan QR Code</string>
+    <string name="label_scan_qr_code_sub">Scan Showroom\'s QR Code</string>
+    <string name="recommend_showrooms">Recommend Showrooms</string>
+    <string name="recommend_showroom_sub">Recommend Showroom List</string>
+    <string name="prompt_empty_showroom_name">Showroom name can not be empty.</string>
+    <string name="label_recommend_showroom">Recommend</string>
 </resources>

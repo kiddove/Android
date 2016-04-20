@@ -46,10 +46,10 @@ public class VideoViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (BuildConfig.DEBUG)
-//        {
-//            System.gc();
-//        }
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
         // TODO: 29/03/2016 StrictMode policy violation try to do it async 
         if (!LibsChecker.checkVitamioLibs(this))
             return;

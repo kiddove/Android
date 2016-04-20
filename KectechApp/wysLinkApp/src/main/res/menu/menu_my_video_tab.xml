@@ -4,7 +4,7 @@
         android:id="@+id/video_menu_item_add_new_video"
         android:icon="@drawable/ic_action_content_add"
         android:showAsAction="ifRoom"
-        android:title="@string/ui_menu_capture_video" />
+        android:title="@string/ui_menu_add" />
     <item
         android:id="@+id/video_menu_item_share"
         android:icon="@drawable/ic_action_social_share"

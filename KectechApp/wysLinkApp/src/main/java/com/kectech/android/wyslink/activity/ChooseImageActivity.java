@@ -50,9 +50,9 @@ public class ChooseImageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_image);
-//        if (BuildConfig.DEBUG) {
-//            System.gc();
-//        }
+        if (BuildConfig.DEBUG) {
+            System.gc();
+        }
         // start get data first
         initList();
         Intent intent = getIntent();
@@ -348,7 +348,7 @@ public class ChooseImageActivity extends Activity {
         if (mAdapter.isSelectionEmpty())
             return;
 
-        Intent intent = new Intent(this, PhotoOfHallOfMainActivity.class);
+        Intent intent = new Intent(this, PhotoOfShowOfMainActivity.class);
 
         Bundle params = new Bundle();
         params.putStringArrayList(MainActivity.PHOTO_TAB_IMAGE_URL_KEY, mAdapter.getSelection());

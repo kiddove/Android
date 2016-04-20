@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.NetworkOnMainThreadException;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -25,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -96,9 +98,9 @@ public class ChooseVideoActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_choose_image);
-//        if (BuildConfig.DEBUG) {
-//            System.gc();
-//        }
+        if (BuildConfig.DEBUG) {
+            System.gc();
+        }
         // start get data first
         initList();
 
@@ -332,6 +334,15 @@ public class ChooseVideoActivity extends Activity {
     }
 
     private ArrayList<ChooseVideoGridItem> getGalleryVideos() {
+//        String directoryName =
+//                Environment.getExternalStorageDirectory().toString()
+//                        + "/DCIM/.thumbnails";
+//        File folder = new File(directoryName);
+//        if (!folder.exists()) {
+//            if (!folder.mkdir()){
+//                Log.e(MainActivity.LOG_TAG, "can not create!!!!!!");
+//            }
+//        }
         ArrayList<ChooseVideoGridItem> galleryList = new ArrayList<>();
         final String[] columns = {MediaStore.Video.Media.DATA,
                 MediaStore.Video.Media._ID};
@@ -353,20 +364,50 @@ public class ChooseVideoActivity extends Activity {
 
                         // get thumbnail
                         int id = videoCursor.getInt(videoCursor.getColumnIndex(MediaStore.Video.Media._ID));
+
                         Cursor thumbCursor = getContentResolver().query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
                                 thumb_columns, MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id, null, null);
 
                         try {
                             if (thumbCursor != null) {
                                 if (thumbCursor.moveToFirst()) {
-                                    item.setThumbURL(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
+                                    File thumbFile = new File(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
+                                    if (thumbFile.exists())
+                                        item.setThumbURL(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
+                                    else {
+                                        thumbCursor.close();
+
+                                        // create thumbnail
+                                        MediaStore.Video.Thumbnails.getThumbnail(getContentResolver(), id,
+                                                MediaStore.Images.Thumbnails.MICRO_KIND, null);
+                                        //Log.d(MainActivity.LOG_TAG, "bu kai xin");
+
+                                        thumbCursor = getContentResolver().query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
+                                                thumb_columns, MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id, null, null);
+                                        if (thumbCursor != null) {
+                                            if (thumbCursor.moveToFirst()) {
+                                                item.setThumbURL(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
+                                            }
+                                        }
+                                    }
                                 } else {
                                     // create thumbnail
                                     int cou = thumbCursor.getCount();
                                     if (cou == 0) {
+                                        thumbCursor.close();
+
+                                        // create thumbnail
                                         MediaStore.Video.Thumbnails.getThumbnail(getContentResolver(), id,
                                                 MediaStore.Images.Thumbnails.MICRO_KIND, null);
                                         //Log.d(MainActivity.LOG_TAG, "bu kai xin");
+
+                                        thumbCursor = getContentResolver().query(MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
+                                                thumb_columns, MediaStore.Video.Thumbnails.VIDEO_ID + "=" + id, null, null);
+                                        if (thumbCursor != null) {
+                                            if (thumbCursor.moveToFirst()) {
+                                                item.setThumbURL(thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA)));
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -443,10 +484,15 @@ public class ChooseVideoActivity extends Activity {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(Intent.createChooser(intent, "Select a video"), MainActivity.REQUEST_VIDEO_CAPTURE);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MainActivity.REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
+
+            // refresh grid...
+            initList();
+
             showInputDialog(getPath(videoUri));
         } else if (requestCode == MainActivity.REQUEST_SELECT_VIDEO && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
@@ -514,6 +560,7 @@ public class ChooseVideoActivity extends Activity {
 
         final EditText edit_title = (EditText) promptView.findViewById(R.id.edit_title);
         final EditText edit_description = (EditText) promptView.findViewById(R.id.edit_description);
+
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Upload", new DialogInterface.OnClickListener() {
                     @Override
@@ -522,8 +569,8 @@ public class ChooseVideoActivity extends Activity {
                         String name = "name of video";
                         String title = edit_title.getText().toString();
                         String description = edit_description.getText().toString();
-
                         String post_string;
+
                         try {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("owner", !owner.isEmpty() ? owner : "owner");
@@ -534,6 +581,7 @@ public class ChooseVideoActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                             return;
                         }
 
@@ -545,6 +593,7 @@ public class ChooseVideoActivity extends Activity {
                             new UploadTask(file.length()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, video, post_string);
                         else
                             new UploadTask(file.length()).execute(video, post_string);
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -554,7 +603,19 @@ public class ChooseVideoActivity extends Activity {
                     }
                 });
 
-        alertDialogBuilder.create().show();
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+        edit_description.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public class UploadTask extends AsyncTask<String, Integer, Boolean> {

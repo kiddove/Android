@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kectech.android.wyslink.BuildConfig;
 import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.adapter.MeOfMainAdapter;
 import com.kectech.android.wyslink.listeners.OnSwipeOutListener;
@@ -26,16 +27,16 @@ import java.io.File;
  */
 public class MeOfMainActivity extends Activity implements OnSwipeOutListener {
 
-    //public static final String subFolder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER;
+    //public static final String subFolder = MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_hall);
-//        if (BuildConfig.DEBUG)
-//        {
-//            System.gc();
-//        }
+        setContentView(R.layout.activity_main_show);
+        if (BuildConfig.DEBUG)
+        {
+            System.gc();
+        }
 
         try {
             CustomViewPager pager;
@@ -43,12 +44,12 @@ public class MeOfMainActivity extends Activity implements OnSwipeOutListener {
             SlidingTabLayout tabs;
             int NumOfTabs = 1;
             String tabName = "";
-            CharSequence Titles[] = {getString(R.string.title_activity_main_hall_Video), getString(R.string.title_activity_main_hall_photo)};
+            CharSequence Titles[] = {getString(R.string.title_activity_main_show_Video), getString(R.string.title_activity_main_show_photo)};
 
             Intent intent = getIntent();
             if (intent != null) {
 
-                tabName = intent.getStringExtra(MainActivity.HALL_OF_MAIN_NAME);
+                tabName = intent.getStringExtra(MainActivity.SHOW_OF_MAIN_SHOWROOM_NAME);
 
                 KecUtilities.createSubFolders(MainActivity.USER + File.separator + MainActivity.ME_SUB_FOLDER + File.separator + tabName);
             }
@@ -63,12 +64,12 @@ public class MeOfMainActivity extends Activity implements OnSwipeOutListener {
             adapter = new MeOfMainAdapter(getFragmentManager(), Titles, NumOfTabs, tabName);
 
             // Assigning ViewPager View and setting the adapter
-            pager = (CustomViewPager) findViewById(R.id.hall_activity_pager);
+            pager = (CustomViewPager) findViewById(R.id.show_activity_pager);
             pager.setOnSwipeOutListener(this);
             pager.setAdapter(adapter);
 
             // Assigning the Sliding Tab Layout View
-            tabs = (SlidingTabLayout) findViewById(R.id.hall_activity_tabs);
+            tabs = (SlidingTabLayout) findViewById(R.id.show_activity_tabs);
             tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
             // use this interface to use you own view, e.g. can add icon instead of text

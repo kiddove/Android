@@ -24,7 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.kectech.android.wyslink.R;
-import com.kectech.android.wyslink.activity.PhotoOfHallOfMainActivity;
+import com.kectech.android.wyslink.activity.PhotoOfShowOfMainActivity;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.Utils;
 import com.kectech.android.wyslink.thirdparty.ScaleImageView;
 import com.kectech.android.wyslink.thirdparty.UniversalImageLoader.core.ImageLoader;
@@ -33,7 +33,7 @@ import com.kectech.android.wyslink.thirdparty.UniversalImageLoader.core.imageawa
 
 
 /**
- * This fragment will populate the children of the ViewPager from {@link PhotoOfHallOfMainActivity}.
+ * This fragment will populate the children of the ViewPager from {@link PhotoOfShowOfMainActivity}.
  */
 public class ImageDetailFragment extends Fragment {
     private static final String IMAGE_DATA_EXTRA = "extra_image_data";
@@ -85,8 +85,8 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (PhotoOfHallOfMainActivity.class.isInstance(getActivity())) {
-//            mImageFetcher = ((PhotoOfHallOfMainActivity) getActivity()).getImageFetcher();
+        if (PhotoOfShowOfMainActivity.class.isInstance(getActivity())) {
+//            mImageFetcher = ((PhotoOfShowOfMainActivity) getActivity()).getImageFetcher();
 //            mImageFetcher.loadImage(mImageUrl, mImageView);
             ImageAware imageAware = new ImageViewAware(mImageView, false);
 

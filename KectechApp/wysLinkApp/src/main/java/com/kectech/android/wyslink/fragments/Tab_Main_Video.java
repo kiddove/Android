@@ -112,7 +112,7 @@ public class Tab_Main_Video extends Fragment {
     }
 
     public void createSubFolder() {
-        String folder = MainActivity.USER + File.separator + MainActivity.HALL_SUB_FOLDER + File.separator + tabId + File.separator + MainActivity.VIDEO_SUB_FOLDER;
+        String folder = MainActivity.USER + File.separator + MainActivity.SHOW_SUB_FOLDER + File.separator + tabId + File.separator + MainActivity.VIDEO_SUB_FOLDER;
         if (KecUtilities.createSubFolders(folder)) {
             subFolder = folder;
         } else

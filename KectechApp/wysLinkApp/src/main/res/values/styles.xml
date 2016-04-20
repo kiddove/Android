@@ -41,7 +41,7 @@
         <item name="android:dropDownItemStyle">@style/AutoCompleteTextView.DropDownItem</item>
 
         <!--cab done button icon-->
-        <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_action_content_clear</item>
 
         <item name="cpb_style">@style/CircularProgressBar</item>
 

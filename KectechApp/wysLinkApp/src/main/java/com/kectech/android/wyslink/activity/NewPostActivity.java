@@ -58,9 +58,9 @@ public class NewPostActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-//        if (BuildConfig.DEBUG) {
-//            System.gc();
-//        }
+        if (BuildConfig.DEBUG) {
+            System.gc();
+        }
 
 //        View.OnClickListener mListener = new View.OnClickListener() {
 //            @Override
@@ -589,7 +589,7 @@ public class NewPostActivity extends Activity {
     private void preview(int position) {
         // start photo activity, DO NOT finish current activity
 
-        Intent intent = new Intent(this, PhotoOfHallOfMainActivity.class);
+        Intent intent = new Intent(this, PhotoOfShowOfMainActivity.class);
         ArrayList<String> images = new ArrayList<>();
         for (int i = 0; i < mAdapter.getCount(); i++) {
             if (mAdapter.getItem(i).compareToIgnoreCase(MainActivity.NEW_POST_DEFAULT_IMAGE) == 0)

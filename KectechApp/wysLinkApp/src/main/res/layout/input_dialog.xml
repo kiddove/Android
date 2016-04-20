@@ -1,37 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
         android:id="@+id/title"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-    />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/edit_title"
-        android:hint="title of your video"
-        android:ellipsize="end"/>
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
-        android:id="@+id/description"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="20dp"
-        />
+        android:text="@string/prompt_upload_title"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_description"
-        android:hint="title of your video"
-        android:ellipsize="end"/>
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_background_login"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_background_none"
+            android:ellipsize="end"
+            android:hint="@string/prompt_upload_title_hint"
+            android:imeOptions="actionNext"
+            android:singleLine="true"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/prompt_upload_description"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_background_login"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:hint="@string/prompt_upload_description_hint"
+            android:background="@drawable/edit_text_background_none"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
+    </LinearLayout>
 </LinearLayout>

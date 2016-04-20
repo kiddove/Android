@@ -44,8 +44,8 @@ public class Utils {
 //            if (Utils.hasHoneycomb()) {
 //                threadPolicyBuilder.penaltyFlashScreen();
 //                vmPolicyBuilder
-//                        .setClassInstanceLimit(HallOfMainActivity.class, 1)
-//                        .setClassInstanceLimit(PhotoOfHallOfMainActivity.class, 1);
+//                        .setClassInstanceLimit(ShowOfMainActivity.class, 1)
+//                        .setClassInstanceLimit(PhotoOfShowOfMainActivity.class, 1);
 //            }
             StrictMode.setThreadPolicy(threadPolicyBuilder.build());
             StrictMode.setVmPolicy(vmPolicyBuilder.build());

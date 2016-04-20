@@ -3,7 +3,7 @@ package com.kectech.android.wyslink.adapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 
-import com.kectech.android.wyslink.fragments.Tab_Main_Hall;
+import com.kectech.android.wyslink.fragments.Tab_Main_Show;
 import com.kectech.android.wyslink.fragments.Tab_Main_Setting;
 import com.kectech.android.wyslink.fragments.Tab_Main_Me;
 
@@ -34,7 +34,7 @@ public class MainAdapter extends FragmentPagerAdapter {
         switch (position) {
 
             case 0: {
-                return new Tab_Main_Hall();
+                return new Tab_Main_Show();
             }
             case 1: {
                 return new Tab_Main_Me();
