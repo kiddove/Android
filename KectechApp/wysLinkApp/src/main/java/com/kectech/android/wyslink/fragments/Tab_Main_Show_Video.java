@@ -1,4 +1,5 @@
 package com.kectech.android.wyslink.fragments;
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -35,6 +36,8 @@ import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -259,17 +262,17 @@ public class Tab_Main_Show_Video extends Fragment {
         if (direction == SwipeRefreshLayoutDirection.TOP) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                 // allow async task to run simultaneously
-                new UpdateThumbListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(0).getId());
+                new UpdateThumbListTaskTop().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(0).getDatetime(), mVideoAdapter.getItem(0).getId());
             else
-                new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getId());
+                new UpdateThumbListTaskTop().execute(mVideoAdapter.getItem(0).getDatetime(), mVideoAdapter.getItem(0).getId());
         } else if (direction == SwipeRefreshLayoutDirection.BOTTOM) {
             int i = mVideoAdapter.getCount();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                 // allow async task to run simultaneously
-                new UpdateThumbListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(i - 1).getId());
+                new UpdateThumbListTaskBottom().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mVideoAdapter.getItem(i - 1).getDatetime(), mVideoAdapter.getItem(i - 1).getId());
             else
-                new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getId());
+                new UpdateThumbListTaskBottom().execute(mVideoAdapter.getItem(i - 1).getDatetime(), mVideoAdapter.getItem(i - 1).getId());
         } else
             // use as init
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -292,7 +295,8 @@ public class Tab_Main_Show_Video extends Fragment {
 
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?tabtype=" + tabType;
                 //String strURL = "http://198.105.216.190/generateVideolist.ashx?id=&count=6&user=" + tabOwner + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
-                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=&count=6&eh=showroom&user=" + tabOwner;
+                //String strURL = "http://206.190.141.88/generateVideolist.ashx?datetime=&count=20&eh=showroom&user=" + tabOwner;
+                String strURL = String.format(getActivity().getString(R.string.request_template_default_video), 20, tabOwner, getActivity().getString(R.string.tab_main_me_title_showroom));
 
                 URL url = new URL(strURL);
 
@@ -305,6 +309,7 @@ public class Tab_Main_Show_Video extends Fragment {
                 //int length = connection.getContentLength();
                 String strResult = KecUtilities.readStringFromStream(inputStream);
 
+                strResult = URLDecoder.decode(strResult, MainActivity.ENCODING);
                 ArrayList<VideoListItem> items = getListFromJson(strResult);
                 if (items != null && !items.isEmpty()) {
                     if (subFolder != null)
@@ -328,14 +333,18 @@ public class Tab_Main_Show_Video extends Fragment {
         }
     }
 
-    private class UpdateThumbListTaskTop extends AsyncTask<Integer, Void, ArrayList<VideoListItem>> {
+    private class UpdateThumbListTaskTop extends AsyncTask<String, Void, ArrayList<VideoListItem>> {
         @Override
-        protected ArrayList<VideoListItem> doInBackground(Integer... params) {
+        protected ArrayList<VideoListItem> doInBackground(String... params) {
             try {
-                int id = params[0];
+                String sDatetime = params[0];
+                String sId = params[1];
                 //String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=after&user=" + tabOwner + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=top&count=5&tabtype=" + tabType;
-                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=" + id + "&count=2&direction=after&eh=showroom&user=" + tabOwner;
+                //String strURL = "http://206.190.141.88/generateVideolist.ashx?datetime=" + sDatetime + "&count=10&direction=after&eh=showroom&user=" + tabOwner;
+                String strURL = String.format(getActivity().getString(R.string.request_template_video), URLEncoder.encode(sDatetime, "UTF-8"), sId, 10,
+                        getActivity().getString(R.string.request_direction_after),
+                        getActivity().getString(R.string.tab_main_me_title_showroom), tabOwner);
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();
@@ -388,14 +397,21 @@ public class Tab_Main_Show_Video extends Fragment {
         }
     }
 
-    private class UpdateThumbListTaskBottom extends AsyncTask<Integer, Void, ArrayList<VideoListItem>> {
+    private class UpdateThumbListTaskBottom extends AsyncTask<String, Void, ArrayList<VideoListItem>> {
         @Override
-        protected ArrayList<VideoListItem> doInBackground(Integer... params) {
+        protected ArrayList<VideoListItem> doInBackground(String... params) {
             try {
-                int id = params[0];
+                String sDatetime = params[0];
+                String sId = params[1];
                 //String strURL = "http://198.105.216.190/generateVideolist.ashx?id=" + id + "&count=2&direction=before&user=" + tabOwner + strType + URLEncoder.encode(tabName, MainActivity.ENCODING);
                 //String strURL = "http://173.236.36.10/cds/generateVideoListThumb.php?type=bottom&count=5&tabtype=" + tabType;
-                String strURL = "http://206.190.141.88/generateVideolist.ashx?id=" + id + "&count=2&direction=before&eh=showroom&user=" + tabOwner;
+                //String strURL = "http://206.190.141.88/generateVideolist.ashx?datetime=" + sDatetime + "&count=10&direction=before&eh=showroom&user=" + tabOwner;
+                //String strURL = String.format("http://206.190.141.88/generateVideolist.ashx?datetime=%s&id=%s&count=10&direction=before&eh=showroom&user=%s", sDatetime, sId, tabOwner);
+
+                String strURL = String.format(getActivity().getString(R.string.request_template_video), URLEncoder.encode(sDatetime, "UTF-8"), sId, 10,
+                        getActivity().getString(R.string.request_direction_before),
+                        getActivity().getString(R.string.tab_main_me_title_showroom), tabOwner);
+
                 URL url = new URL(strURL);
 
                 URLConnection connection = url.openConnection();

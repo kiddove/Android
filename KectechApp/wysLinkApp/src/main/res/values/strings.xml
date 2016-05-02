@@ -14,7 +14,7 @@
     <string name="ui_menu_feedback">Feedback</string>
     <string name="ui_menu_about">About</string>
     <string name="ui_menu_share">Share</string>
-    <string name="ui_menu_refresh">Sync</string>
+    <string name="ui_menu_refresh">Refresh</string>
     <string name="ui_menu_capture_video">capture</string>
     <string name="ui_menu_show_qr_code">Show QR code(*)</string>
     <string name="video_list_item_img_description">description for video tab item img</string>
@@ -51,7 +51,7 @@
     <string name="prompt_new_post_popup_take">Take a Photo</string>
     <string name="prompt_new_post_popup_cancel">Cancel</string>
     <string name="prompt_new_post_number">0 / 140</string>
-    <string name="prompt_dialog_text">To reduce network provider data charges, please use Wi-Fi to upload videos.</string>
+    <string name="prompt_dialog_text">To reduce network provider data charges, we strongly recommend you choosing resolution 640x480 when capturing videos and using Wi-Fi to upload.</string>
     <string name="prompt_dialog_check_text">Do not ask me again</string>
     <string name="is_up_to_date">is up to date</string>
     <string name="text_limit"> / 140</string>
@@ -83,4 +83,9 @@
     <string name="recommend_showroom_sub">Recommend Showroom List</string>
     <string name="prompt_empty_showroom_name">Showroom name can not be empty.</string>
     <string name="label_recommend_showroom">Recommend</string>
+    <string formatted="false" name="request_template_video"><![CDATA[http://206.190.141.88/generateVideolist.ashx?datetime=%s&id=%s&count=%d&direction=%s&eh=%s&user=%s]]></string>
+    <string formatted="false" name="request_template_default_video"><![CDATA[http://206.190.141.88/generateVideolist.ashx?count=%d&user=%s&eh=%s]]></string>
+    <string name="request_direction_before">before</string>
+    <string name="request_direction_after">after</string>
+
 </resources>
