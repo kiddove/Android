@@ -3,6 +3,7 @@ package com.kectech.android.wyslink.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +22,6 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.kectech.android.wyslink.BuildConfig;
 import com.kectech.android.wyslink.R;
-
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -43,6 +43,12 @@ public class VideoViewActivity extends Activity {
     private CallbackManager callbackManager;
     private ShareDialog shareDialog;
 
+//    private OrientationEventListener orientationEventListener;
+//    private int lastOrientation = -1;
+//    private static final int ORIENTATION_PORTRAIT_NORMAL =  1;
+//    private static final int ORIENTATION_PORTRAIT_INVERTED =  2;
+//    private static final int ORIENTATION_LANDSCAPE_NORMAL =  3;
+//    private static final int ORIENTATION_LANDSCAPE_INVERTED =  4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +106,7 @@ public class VideoViewActivity extends Activity {
         }
 
         videoView = (VideoView) findViewById(R.id.myVideo);
+        videoView.setBufferSize(500 * 1024);     // 500 KB
         View mProgress = findViewById(R.id.loading_progress);
         videoView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -121,7 +128,7 @@ public class VideoViewActivity extends Activity {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mp.setPlaybackSpeed(1.0f);
-                mp.setLooping(true);
+                mp.setLooping(false);
                 mp.setUseCache(true);
             }
         });
@@ -247,5 +254,19 @@ public class VideoViewActivity extends Activity {
 
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 0);
+            io.vov.vitamio.utils.Log.d("landscape --- onConfigurationChanged");
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 0);
+            io.vov.vitamio.utils.Log.d("portrait --- onConfigurationChanged");
+        }
     }
 }

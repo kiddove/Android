@@ -17,7 +17,7 @@ android {
         applicationId 'com.kectech.android.wyslink'
         minSdkVersion 15
         targetSdkVersion 21
-        versionName '0.9.41'
+        versionName '0.9.42'
     }
     buildTypes {
         release {
@@ -30,17 +30,16 @@ android {
 }
 
 dependencies {
-    //    // by paul
-    //    // BuildConfig.DEBUG not working
-    //    // http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
-    //    compile project(path: ':vitamio', configuration: 'debug')
+    // by paul
+    // BuildConfig.DEBUG not working
+    // http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
+    //compile project(path: ':vitamio', configuration: 'debug')
     //compile 'org.apache.httpcomponents:httpclient:4.5.2'
     //compile 'org.apache.httpcomponents:httpmime:4.5.2'
     //    // by paul
     //    // for dependency warning
     //    // http://stackoverflow.com/questions/15775747/how-do-i-properly-import-httpclient-from-org-apache-on-android-using-gradle-buil
     compile project(':vitamio')
-    //releaseCompile project(':vitamio')
     // for GCM
     compile('org.apache.httpcomponents:httpmime:4.3.6') {
         // avoid "is ignored for the default configuration X" warnings

@@ -39,17 +39,18 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
- * Created by Paul on 16/06/2015.
- * video tab implements by a ListView
+ * Created by Paul on 20/04/2016.
+ * recommend showroom tab implements by a ListView
  * use a SwipeRefreshLayout to fulfil pull down and pull up refresh
- * tab an item to open an activity to tab_main_show_add_recommend video page in a WebView
  */
 
 public class Tab_Main_Show_Add_Recommend extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -352,9 +353,6 @@ public class Tab_Main_Show_Add_Recommend extends Fragment implements SwipeRefres
     private boolean actionItemClicked(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_add_recommend_tab_action_done:
-                // do in another thread?
-                //Toast.makeText(getActivity(), num + " items should be deleted.", Toast.LENGTH_SHORT).show();
-                // TODO: 20/04/2016 return selected to caller
                 returnToCaller();
                 return true;
             default:
@@ -378,7 +376,7 @@ public class Tab_Main_Show_Add_Recommend extends Fragment implements SwipeRefres
             // for test
             //String strURL = "http://173.236.36.10/cds/generateThumbnail.php";
             //String strURL = "http://198.105.216.190/generateThumbnail.ashx?id=&count=6&user=" + MainActivity.USER;
-            String strURL = "http://206.190.141.88/generateSRList.ashx?count=10&user=" + MainActivity.USER;
+            String strURL = "http://206.190.141.88/generateSRList.ashx?count=100&user=" + MainActivity.USER;
 
             try {
                 URL url = new URL(strURL);
@@ -424,7 +422,7 @@ public class Tab_Main_Show_Add_Recommend extends Fragment implements SwipeRefres
             int id = params[0];
 //            String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=top&count=5";
             //String strURL = "http://198.105.216.190/generateThumbnail.ashx?id=" + id + "&count=2" + "&direction=after&user=" + MainActivity.USER;
-            String strURL = "http://206.190.141.88/generateSRList.ashx?id=" + id + "&count=10&direction=after&user=" + MainActivity.USER;
+            String strURL = "http://206.190.141.88/generateSRList.ashx?id=" + id + "&count=5&direction=after&user=" + MainActivity.USER;
 
             try {
                 URL url = new URL(strURL);
@@ -490,7 +488,7 @@ public class Tab_Main_Show_Add_Recommend extends Fragment implements SwipeRefres
             // for test
             //String strURL = "http://173.236.36.10/cds/generateThumbnail.php?type=bottom&count=5";
             //String strURL = "http://198.105.216.190/generateThumbnail.ashx?id=" + id + "&count=2" + "&direction=before&user=" + MainActivity.USER;
-            String strURL = "http://206.190.141.88/generateSRList.ashx?id=" + id + "&count=10&direction=before&user=" + MainActivity.USER;
+            String strURL = "http://206.190.141.88/generateSRList.ashx?id=" + id + "&count=5&direction=before&user=" + MainActivity.USER;
 
             try {
                 URL url = new URL(strURL);
@@ -822,18 +820,24 @@ public class Tab_Main_Show_Add_Recommend extends Fragment implements SwipeRefres
         }
 
         String strName = "";
-        for (int i = mAdapter.getCount() - 1; i >= 0; i--) {
-            if (!mAdapter.isChecked(i))
-                continue;
-            strName += mAdapter.getItem(i).getName();
-            strName += ";";
+        try {
+            for (int i = mAdapter.getCount() - 1; i >= 0; i--) {
+                if (!mAdapter.isChecked(i))
+                    continue;
+                strName += URLEncoder.encode(mAdapter.getItem(i).getName(), MainActivity.ENCODING);
+                strName += ";";
+            }
+        } catch (UnsupportedEncodingException uee) {
+            uee.printStackTrace();
+            stopActionMode();
+            return;
         }
 
         stopActionMode();
 
         if (!TextUtils.isEmpty(strName)) {
             // remove last ;
-            strName = strName.substring(0, strName.length() - 2);
+            strName = strName.substring(0, strName.length() - 1);
         }
         Intent intent = new Intent();
         intent.putExtra(MainActivity.SHOWROOM_NAME, strName);

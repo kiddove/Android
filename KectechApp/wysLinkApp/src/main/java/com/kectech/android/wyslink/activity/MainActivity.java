@@ -77,6 +77,7 @@ public class MainActivity extends Activity {
     public final static String USER_NAME_SET_KEY = "USERNAME";
     public final static String CURRENT_USER_KEY = "CURRENT";
     public final static String CURRENT_LOGIN_STATUS_KEY = "LOGIN";
+    public final static String CURRENT_SHOWROOM_NAME_KEY = "SHOWROOM_NAME";
     public static String USER = ""; // kdlinx@kdlinx.com, kevin@kectech.com
     public final static String NEED_PROMPT_KEY = "PROMPT";
 
@@ -281,6 +282,7 @@ public class MainActivity extends Activity {
                 SharedPreferences.Editor editor = userDetails.edit();
                 editor.putString(MainActivity.CURRENT_USER_KEY, null);
                 editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, false);
+                editor.putString(MainActivity.CURRENT_SHOWROOM_NAME_KEY, null);
                 editor.apply();
 
                 KecUtilities.closeCache();

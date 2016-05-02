@@ -26,5 +26,5 @@ android {
     // by paul
     // BuildConfig.DEBUG not working
     // http://stackoverflow.com/questions/20176284/buildconfig-debug-always-false-when-building-library-projects-with-gradle
-    publishNonDefault true
+    //publishNonDefault true
 }

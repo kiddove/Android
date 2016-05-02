@@ -16,6 +16,7 @@ public class MainShowAddRecommendListItem {
     private int id;
     private String showname = null;    // name
     private String owner = null;   // owner
+    private boolean follow = false; // if followed this showroom
 
     public MainShowAddRecommendListItem(MainShowAddRecommendListItem item) {
         this.title = item.title;
@@ -24,6 +25,7 @@ public class MainShowAddRecommendListItem {
         this.id = item.id;
         this.showname = item.showname;
         this.owner = item.owner;
+        this.follow = item.follow;
     }
 
     public String getDescription() {
@@ -75,8 +77,8 @@ public class MainShowAddRecommendListItem {
         return showname;
     }
 
-    public String getOwner() {
-        return owner;
+    public boolean isFollow() {
+        return follow;
     }
     @Override
     public String toString() {

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,6 +66,7 @@ public class Tab_Main_Me extends Fragment {
     }
 
     public void initList() {
+        String showroomName = getActivity().getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE).getString(MainActivity.CURRENT_SHOWROOM_NAME_KEY, "");
         ArrayList<MeListItem> defaultListItems = new ArrayList<>();
         MeListItem itemPrivate = new MeListItem();
         MeListItem itemPublic = new MeListItem();
@@ -76,11 +78,13 @@ public class Tab_Main_Me extends Fragment {
         itemPublic.setDescription(getActivity().getString(R.string.tab_main_me_description_public));
 
         itemShowroom.setTitle(getActivity().getString(R.string.tab_main_me_title_showroom));
-        itemShowroom.setDescription(getActivity().getString(R.string.tab_main_me_description_showroom));
+        itemShowroom.setDescription(showroomName);
 
         defaultListItems.add(itemPrivate);
         defaultListItems.add(itemPublic);
-        defaultListItems.add(itemShowroom);
+
+        if (!TextUtils.isEmpty(showroomName))
+            defaultListItems.add(itemShowroom);
 
         mListAdapter = new MeListViewAdapter(getActivity(), R.layout.me_list_item, defaultListItems);
     }

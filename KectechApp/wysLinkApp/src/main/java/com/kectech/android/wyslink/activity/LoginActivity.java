@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kectech.android.wyslink.BuildConfig;
 import com.kectech.android.wyslink.R;
 import com.kectech.android.wyslink.thirdparty.CacheBitmap.ImageFetcher;
@@ -48,6 +51,10 @@ import com.kectech.android.wyslink.util.KecUtilities;
  */
 public class LoginActivity extends Activity {
 
+    private class LoginResult {
+        public boolean login;    // login status
+        public String showroom;       // showroom name
+    }
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -58,6 +65,7 @@ public class LoginActivity extends Activity {
     private Set<String> username;
     //private String current_user;
 
+    private LoginResult loginResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (BuildConfig.DEBUG) {
@@ -308,9 +316,9 @@ public class LoginActivity extends Activity {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                     // allow async task to run simultaneously
-                    new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString());
+                    new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString(), loginResult != null ? loginResult.showroom : "");
                 else
-                    new saveStateTask().execute(mEmailView.getText().toString());
+                    new saveStateTask().execute(mEmailView.getText().toString(), loginResult != null ? loginResult.showroom : "");
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -348,7 +356,8 @@ public class LoginActivity extends Activity {
         try {
             //final String urlString = "http://www.kdlinx.com/registor.ashx?handleType=4&email=xxx&pwd=xxx&nickname=xxx";
             //final String urlString = "http://198.105.216.190/registor.ashx?handleType=20&username=" + params[0] + "&pwd=" + params[1];
-            final String urlString = "http://206.190.141.88/registor.ashx?handleType=20&username=" + params[0] + "&pwd=" + params[1];
+            //final String urlString = "http://206.190.141.88/registor.ashx?handleType=20&username=" + params[0] + "&pwd=" + params[1];
+            final String urlString = "http://206.190.141.88/registor.ashx?handleType=25&username=" + params[0] + "&pwd=" + params[1];
             final URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             in = new BufferedInputStream(urlConnection.getInputStream(), MainActivity.DOWNLOAD_BUFFER);
@@ -357,11 +366,18 @@ public class LoginActivity extends Activity {
             byte[] contents = new byte[1024];
             int bytesRead;
             if ((bytesRead = in.read(contents)) != -1) {
-                String s = new String(contents, 0, bytesRead);
-                return s.compareToIgnoreCase("true") == 0;
-            }
+                String strJson = new String(contents, 0, bytesRead);
+                //return s.compareToIgnoreCase("true") == 0;
 
-            return true;
+                loginResult = getResultFromJson(strJson);
+
+                if (loginResult == null) {
+                    return strJson.compareToIgnoreCase("true") == 0;
+                }
+
+                if (loginResult.login)
+                    return true;
+            }
         } catch (final IOException e) {
             Log.e(MainActivity.LOG_TAG, "Error in log in - " + e.getMessage());
             e.printStackTrace();
@@ -403,9 +419,9 @@ public class LoginActivity extends Activity {
                     mEmailView.setText(data.getStringExtra(MainActivity.CURRENT_USER_KEY));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                         // allow async task to run simultaneously
-                        new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString());
+                        new saveStateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mEmailView.getText().toString(), "");
                     else
-                        new saveStateTask().execute(mEmailView.getText().toString());
+                        new saveStateTask().execute(mEmailView.getText().toString(), "");
                 }
             }
         }
@@ -480,6 +496,7 @@ public class LoginActivity extends Activity {
             try {
                 //current_user = mEmailView.getText().toString();
                 String current_user = params[0];
+                String current_showroom_name = params[1];
                 // test
                 if (!TextUtils.isEmpty(current_user)) {
                     SharedPreferences userDetails = getSharedPreferences(MainActivity.SHARED_PREFERENCE_KEY, android.content.Context.MODE_PRIVATE);
@@ -488,6 +505,7 @@ public class LoginActivity extends Activity {
                     username.add(current_user);
                     SharedPreferences.Editor editor = userDetails.edit();
                     editor.putString(MainActivity.CURRENT_USER_KEY, current_user);
+                    editor.putString(MainActivity.CURRENT_SHOWROOM_NAME_KEY, current_showroom_name);
                     editor.putBoolean(MainActivity.CURRENT_LOGIN_STATUS_KEY, true);
                     editor.putStringSet(MainActivity.USER_NAME_SET_KEY, username);
                     editor.apply();
@@ -551,6 +569,20 @@ public class LoginActivity extends Activity {
         // If it wasn't the Back key or there's no web page history, bubble up to the default
         // system behavior (probably exit the activity)
         return super.onKeyDown(keyCode, event);
+    }
+
+    private LoginResult getResultFromJson(String strJson) {
+        try {
+            Gson gson = new Gson();
+
+            Type typeOfObjects = new TypeToken<LoginResult>() {
+            }.getType();
+
+            return gson.fromJson(strJson, typeOfObjects);
+        } catch (Exception e) {
+            Log.e(MainActivity.LOG_TAG, "Exception caught(userLogIn---getResultFromJson): " + e.getMessage());
+            return null;
+        }
     }
 }
 

@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import java.util.HashMap;
  * custom adapter for video tab listView
  */
 public class ShowAddRecommendListViewAdapter extends ArrayAdapter<MainShowAddRecommendListItem> {
-    public static final int ANIMATION_DURATION = 100;
     private Context context;
     public boolean showCheckBox = false;
     private ImageFetcher mImageFetcher;
@@ -110,60 +107,5 @@ public class ShowAddRecommendListViewAdapter extends ArrayAdapter<MainShowAddRec
 
     public boolean isSelectionEmpty() {
         return selection.size() == 0;
-    }
-
-    public Animation deleteCell(final View v, final int index) {
-        Animation.AnimationListener al = new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                //Log.d(MainActivity.LOG_TAG, "start delete animation at " + index);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                remove(getItem(index));
-                ViewHolder vh = (ViewHolder) v.getTag();
-                vh.needInflate = true;
-                notifyDataSetChanged();
-                //Log.d(MainActivity.LOG_TAG, "finish delete animation at " + index);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        };
-
-        return collapse(v, al);
-    }
-
-    private Animation collapse(final View v, Animation.AnimationListener al) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation anim = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
-                } else {
-                    if (v.getLayoutParams() == null)
-                        return;
-                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        if (al != null) {
-            anim.setAnimationListener(al);
-        }
-        anim.setDuration(ANIMATION_DURATION);
-        return anim;
-//        v.startAnimation(anim);
     }
 }

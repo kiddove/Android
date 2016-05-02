@@ -170,8 +170,8 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private int mCurrentState = STATE_IDLE;
   private int mTargetState = STATE_IDLE;
   private float mAspectRatio = 0;
-  private int mVideoLayout = VIDEO_LAYOUT_ORIGIN;
-  //private int mVideoLayout = VIDEO_LAYOUT_SCALE;
+  //private int mVideoLayout = VIDEO_LAYOUT_ORIGIN;
+  private int mVideoLayout = VIDEO_LAYOUT_SCALE;
   //private int mVideoLayout = VIDEO_LAYOUT_STRETCH;    // this stands for fullscreen
   private SurfaceHolder mSurfaceHolder = null;
   private MediaPlayer mMediaPlayer = null;
@@ -337,14 +337,78 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       float parentRatio = ((float) parent.getWidth()) / ((float) parent.getHeight());
       lp.width = (parentRatio < videoRatio) ? parent.getWidth() : Math.round(((float) parent.getHeight()) * videoRatio);
       lp.height = (parentRatio > videoRatio) ? parent.getHeight() : Math.round(((float) parent.getWidth()) / videoRatio);
-    } else {
+    }/* else if (layout == VIDEO_LAYOUT_SCALE) {
+      // scale ==???
+      if (windowRatio > 1) {
+        // landscape
+        if (videoRatio < 1) {
+          lp.height = windowHeight;
+          lp.width = Math.round((float) lp.height * videoRatio);
+        } else {
+          if (windowRatio < videoRatio) {
+            lp.width = windowWidth;
+            lp.height = Math.round((float) lp.width / videoRatio);
+          } else {
+            lp.height = windowHeight;
+            lp.width = Math.round((float) lp.height * videoRatio);
+          }
+        }
+      } else {
+        // portrait
+        if (videoRatio > 1) {
+          lp.width = windowWidth;
+          lp.height = Math.round((float) windowWidth / videoRatio);
+        } else {
+          if (windowRatio < videoRatio) {
+            lp.width = windowWidth;
+            lp.height = Math.round((float) lp.width / videoRatio);
+          } else {
+            lp.height = windowHeight;
+            lp.width = Math.round((float) lp.height * videoRatio);
+          }
+        }
+      }
+      lp.height *= 0.8;
+      lp.width *= 0.8;
+    } else if (layout == VIDEO_LAYOUT_STRETCH) {
+      // full screen
+      if (windowRatio > 1) {
+        // landscape
+        if (videoRatio < 1) {
+          lp.height = windowHeight;
+          lp.width = Math.round((float) lp.height * videoRatio);
+        } else {
+          if (windowRatio < videoRatio) {
+            lp.width = windowWidth;
+            lp.height = Math.round((float) lp.width / videoRatio);
+          } else {
+            lp.height = windowHeight;
+            lp.width = Math.round((float) lp.height * videoRatio);
+          }
+        }
+      } else {
+        // portrait
+        if (videoRatio > 1) {
+          lp.width = windowWidth;
+          lp.height = Math.round((float) windowWidth / videoRatio);
+        } else {
+          if (windowRatio < videoRatio) {
+            lp.width = windowWidth;
+            lp.height = Math.round((float) lp.width / videoRatio);
+          } else {
+            lp.height = windowHeight;
+            lp.width = Math.round((float) lp.height * videoRatio);
+          }
+        }
+      }
+    } */else {
       boolean full = layout == VIDEO_LAYOUT_STRETCH;
-      lp.width = (full || windowRatio < videoRatio) ? windowWidth : (int) (videoRatio * windowHeight);
-      lp.height = (full || windowRatio > videoRatio) ? windowHeight : (int) (windowWidth / videoRatio);
+      lp.width = (full || windowRatio < videoRatio) ? windowWidth : Math.round(videoRatio * (float) windowHeight);
+      lp.height = (full || windowRatio > videoRatio) ? windowHeight : Math.round((float) windowWidth / videoRatio);
     }
     setLayoutParams(lp);
     getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);
-    Log.d("VIDEO: %dx%dx%f, Surface: %dx%d, LP: %dx%d, Window: %dx%dx%f", mVideoWidth, mVideoHeight, mVideoAspectRatio, mSurfaceWidth, mSurfaceHeight, lp.width, lp.height, windowWidth, windowHeight, windowRatio);
+    Log.d("VIDEO[%d]: %dx%dx%f, Surface: %dx%d, LP: %dx%d, Window: %dx%dx%f", mVideoLayout, mVideoWidth, mVideoHeight, mVideoAspectRatio, mSurfaceWidth, mSurfaceHeight, lp.width, lp.height, windowWidth, windowHeight, windowRatio);
     mVideoLayout = layout;
     mAspectRatio = aspectRatio;
   }
@@ -484,9 +548,9 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
         ((Activity)getContext()).getWindow().setFlags(~WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setVideoLayout(VIDEO_LAYOUT_ORIGIN, 0);
+        setVideoLayout(VIDEO_LAYOUT_SCALE, 0);
         mMediaController.mFullScreenButton.setImageResource(getResources().getIdentifier("ic_navigation_fullscreen", "drawable", mContext.getPackageName()));
-        //android.util.Log.i("paul", "full is " + full + "  exit full screen (" + mVideoLayout + ")");
+        android.util.Log.i("paul", "full is " + full + "  exit full screen (" + mVideoLayout + ")");
       } else {
         ((Activity)getContext()).getActionBar().hide();
         ((Activity)getContext()).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -494,10 +558,14 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
         setVideoLayout(VIDEO_LAYOUT_STRETCH, 0);
         mMediaController.mFullScreenButton.setImageResource(getResources().getIdentifier("ic_navigation_fullscreen_exit", "drawable", mContext.getPackageName()));
-        //android.util.Log.i("paul", "full is " + full + "  go full screen (" + mVideoLayout + ")");
+        android.util.Log.i("paul", "full is " + full + "  go full screen (" + mVideoLayout + ")");
       }
     }
   };
+
+  public boolean isFullScreen() {
+    return mVideoLayout == VIDEO_LAYOUT_STRETCH;
+  }
 
   public void setOnPreparedListener(OnPreparedListener l) {
     mOnPreparedListener = l;

@@ -260,13 +260,13 @@ public class Tab_Main_Show extends Fragment implements SwipeRefreshLayout.OnRefr
         if (TextUtils.isEmpty(showroomName))
             return;
 
-        String strURl = "http://206.190.141.88/generateFollow.ashx?handle=insert&type=3&follow=" + MainActivity.USER + "&showname=" + showroomName;
+            String strURl = "http://206.190.141.88/generateFollow.ashx?handle=insert&type=3&follow=" + MainActivity.USER + "&showname=" + showroomName;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            // allow async task to run simultaneously
-            new AddNewEventTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, strURl);
-        else
-            new AddNewEventTask().execute(strURl);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                // allow async task to run simultaneously
+                new AddNewEventTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, strURl);
+            else
+                new AddNewEventTask().execute(strURl);
     }
 
     @Override
@@ -304,7 +304,7 @@ public class Tab_Main_Show extends Fragment implements SwipeRefreshLayout.OnRefr
         if (requestCode == MainActivity.ADD_SHOWROOM_CODE && resultCode == Activity.RESULT_OK) {
             if (intent != null) {
                 String strName = intent.getStringExtra(MainActivity.SHOWROOM_NAME);
-                //AddItemToList(strName);
+                AddItemToList(strName);
                 Log.d(MainActivity.LOG_TAG, strName);
             }
         }
@@ -1000,7 +1000,8 @@ public class Tab_Main_Show extends Fragment implements SwipeRefreshLayout.OnRefr
                     int bytesRead;
                     if ((bytesRead = in.read(contents)) != -1) {
                         String s = new String(contents, 0, bytesRead);
-                        return s.compareToIgnoreCase("true") == 0;
+                        // multiple names, return is not true or false
+                        //return s.compareToIgnoreCase("true") == 0;
                     }
 
                     return true;

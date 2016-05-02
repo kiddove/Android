@@ -27,7 +27,7 @@ import java.util.HashMap;
  * custom adapter for video tab listView
  */
 public class ShowListViewAdapter extends ArrayAdapter<MainShowListItem> {
-    public static final int ANIMATION_DURATION = 100;
+    public static final int ANIMATION_DURATION = 150;
     private Context context;
     public boolean showCheckBox = false;
     private ImageFetcher mImageFetcher;
@@ -116,7 +116,7 @@ public class ShowListViewAdapter extends ArrayAdapter<MainShowListItem> {
         Animation.AnimationListener al = new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                //Log.d(MainActivity.LOG_TAG, "start delete animation at " + index);
+                Log.d(MainActivity.LOG_TAG, "start delete animation at " + index);
             }
 
             @Override
@@ -125,7 +125,7 @@ public class ShowListViewAdapter extends ArrayAdapter<MainShowListItem> {
                 ViewHolder vh = (ViewHolder) v.getTag();
                 vh.needInflate = true;
                 notifyDataSetChanged();
-                //Log.d(MainActivity.LOG_TAG, "finish delete animation at " + index);
+                Log.d(MainActivity.LOG_TAG, "finish delete animation at " + index);
             }
 
             @Override

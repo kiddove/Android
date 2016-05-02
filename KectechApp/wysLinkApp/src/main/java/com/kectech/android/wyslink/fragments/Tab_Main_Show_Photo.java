@@ -672,7 +672,6 @@ public class Tab_Main_Show_Photo extends Fragment {
                     //multipartEntityBuilder.addPart(MainActivity.POST_DESC, new StringBody(strDesc));
                     multipartEntityBuilder.addTextBody(MainActivity.POST_DESC, strDesc);
 
-
                 for (String strImage : images) {
                     File file = new File(strImage);
                     multipartEntityBuilder.addPart(MainActivity.POST_IMAGES, new FileBody(file));

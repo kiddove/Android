@@ -46,9 +46,7 @@ public class ShowOfMainActivity extends Activity implements OnSwipeOutListener {
             String tabName = "";
             String tabOwner = "";
             CharSequence Titles[] = {getString(R.string.title_activity_main_show_Video), getString(R.string.title_activity_main_show_photo)};
-            // depends on type, may be different num of tabs
-            // for test
-            // todo to be continued...
+
             Intent intent = getIntent();
             if (intent != null) {
                 tabName = intent.getStringExtra(MainActivity.SHOW_OF_MAIN_SHOWROOM_NAME);
